@@ -1,48 +1,54 @@
 import {Injectable, Inject, ModuleWithProviders} from '@angular/core';
 import 'rxjs/add/operator/map';
 import {ConfigModel} from "../models/config";
-import {PersistenceManager} from "../manager/persistenceManager";
 import {FirebaseModel} from "../models/firebase";
 import {AngularFireAuth} from "angularfire2/auth";
-import {LocalStorageService} from 'angular-2-local-storage';
+import {PersistenceManager} from "../manager/persistenceManager";
+
 
 /*
   Generated class for the AppProvider provider.
 
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
+
 */
-@Injectable()
+
+
+export interface AppsappModuleProviderConfig {
+  apiKey: string,
+  projectId: string
+};
+
 
 export class AppsappModuleProvider {
 
   public config: ConfigModel;
-  private persistenceManager: PersistenceManager;
   private firebaseProject: FirebaseModel;
   private firebaseGlobal: FirebaseModel;
+  private persistenceManager: any;
 
-  constructor(private localStorageService: LocalStorageService) {
+  constructor(@Inject('config') private providerConfig: AppsappModuleProviderConfig) {
 
-    const config = {
-      apiKey: 'AIzaSyCyld8fFu8jiGjZeDiSpO9tdHlPu2w6hM8',
-      projectId: 'appsapp-io'
-    }
 
     let self = this;
 
-    // create persistence manager
-    this.persistenceManager = new PersistenceManager(localStorageService);
+
+    this.persistenceManager = new PersistenceManager();
+
 
     // init configuration instance
-    this.config = new ConfigModel(this.persistenceManager);
+    this.config = new ConfigModel();
 
     // init global firebase instance
     this.firebaseGlobal = new FirebaseModel();
-    this.firebaseGlobal.init({firebaseProjectId: config.projectId, firebaseApiKey: config.apiKey});
+    this.firebaseGlobal.init({firebaseProjectId: providerConfig.projectId, firebaseApiKey: providerConfig.apiKey});
 
 
     // init projects firebase instance
     self.firebaseProject = new FirebaseModel();
+
+
 
     this.config.getObservable().subscribe((config) => {
 
@@ -71,6 +77,20 @@ export class AppsappModuleProvider {
         });
     });
 
+
+  }
+
+  /**
+   * creates and return new persistable model
+   * @param constructor
+   */
+  public new(constructor: any) {
+
+    let model = new constructor();
+    model.setPersistanceManager(this.persistenceManager);
+    this.persistenceManager.initAndload(model);
+
+    return model;
 
   }
 

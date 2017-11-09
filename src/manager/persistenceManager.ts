@@ -1,10 +1,13 @@
 import 'rxjs/add/operator/map';
-import { LocalStorageService } from 'angular-2-local-storage';
+import {Injectable} from '@angular/core';
+import {LocalStorageService} from 'angular-2-local-storage';
 import {AngularFireDatabase} from "angularfire2/database";
 import {Observer} from "rxjs/Observer";
 import {Observable} from "rxjs/Observable";
 import {FirebaseModel} from "../models/firebase";
 import {AngularFireAuth} from "angularfire2/auth";
+
+@Injectable()
 
 export class PersistenceManager {
 
@@ -16,30 +19,33 @@ export class PersistenceManager {
   private observable: Observable<any>;
   private _pendingChangesModels: any = {};
 
-  constructor(private storage: LocalStorageService) {
+  constructor() {
 
     let self = this;
+
+
+    let storage = new LocalStorageService({storageType: 'localStorage', prefix: 'appsapps-'});
 
 
     this.storageWrapper = {
       set: function (key, set) {
         return new Promise(function (resolve, reject) {
-          resolve(self.storage.set(key, set));
+          resolve(storage.set(key, set));
         });
       },
       get: function (key) {
         return new Promise(function (resolve, reject) {
-          resolve(self.storage.get(key));
+          resolve(storage.get(key));
         });
       },
       clear: function () {
         return new Promise(function (resolve, reject) {
-          resolve(self.storage.remove());
+          resolve(storage.remove());
         });
       },
       remove: function (key) {
         return new Promise(function (resolve, reject) {
-          resolve(self.storage.remove(key));
+          resolve(storage.remove(key));
         });
       },
       ready: function () {
@@ -220,14 +226,15 @@ export class PersistenceManager {
     let self = this;
 
 
-
     return new Promise(function (resolve, reject) {
 
 
       model.validate(localStorageOnly).then(() => {
 
 
+        console.log(self.getPersistanceIdentifier(model), model.getFirebaseDatabasePath(), model.getFirebaseDatabase());
         self.storageWrapper.set(self.getPersistanceIdentifier(model), model.serialize(false, true)).then((m) => {
+
 
           if (!localStorageOnly && model.getFirebaseDatabasePath() && model.getFirebaseDatabase()) {
 
@@ -236,12 +243,12 @@ export class PersistenceManager {
               'action': action == undefined ? null : action
             }
 
-            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + (o.action ? '' : '/data')).set(o.action ? o : o.data).then((data) => {
+            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(o.data).then((data) => {
               resolve(model);
             }).catch((error) => {
               reject(error);
             });
-            resolve(model);
+
 
           } else {
             resolve(model);
@@ -293,7 +300,6 @@ export class PersistenceManager {
   public load(model, json?) {
 
     let self = this;
-
 
 
     return new Promise(function (resolve, reject) {
