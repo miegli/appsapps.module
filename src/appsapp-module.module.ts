@@ -1,5 +1,6 @@
 import {Observable} from 'rxjs';
 import {NgModule, ModuleWithProviders} from '@angular/core';
+import {CommonModule} from "@angular/common";
 import {AppsappModuleProvider} from "./providers/appsapp-module-provider";
 import {AppsappInputComponent} from "./components/input/appsapp-input/appsapp-input";
 import {AppsappInputUrlComponent} from "./components/input/appsapp-input-url/appsapp-input-url";
@@ -16,6 +17,8 @@ import {AppsappInputRatingComponent} from "./components/input/appsapp-input-rati
 import {AppsappInputBirthdayComponent} from "./components/input/appsapp-input-birthday/appsapp-input-birthday";
 import {AppsappInputTextComponent} from "./components/input/appsapp-input-text/appsapp-input-text";
 import {AppsappInputAbstractComponent} from "./components/input/appsapp-input-abstract";
+import {MbscModule} from "@mobiscroll/angular";
+import {FormsModule} from "../node_modules/@mobiscroll/angular/node_modules/@angular/forms/src/form_providers";
 
 @NgModule({
     declarations: [
@@ -36,6 +39,7 @@ import {AppsappInputAbstractComponent} from "./components/input/appsapp-input-ab
         AppsappInputTextComponent,
         AppsappInputAbstractComponent
     ],
+    imports: [MbscModule, FormsModule, CommonModule],
     exports: [
         // export the component(s) that you want others to be able to use
         AppsappInputComponent
