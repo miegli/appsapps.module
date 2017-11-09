@@ -18,7 +18,7 @@ import {AppsappInputBirthdayComponent} from "./components/input/appsapp-input-bi
 import {AppsappInputTextComponent} from "./components/input/appsapp-input-text/appsapp-input-text";
 import {AppsappInputAbstractComponent} from "./components/input/appsapp-input-abstract";
 import {MbscModule} from "@mobiscroll/angular";
-import {FormsModule} from "../node_modules/@mobiscroll/angular/node_modules/@angular/forms/src/form_providers";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
     declarations: [
@@ -39,7 +39,7 @@ import {FormsModule} from "../node_modules/@mobiscroll/angular/node_modules/@ang
         AppsappInputTextComponent,
         AppsappInputAbstractComponent
     ],
-    imports: [MbscModule, FormsModule, CommonModule],
+    imports: [MbscModule, CommonModule, FormsModule],
     exports: [
         // export the component(s) that you want others to be able to use
         AppsappInputComponent
