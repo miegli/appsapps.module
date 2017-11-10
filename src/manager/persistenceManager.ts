@@ -61,7 +61,6 @@ export class PersistenceManager {
     this.observable = new Observable<any>((observer: Observer<any>) => {
       self.observer = observer;
     });
-    this.observable.share();
 
 
     self.storageWrapper.get('_pendingChanges').then((data) => {

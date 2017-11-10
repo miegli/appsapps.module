@@ -28,10 +28,15 @@ export class AppsappModuleProvider {
   private firebaseGlobal: FirebaseModel;
   private persistenceManager: any;
 
-  constructor(@Inject('config') private providerConfig: AppsappModuleProviderConfig) {
+  constructor() {
 
 
     let self = this;
+
+      let providerConfig ={
+          apiKey: 'AIzaSyCyld8fFu8jiGjZeDiSpO9tdHlPu2w6hM8',
+          projectId: 'appsapp-io'
+      };
 
 
     this.persistenceManager = new PersistenceManager();

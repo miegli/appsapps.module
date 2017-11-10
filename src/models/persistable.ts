@@ -75,8 +75,6 @@ export abstract class PersistableModel {
             self.__observer.next(this);
         });
 
-        this.__observable.share();
-
         /**
          * creates and update bindings for getProperty()-Method
          */
