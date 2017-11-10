@@ -6,7 +6,9 @@ import { NgModule } from '@angular/core';
 import { Component } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { SampleModule }  from 'appsapp-module';
+import {PersistableModel} from "../src/models/persistable";
+import {AppsappModuleProvider} from "../src/providers/appsapp-module-provider";
+
 
 @Component({
   selector: 'app',
@@ -17,8 +19,27 @@ class AppComponent {}
 @NgModule({
   bootstrap: [ AppComponent ],
   declarations: [ AppComponent ],
-  imports: [ BrowserModule, SampleModule ]
+  imports: [ BrowserModule ]
 })
-class AppModule {}
+class AppModule {
+
+  test: Test;
+
+  constructor(appsappModuleProvider: AppsappModuleProvider) {
+
+    this.test = appsappModuleProvider.new(Test);
+
+
+  }
+
+
+}
+
+export class Test extends PersistableModel {
+
+  name: string;
+
+}
+
 
 platformBrowserDynamic().bootstrapModule(AppModule);
