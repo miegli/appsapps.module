@@ -981,7 +981,6 @@ export abstract class PersistableModel {
     }
 
 
-
     return this;
 
   }
@@ -996,19 +995,23 @@ export abstract class PersistableModel {
 
       Object.keys(self.__conditionContraintsAffectedProperties[property]).forEach((key) => {
 
-        if (self.__conditionContraintsAffectedProperties[key] !== undefined) {
+          if (key == property) {
+            return chain;
+          }
+          if (self.__conditionContraintsAffectedProperties[key] !== undefined) {
 
-          chain[key] = counter;
-          counter++;
-          self.calculateCircularCondition(key, chain, counter);
-          Object.keys(self.__conditionContraintsAffectedProperties[key]).forEach((k) => {
-            chain[k] = counter;
+            chain[key] = counter;
+            counter++;
+            self.calculateCircularCondition(key, chain, counter);
+            Object.keys(self.__conditionContraintsAffectedProperties[key]).forEach((k) => {
+              chain[k] = counter;
 
-          });
+            });
+
+          }
 
         }
-
-      });
+      );
 
     }
 
@@ -1024,7 +1027,9 @@ export abstract class PersistableModel {
    * @param property
    * @returns {PersistableModel}
    */
-  private executeConditionValidatorCircular(property) {
+  private
+
+  executeConditionValidatorCircular(property) {
 
     let self = this;
 

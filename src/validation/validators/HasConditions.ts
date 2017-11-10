@@ -55,6 +55,7 @@ export function HasConditions(options: [{
           if (options) {
             options.forEach((condition: any) => {
               if (condition.type == 'condition') {
+                state = false;
                 if (!validator[condition.validator](args.object.__conditionContraintsPropertiesValue[condition.property] === undefined ? args.object[condition.property] : args.object.__conditionContraintsPropertiesValue[condition.property], condition.value, condition.validatorAdditionalArgument)) {
                   state = false;
                   return state;
