@@ -85,8 +85,8 @@ export class AppsappModuleProvider {
   public new(constructor: any) {
 
     let model = new constructor();
-    model.setPersistanceManager(this.persistenceManager);
-    this.persistenceManager.initAndload(model);
+    let pm = new PersistenceManager();
+    model.setPersistanceManager(pm.setFirebase(this.firebaseProject).initAndload(model));
 
     return model;
 

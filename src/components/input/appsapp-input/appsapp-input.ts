@@ -123,7 +123,7 @@ export class AppsappInputComponent extends AbstractComponent {
    */
   isHidden(condition) {
 
-    let hidden = false;
+    let hidden = false, self = this;
 
     switch (condition.action) {
 
@@ -136,8 +136,7 @@ export class AppsappInputComponent extends AbstractComponent {
         break;
 
       default:
-        hidden = false;
-
+        hidden = condition.state;
     }
 
     return hidden;

@@ -1,4 +1,11 @@
-# appsapp-module
+# appsapp-module for Angular and Ionicframework
+
+This is an appsApp collection of high quality ui components with awesome backend and validation services full included. Now you build super sophisticated Angular2/Ionic2 apps using TypeScript. Supports Angular's ngc and Ahead-of-Time compiling.
+
+Circular condition validators are the unique selling points. You gonna love it!
+ 
+![Alt text](appsapp-module-screen.png?raw=true "appsApp.io")
+
 
 ## Installation
 
@@ -8,9 +15,9 @@ To install this library, run:
 $ npm install appsapp-module --save
 ```
 
-## Consuming your library
+## Install
 
-Once you have published your library to npm, you can import your library in any Angular application by running:
+Once you have kickstarted your ionic or angular ap, you can import appsApp to your application by running:
 
 ```bash
 $ npm install appsapp-module
@@ -24,8 +31,8 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 
-// Import your library
-import { SampleModule } from 'appsapp-module';
+// Import appsApp module
+import { AppsappModule } from 'appsapp-module';
 
 @NgModule({
   declarations: [
@@ -33,38 +40,15 @@ import { SampleModule } from 'appsapp-module';
   ],
   imports: [
     BrowserModule,
-
-    // Specify your library as an import
-    LibraryModule
+    AppsappModule.initializeApp({
+      apiKey: '***',
+      projectId: 'appsapp-io'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-```
-
-Once your library is imported, you can use its components, directives and pipes in your Angular application:
-
-```xml
-<!-- You can now use your library component in app.component.html -->
-<h1>
-  {{title}}
-</h1>
-<sampleComponent></sampleComponent>
-```
-
-## Development
-
-To generate all `*.js`, `*.d.ts` and `*.metadata.json` files:
-
-```bash
-$ npm run build
-```
-
-To lint all `*.ts` files:
-
-```bash
-$ npm run lint
 ```
 
 ## License

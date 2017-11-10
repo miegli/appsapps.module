@@ -49,18 +49,21 @@ export function HasConditions(options: [{
           const validator = new Validator();
 
           let state = true;
+
           /**
            * iterates over all rules synchronous
            */
           if (options) {
             options.forEach((condition: any) => {
-              if (condition.type == 'condition') {
-                state = false;
-                if (!validator[condition.validator](args.object.__conditionContraintsPropertiesValue[condition.property] === undefined ? args.object[condition.property] : args.object.__conditionContraintsPropertiesValue[condition.property], condition.value, condition.validatorAdditionalArgument)) {
-                  state = false;
-                  return state;
+
+              if (state) {
+                if (condition.type == 'condition') {
+                  if (!validator[condition.validator](args.object.__conditionContraintsPropertiesValue[condition.property] === undefined ? args.object[condition.property] : args.object.__conditionContraintsPropertiesValue[condition.property], condition.value, condition.validatorAdditionalArgument)) {
+                    state = false;
+                  }
                 }
               }
+
             });
           }
 

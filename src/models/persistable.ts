@@ -152,6 +152,8 @@ export abstract class PersistableModel {
     });
 
 
+
+
     return new Promise(function (resolve, reject) {
 
 
@@ -912,6 +914,8 @@ export abstract class PersistableModel {
       let hasRealtimeTypes = false;
 
 
+
+
       self.__conditionActionIfMatchesRemovedProperties[validator.propertyName] = true;
 
       if (self.__conditionActionIfMatches[validator.propertyName] == undefined) {
@@ -981,6 +985,15 @@ export abstract class PersistableModel {
     }
 
 
+    // if (!prepare) {
+    //   Object.keys(self.__conditionActionIfMatchesRemovedProperties).forEach((property) => {
+    //     console.log(property);
+    //     self.setProperty(property, null);
+    //   });
+    // }
+
+
+
     return this;
 
   }
@@ -1027,9 +1040,7 @@ export abstract class PersistableModel {
    * @param property
    * @returns {PersistableModel}
    */
-  private
-
-  executeConditionValidatorCircular(property) {
+  private executeConditionValidatorCircular(property) {
 
     let self = this;
 
@@ -1043,17 +1054,11 @@ export abstract class PersistableModel {
 
     self.executeConditionValidator(property);
 
-
     keys.forEach((key) => {
-
       self.executeConditionValidator(key);
-      // self.__conditionActionIfMatchesObserver[k].next({
-      //   action: self.__conditionActionIfMatchesAction[k],
-      //   state: validateSync(self, {groups: ["condition_" + k], async: true}).length ? true : false
-      // });
-
 
     });
+
 
 
     return this;
@@ -1070,6 +1075,7 @@ export abstract class PersistableModel {
     let self = this;
 
 
+
     if (self.__conditionContraintsProperties[property] !== undefined) {
       if (self.__conditionBindings['properties'][property] !== undefined) {
         self.__conditionBindings['properties'][property].set(self.__conditionContraintsPropertiesValue[property]);
@@ -1079,6 +1085,8 @@ export abstract class PersistableModel {
 
 
     let result = validateSync(self, {groups: ["condition_" + property]});
+
+
 
     if (result.length) {
       self.__conditionContraintsPropertiesValue[property] = null;

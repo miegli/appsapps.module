@@ -89,6 +89,7 @@ export class PersistenceManager {
 
     let self = this;
 
+
     firebaseModel.getDatabase().then((database) => {
       self.firebaseDatabase = database;
     });
@@ -157,11 +158,13 @@ export class PersistenceManager {
 
     let self = this;
 
+
+
     if (!model.getPersistanceManager() || !model.getFirebaseDatabasePath()) {
 
       model.setPersistanceManager(this);
-      this.observable.subscribe((data) => {
 
+      this.observable.subscribe((data) => {
 
         if (data.action == 'connected' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
           this.workOnPendingChanges(model);
@@ -233,6 +236,7 @@ export class PersistenceManager {
 
         self.storageWrapper.set(self.getPersistanceIdentifier(model), model.serialize(false, true)).then((m) => {
 
+          console.log(model.getFirebaseDatabasePath(),model.getFirebaseDatabase());
 
           if (!localStorageOnly && model.getFirebaseDatabasePath() && model.getFirebaseDatabase()) {
 
