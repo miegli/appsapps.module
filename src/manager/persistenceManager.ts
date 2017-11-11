@@ -288,10 +288,7 @@ export class PersistenceManager {
 
             if (p.message && p.message !== 'done') {
               observer.next(model.getMessage(p.message));
-              window.setTimeout(function () {
-                observer.complete();
-              }, 3000);
-
+              observer.complete();
             } else {
               observer.complete();
             }
