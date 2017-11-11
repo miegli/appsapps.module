@@ -4,6 +4,7 @@ import {ConfigModel} from "../models/config";
 import {FirebaseModel} from "../models/firebase";
 import {AngularFireAuth} from "angularfire2/auth";
 import {PersistenceManager} from "../manager/persistenceManager";
+import {mobiscroll} from "@mobiscroll/angular";
 
 
 /*
@@ -20,6 +21,17 @@ export interface AppsappModuleProviderConfig {
   projectId: string
 };
 
+export interface AppsappModuleProviderMessages {
+  saved: string,
+  processing: string,
+  wait: string,
+  done: string,
+  submitted: string,
+  submittedInBackground: string,
+  disconnected: string,
+  connected: string
+};
+
 
 export class AppsappModuleProvider {
 
@@ -27,13 +39,16 @@ export class AppsappModuleProvider {
   private firebaseProject: FirebaseModel;
   private firebaseGlobal: FirebaseModel;
   private persistenceManager: any;
+  private notificationProvider: object;
 
-  constructor(@Inject('config') private providerConfig: AppsappModuleProviderConfig) {
+
+  constructor(@Inject('config') private providerConfig: AppsappModuleProviderConfig, @Inject('messages') private providerMessages: AppsappModuleProviderMessages) {
 
     let self = this;
 
 
     this.persistenceManager = new PersistenceManager();
+
 
     // init configuration instance
     this.config = new ConfigModel();
@@ -46,6 +61,18 @@ export class AppsappModuleProvider {
     // init projects firebase instance
     self.firebaseProject = new FirebaseModel();
 
+    // init notification provider
+    let timeout = null;
+    this.notificationProvider = function (message) {
+      if (timeout) {
+        window.clearTimeout(timeout);
+      }
+      timeout = window.setTimeout(function () {
+        mobiscroll.toast({
+          message: message
+        }).then();
+      }, timeout ? 1000 : 1);
+    }
 
 
     this.config.getObservable().subscribe((config) => {
@@ -86,7 +113,8 @@ export class AppsappModuleProvider {
 
     let model = new constructor();
     let pm = new PersistenceManager();
-    model.setPersistanceManager(pm.setFirebase(this.firebaseProject).initAndload(model));
+
+    model.setNotificationProvider(this.notificationProvider).setMessages(this.providerMessages).setPersistanceManager(pm.setFirebase(this.firebaseProject).initAndload(model));
 
     return model;
 

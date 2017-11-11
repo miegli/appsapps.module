@@ -20,6 +20,7 @@ import {FormsModule} from "@angular/forms";
 import {AppsappModuleProvider} from "./providers/appsapp-module-provider";
 import {AngularFireModule} from "angularfire2";
 import {AppsappModuleProviderConfig} from "./providers/appsapp-module-provider";
+import {AppsappModuleProviderMessages} from "./providers/appsapp-module-provider";
 
 @NgModule({
   declarations: [
@@ -58,10 +59,10 @@ import {AppsappModuleProviderConfig} from "./providers/appsapp-module-provider";
 
 
 export class AppsappModule {
-  static initializeApp(config: AppsappModuleProviderConfig): ModuleWithProviders {
+  static initializeApp(config: AppsappModuleProviderConfig, messages: AppsappModuleProviderMessages): ModuleWithProviders {
     return {
       ngModule: AppsappModule,
-      providers: [AppsappModuleProvider, {provide: 'config', useValue: config}]
+      providers: [AppsappModuleProvider, {provide: 'config', useValue: config}, {provide: 'messages', useValue: messages}]
     };
   }
 }

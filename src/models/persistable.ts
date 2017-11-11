@@ -6,7 +6,7 @@ import {plainToClass, serialize} from "class-transformer";
 import {AngularFireAuth} from "angularfire2/auth";
 import {getFromContainer} from "class-validator";
 import {MetadataStorage} from "class-validator";
-
+import {AppsappModuleProviderMessages} from "../providers/appsapp-module-provider";
 
 export abstract class PersistableModel {
 
@@ -38,6 +38,8 @@ export abstract class PersistableModel {
   private __conditionContraintsProperties: any = {};
   private __conditionContraintsPropertiesValue: any = {};
   private __conditionContraintsAffectedProperties: any = {};
+  private __messages: AppsappModuleProviderMessages;
+  private __notificationProvider: any;
 
   /**
    * PersistanceManager as an optional argument when changes were persisted to stable database
@@ -138,12 +140,79 @@ export abstract class PersistableModel {
     return this;
   }
 
+
+  /**
+   * save with optional observable
+   * @param action
+   * @returns {Promise<any>}
+   */
+  public saveWithPromise(action?: { name: string, data?: {} }) {
+
+    let self = this;
+
+    return new Promise(function (resolve, reject) {
+
+      self.save(action).subscribe((next) => {
+
+      }, (error) => {
+
+        reject(error);
+
+      }, () => {
+
+        resolve();
+
+      })
+
+
+    });
+
+  }
+
+
+  /**
+   * save with optional observable
+   * @param action
+   * @returns {Observable<any>}
+   */
+  public save(action?: { name: string, data?: {} }) {
+
+    let self = this, observer = null;
+
+    self.executeSave(action).subscribe((next) => {
+      if (observer) {
+        observer.next(next);
+      } else {
+        self.notify(next);
+      }
+    }, (error) => {
+      if (observer) {
+        observer.error(error);
+      } else {
+        self.notify(error);
+      }
+    }, () => {
+      if (observer) {
+        observer.complete();
+      } else {
+        self.notify(self.getMessage('done'));
+      }
+    });
+
+    return new Observable<any>((o: Observer<any>) => {
+      observer = o;
+    });
+
+
+  }
+
+
   /**
    * save model and persist if is persistable
    * @param {any} action as an optinal argument for transmitting additional action metadata
-   * @returns {PersistableModel}
+   * @returns {Observable<any>}
    */
-  public save(action?: {'name': string, 'data': {}}) {
+  private executeSave(action?: { name: string, data?: {} }) {
 
     let self = this;
 
@@ -152,35 +221,39 @@ export abstract class PersistableModel {
     });
 
 
-
-
-    return new Promise(function (resolve, reject) {
-
+    return new Observable<any>((observer: Observer<any>) => {
 
       self.validate().then(() => {
 
         self.setHasPendingChanges(true, action);
 
         if (self.__persistenceManager) {
-          self.__persistenceManager.save(self, action).then((success) => {
+          self.__persistenceManager.save(self, observer, action).then((success) => {
             self.__edited = {};
-            resolve(self);
+
+            if (action) {
+              if (self.isOnline()) {
+                observer.next(self.getMessage('submitted'));
+              } else {
+                observer.next(self.getMessage('submittedInBackground'));
+              }
+            } else {
+              observer.complete();
+            }
+
           }).catch((error) => {
-            console.log(error);
             self.__edited = {};
-            reject(error);
+            observer.error(error);
           });
 
         } else {
-          reject('No persistence Manger provided');
+          observer.error('No persistence Manger provided');
           self.__edited = {};
         }
 
-
       }).catch((error) => {
-        reject(error);
+        observer.error(error);
       });
-
 
     });
 
@@ -267,8 +340,12 @@ export abstract class PersistableModel {
     let connectedRef = this.__firebaseDatabase.app.database().ref(".info/connected");
     connectedRef.on("value", (snap) => {
       self.__isOnline = snap.val();
+
       if (self.__persistenceManager && self.__isOnline) {
         self.__persistenceManager.getObserver().next({'action': 'connected'});
+      }
+      if (self.__persistenceManager && !self.__isOnline) {
+        self.__persistenceManager.getObserver().next({'action': 'disconnected'});
       }
 
     });
@@ -402,6 +479,28 @@ export abstract class PersistableModel {
 
   }
 
+  /**
+   * set module provider messages
+   * @param {AppsappModuleProviderMessages} messages
+   * @returns {PersistableModel}
+   */
+  private setMessages(messages: AppsappModuleProviderMessages) {
+
+    this.__messages = messages;
+    return this;
+
+  }
+
+  /**
+   * get modules providers message
+   * @param keyword
+   * @returns {any}
+   */
+  public getMessage(keyword) {
+
+    return this.__messages[keyword] == undefined ? keyword : this.__messages[keyword];
+
+  }
 
   /**
    * set property value for using as an binding variable
@@ -914,8 +1013,6 @@ export abstract class PersistableModel {
       let hasRealtimeTypes = false;
 
 
-
-
       self.__conditionActionIfMatchesRemovedProperties[validator.propertyName] = true;
 
       if (self.__conditionActionIfMatches[validator.propertyName] == undefined) {
@@ -993,7 +1090,6 @@ export abstract class PersistableModel {
     // }
 
 
-
     return this;
 
   }
@@ -1060,7 +1156,6 @@ export abstract class PersistableModel {
     });
 
 
-
     return this;
 
   }
@@ -1075,7 +1170,6 @@ export abstract class PersistableModel {
     let self = this;
 
 
-
     if (self.__conditionContraintsProperties[property] !== undefined) {
       if (self.__conditionBindings['properties'][property] !== undefined) {
         self.__conditionBindings['properties'][property].set(self.__conditionContraintsPropertiesValue[property]);
@@ -1085,7 +1179,6 @@ export abstract class PersistableModel {
 
 
     let result = validateSync(self, {groups: ["condition_" + property]});
-
 
 
     if (result.length) {
@@ -1152,6 +1245,32 @@ export abstract class PersistableModel {
         this[property] = this.__temp[property];
       }
     }
+
+    return this;
+
+  }
+
+
+  /**
+   * set notificationProvider
+   * @param notificationProvider
+   * @returns {PersistableModel}
+   */
+  private setNotificationProvider(notificationProvider) {
+
+    this.__notificationProvider = notificationProvider;
+
+    return this;
+  }
+
+  /**
+   * send notification message to user
+   * @param message
+   * @returns {PersistableModel}
+   */
+  public notify(message) {
+
+    this.__notificationProvider(message);
 
     return this;
 

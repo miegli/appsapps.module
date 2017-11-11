@@ -190,15 +190,7 @@ export class PersistenceManager {
             } else {
 
               model.loadJson(action.payload.val()).then((m) => {
-
                 m.emit();
-
-                // self.save(model,{},true).then(() => {
-                //   m.emit();
-                // }).catch((error) => {
-                //   console.log(error);
-                // });
-
               }).catch((error) => {
                 //
                 console.log('error', error);
@@ -223,11 +215,12 @@ export class PersistenceManager {
   /**
    * save one model to storage
    * @param model
+   * @param {Observer} observer
    * @param action
    * @param {boolean} localStorageOnly
    * @returns {Promise<any>}
    */
-  public save(model, action?: { 'name': string, 'data': {} }, localStorageOnly?) {
+  public save(model, observer, action?: { 'name': string, 'data': {} }, localStorageOnly?) {
 
     let self = this;
 
@@ -241,13 +234,71 @@ export class PersistenceManager {
 
           if (!localStorageOnly && model.getFirebaseDatabasePath() && model.getFirebaseDatabase()) {
 
+            resolve(model);
 
             model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(model.serialize(true, true)).then((data) => {
 
               if (action) {
 
-                model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action').set(self.getActionDataWithIdentifier(action, model)).then((data) => {
+                let c = self.getActionDataWithIdentifier(action, model);
+
+                observer.next(model.getMessage('processing'));
+
+                self.observable.subscribe((data) => {
+
+                  let timeout = null;
+
+                  if (data.action == 'disconnected') {
+                    observer.next(model.getMessage('disconnected'));
+                    timeout = window.setTimeout(function () {
+                      if (!model.isOnline()) {
+                        observer.next(model.getMessage('submittedInBackground'));
+                        window.setTimeout(function () {
+                          observer.complete();
+                        }, 5000);
+                      }
+                    }, 15000);
+
+                  }
+                  if (data.action == 'connected') {
+                    window.clearTimeout(timeout);
+                    observer.next(model.getMessage('connected'));
+                    window.setTimeout(function () {
+                      observer.next(model.getMessage('processing'));
+                    }, 3000);
+                  }
+
+                });
+
+                model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action').set(c).then((data) => {
                   model.setHasPendingChanges(false);
+                  model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action/' + Object.keys(c)[0]).snapshotChanges().subscribe((action) => {
+                    let p = action.payload.val();
+                    if (p && p.state && p.state !== 'requested') {
+
+                      if (p.message && p.message !== 'done' && p.state !== 'done') {
+                        observer.next(model.getMessage(p.message));
+                      }
+
+                      if (p.state == 'done') {
+
+                        if (p.message && p.message !== 'done') {
+                          observer.next(model.getMessage(p.message));
+                          window.setTimeout(function () {
+                            observer.complete();
+                          }, 3000);
+
+                        } else {
+                          observer.complete();
+                        }
+
+                      }
+                    }
+
+                  }, (error) => {
+                    // skip access denied
+                  });
+
                 }).catch((error) => {
                   reject(error);
                 });
@@ -261,7 +312,6 @@ export class PersistenceManager {
               reject(error);
             });
 
-            resolve(model);
 
           } else {
             resolve(model);
@@ -292,7 +342,7 @@ export class PersistenceManager {
 
     let d = {};
     action.state = 'requested';
-    d[objectHash.sha1([model.serialize(true),action])] = action;
+    d[objectHash.sha1([model.serialize(true), action])] = action;
 
     return d;
 
@@ -451,8 +501,6 @@ export class PersistenceManager {
             }
 
 
-            console.log(o, self._pendingChangesModels[object].firebase);
-
             if (self._pendingChangesModels[object].firebase.path) {
               try {
                 model.getFirebaseDatabase().object(self._pendingChangesModels[object].firebase.path + "/data").set(o).then((data) => {
@@ -471,7 +519,6 @@ export class PersistenceManager {
                       self.updatePropertyFromLocalStorage('_hasPendingChanges', false, object).then((o) => {
                         resolve(o);
                       }).catch((error) => {
-                        console.log(error);
                         reject(error);
                       });
 
