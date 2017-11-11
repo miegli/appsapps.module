@@ -171,6 +171,45 @@ export abstract class PersistableModel {
 
 
   /**
+   * execute cation
+   * @param action
+   * @returns {Promise<any>}
+   */
+  public action(action: { name: string, data?: {} }) {
+
+    let self = this;
+
+    let observable = new Observable<any>((observer: Observer<any>) => {
+
+      if (self.__persistenceManager) {
+        self.__persistenceManager.action(self, observer, action).then((success) => {
+          observer.complete();
+        }).catch((error) => {
+          observer.error(error);
+        });
+      } else {
+        observer.error('No persistence Manger provided');
+      }
+
+    });
+
+
+    return new Promise(function (resolve, reject) {
+
+      observable.subscribe((next) => {
+      }, (error) => {
+        reject(error);
+      }, () => {
+        resolve();
+      })
+
+    });
+
+
+  }
+
+
+  /**
    * save with optional observable
    * @param action
    * @returns {Observable<any>}

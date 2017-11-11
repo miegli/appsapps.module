@@ -217,10 +217,108 @@ export class PersistenceManager {
    * @param model
    * @param {Observer} observer
    * @param action
+   * @returns {Promise<any>}
+   */
+  public action(model, observer, action: { name: string, data?: {} }) {
+
+    let self = this;
+
+    return new Promise(function (resolve, reject) {
+
+      self.callAction(model, observer, action, resolve, reject);
+
+    });
+
+  }
+
+
+  /**
+   *
+   * @param model
+   * @param observer
+   * @param action
+   * @param resolve
+   * @param reject
+   * @returns void
+   */
+  private callAction(model, observer, action: { name: string, data?: {} }, resolve, reject) {
+
+
+    let self = this, c = self.getActionDataWithIdentifier(action, model);
+
+    observer.next(model.getMessage('processing'));
+
+    self.observable.subscribe((data) => {
+
+      let timeout = null;
+
+      if (data.action == 'disconnected') {
+        observer.next(model.getMessage('disconnected'));
+        timeout = window.setTimeout(function () {
+          if (!model.isOnline()) {
+            observer.next(model.getMessage('submittedInBackground'));
+            window.setTimeout(function () {
+              observer.complete();
+            }, 5000);
+          }
+        }, 15000);
+
+      }
+      if (data.action == 'connected') {
+        window.clearTimeout(timeout);
+        observer.next(model.getMessage('connected'));
+        window.setTimeout(function () {
+          observer.next(model.getMessage('processing'));
+        }, 3000);
+      }
+
+    });
+
+    model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action').set(c).then((data) => {
+      model.setHasPendingChanges(false);
+      model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action/' + Object.keys(c)[0]).snapshotChanges().subscribe((action) => {
+        let p = action.payload.val();
+        if (p && p.state && p.state !== 'requested') {
+
+          if (p.message && p.message !== 'done' && p.state !== 'done') {
+            observer.next(model.getMessage(p.message));
+          }
+
+          if (p.state == 'done') {
+
+            if (p.message && p.message !== 'done') {
+              observer.next(model.getMessage(p.message));
+              window.setTimeout(function () {
+                observer.complete();
+              }, 3000);
+
+            } else {
+              observer.complete();
+            }
+
+          }
+        }
+
+      }, (error) => {
+        // skip access denied
+      });
+
+    }).catch((error) => {
+      reject(error);
+    });
+
+
+  }
+
+  /**
+   * save one model to storage
+   * @param model
+   * @param {Observer} observer
+   * @param action
    * @param {boolean} localStorageOnly
    * @returns {Promise<any>}
    */
-  public save(model, observer, action?: { 'name': string, 'data': {} }, localStorageOnly?) {
+  public save(model, observer, action?: { name: string, data?: {} }, localStorageOnly?) {
 
     let self = this;
 
@@ -239,74 +337,10 @@ export class PersistenceManager {
             model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(model.serialize(true, true)).then((data) => {
 
               if (action) {
-
-                let c = self.getActionDataWithIdentifier(action, model);
-
-                observer.next(model.getMessage('processing'));
-
-                self.observable.subscribe((data) => {
-
-                  let timeout = null;
-
-                  if (data.action == 'disconnected') {
-                    observer.next(model.getMessage('disconnected'));
-                    timeout = window.setTimeout(function () {
-                      if (!model.isOnline()) {
-                        observer.next(model.getMessage('submittedInBackground'));
-                        window.setTimeout(function () {
-                          observer.complete();
-                        }, 5000);
-                      }
-                    }, 15000);
-
-                  }
-                  if (data.action == 'connected') {
-                    window.clearTimeout(timeout);
-                    observer.next(model.getMessage('connected'));
-                    window.setTimeout(function () {
-                      observer.next(model.getMessage('processing'));
-                    }, 3000);
-                  }
-
-                });
-
-                model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action').set(c).then((data) => {
-                  model.setHasPendingChanges(false);
-                  model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action/' + Object.keys(c)[0]).snapshotChanges().subscribe((action) => {
-                    let p = action.payload.val();
-                    if (p && p.state && p.state !== 'requested') {
-
-                      if (p.message && p.message !== 'done' && p.state !== 'done') {
-                        observer.next(model.getMessage(p.message));
-                      }
-
-                      if (p.state == 'done') {
-
-                        if (p.message && p.message !== 'done') {
-                          observer.next(model.getMessage(p.message));
-                          window.setTimeout(function () {
-                            observer.complete();
-                          }, 3000);
-
-                        } else {
-                          observer.complete();
-                        }
-
-                      }
-                    }
-
-                  }, (error) => {
-                    // skip access denied
-                  });
-
-                }).catch((error) => {
-                  reject(error);
-                });
-
+                self.callAction(model,observer,action,resolve,reject);
               } else {
                 model.setHasPendingChanges(false);
               }
-
 
             }).catch((error) => {
               reject(error);
