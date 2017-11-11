@@ -143,7 +143,7 @@ export abstract class PersistableModel {
    * @param {any} action as an optinal argument for transmitting additional action metadata
    * @returns {PersistableModel}
    */
-  public save(action?) {
+  public save(action?: {'name': string, 'data': {}}) {
 
     let self = this;
 

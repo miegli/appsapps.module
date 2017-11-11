@@ -7,6 +7,8 @@ import {Observable} from "rxjs/Observable";
 import {FirebaseModel} from "../models/firebase";
 import {AngularFireAuth} from "angularfire2/auth";
 
+import * as objectHash from 'object-hash';
+
 @Injectable()
 
 export class PersistenceManager {
@@ -22,7 +24,6 @@ export class PersistenceManager {
   constructor() {
 
     let self = this;
-
 
     let storage = new LocalStorageService({storageType: 'localStorage', prefix: 'appsapps-'});
 
@@ -159,7 +160,6 @@ export class PersistenceManager {
     let self = this;
 
 
-
     if (!model.getPersistanceManager() || !model.getFirebaseDatabasePath()) {
 
       model.setPersistanceManager(this);
@@ -180,9 +180,13 @@ export class PersistenceManager {
           model.setFirebaseDatabaseObject(model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + "/data")).getFirebaseDatabaseObject().snapshotChanges().subscribe((action) => {
 
             if (model.hasPendingChanges()) {
-              self.workOnPendingChanges(model).then(() => {
-                model.setHasPendingChanges(false).emit();
-              }).catch();
+
+              window.setTimeout(function () {
+                self.workOnPendingChanges(model).then(() => {
+                  model.setHasPendingChanges(false).emit();
+                }).catch();
+              }, 2000);
+
             } else {
 
               model.loadJson(action.payload.val()).then((m) => {
@@ -219,11 +223,11 @@ export class PersistenceManager {
   /**
    * save one model to storage
    * @param model
-   * @param {any} action
-   * @param {any} localStorageOnly
+   * @param action
+   * @param {boolean} localStorageOnly
    * @returns {Promise<any>}
    */
-  public save(model, action?, localStorageOnly?) {
+  public save(model, action?: { 'name': string, 'data': {} }, localStorageOnly?) {
 
     let self = this;
 
@@ -233,24 +237,31 @@ export class PersistenceManager {
 
       model.validate(localStorageOnly).then(() => {
 
-
         self.storageWrapper.set(self.getPersistanceIdentifier(model), model.serialize(false, true)).then((m) => {
-
-          console.log(model.getFirebaseDatabasePath(),model.getFirebaseDatabase());
 
           if (!localStorageOnly && model.getFirebaseDatabasePath() && model.getFirebaseDatabase()) {
 
-            let o = {
-              'data': model.serialize(true, true),
-              'action': action == undefined ? null : action
-            }
 
-            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(o.data).then((data) => {
-              resolve(model);
+            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(model.serialize(true, true)).then((data) => {
+
+              if (action) {
+
+                model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action').set(self.getActionDataWithIdentifier(action, model)).then((data) => {
+                  model.setHasPendingChanges(false);
+                }).catch((error) => {
+                  reject(error);
+                });
+
+              } else {
+                model.setHasPendingChanges(false);
+              }
+
+
             }).catch((error) => {
               reject(error);
             });
 
+            resolve(model);
 
           } else {
             resolve(model);
@@ -266,6 +277,24 @@ export class PersistenceManager {
 
 
     });
+
+
+  }
+
+
+  /**
+   * prepare action data for transmitting
+   * @param action
+   * @param model
+   * @returns {any}
+   */
+  private getActionDataWithIdentifier(action, model) {
+
+    let d = {};
+    action.state = 'requested';
+    d[objectHash.sha1([model.serialize(true),action])] = action;
+
+    return d;
 
 
   }
@@ -421,27 +450,50 @@ export class PersistenceManager {
               // e
             }
 
-            let d = {
-              'data': o,
-              'action': self._pendingChangesModels[object].action == undefined ? null : self._pendingChangesModels[object].action
-            }
 
+            console.log(o, self._pendingChangesModels[object].firebase);
 
             if (self._pendingChangesModels[object].firebase.path) {
               try {
-                model.getFirebaseDatabase().object(self._pendingChangesModels[object].firebase.path).set(d).then((data) => {
+                model.getFirebaseDatabase().object(self._pendingChangesModels[object].firebase.path + "/data").set(o).then((data) => {
 
-                  try {
-                    delete self._pendingChangesModels[object];
-                  } catch (e) {
-                    // e
+
+                  if (self._pendingChangesModels[object] && self._pendingChangesModels[object].action) {
+
+                    model.getFirebaseDatabase().object(self._pendingChangesModels[object].firebase.path + "/action").update(self._pendingChangesModels[object].action).then((data) => {
+
+                      try {
+                        delete self._pendingChangesModels[object];
+                      } catch (e) {
+                        // e
+                      }
+
+                      self.updatePropertyFromLocalStorage('_hasPendingChanges', false, object).then((o) => {
+                        resolve(o);
+                      }).catch((error) => {
+                        console.log(error);
+                        reject(error);
+                      });
+
+                    }).catch((error) => {
+                      reject(error);
+                    });
+
+                  } else {
+
+                    try {
+                      delete self._pendingChangesModels[object];
+                    } catch (e) {
+                      // e
+                    }
+
+                    self.updatePropertyFromLocalStorage('_hasPendingChanges', false, object).then((o) => {
+                      resolve(o);
+                    }).catch((error) => {
+                      reject(error);
+                    });
+
                   }
-
-                  self.updatePropertyFromLocalStorage('_hasPendingChanges', false, object).then((o) => {
-                    resolve(o);
-                  }).catch((error) => {
-                    console.log(error);
-                  });
 
 
                 }).catch((error) => {
@@ -489,10 +541,8 @@ export class PersistenceManager {
     }
 
     if (action) {
-      Object.keys(action).forEach((key) => {
-        this._pendingChangesModels[i]['action'][key] = action[key];
-      });
-
+      let a = this.getActionDataWithIdentifier(action, model);
+      this._pendingChangesModels[i]['action'][Object.keys(a)[0]] = a[Object.keys(a)[0]];
     }
 
     this._pendingChangesModels[i]['constructor'] = model.constructor.name;
@@ -510,7 +560,6 @@ export class PersistenceManager {
       });
 
     }
-
 
   }
 
