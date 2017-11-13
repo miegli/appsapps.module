@@ -36,3 +36,4 @@ dist/*
 
 # Playground tmp files
 .playground
+/src/backend/functions/node_modules/

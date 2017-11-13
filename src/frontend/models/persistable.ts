@@ -212,9 +212,10 @@ export abstract class PersistableModel {
   /**
    * save with optional observable
    * @param action
+   * @param silent
    * @returns {Observable<any>}
    */
-  public save(action?: { name: string, data?: {} }) {
+  public save(action?: { name: string, data?: {} }, silent?: boolean) {
 
     let self = this, observer = null;
 
@@ -222,19 +223,25 @@ export abstract class PersistableModel {
       if (observer) {
         observer.next(next);
       } else {
-        self.notify(next);
+        if (!silent) {
+          self.notify(next);
+        }
       }
     }, (error) => {
       if (observer) {
         observer.error(error);
       } else {
-        self.notify(error);
+        if (!silent) {
+          self.notify(error);
+        }
       }
     }, () => {
       if (observer) {
         observer.complete();
       } else {
-        self.notify(self.getMessage('done'));
+       if (!silent) {
+         self.notify(self.getMessage('done'));
+       }
       }
     });
 
