@@ -5,7 +5,8 @@ import {FirebaseModel} from "../models/firebase";
 import {AngularFireAuth} from "angularfire2/auth";
 import {PersistenceManager} from "../manager/persistenceManager";
 import {mobiscroll} from "@mobiscroll/angular";
-
+import * as ts from "typescript";
+import * as CryptoJS from 'crypto-js';
 
 /*
   Generated class for the AppProvider provider.
@@ -32,6 +33,8 @@ export interface AppsappModuleProviderMessages {
   connected: string
 };
 
+
+declare var require: any
 
 export class AppsappModuleProvider {
 
@@ -225,6 +228,18 @@ export class AppsappModuleProvider {
 
     });
 
+
+  }
+
+
+  /**
+   *
+   * @param {string} data
+   * @returns {string}
+   */
+  public appsAppEncrypt(data: string) {
+
+   return data;
 
   }
 

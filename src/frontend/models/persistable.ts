@@ -8,6 +8,31 @@ import {getFromContainer} from "class-validator";
 import {MetadataStorage} from "class-validator";
 import {AppsappModuleProviderMessages} from "../providers/appsapp-module-provider";
 
+
+export interface actionEmail {
+  name: 'email',
+  data: {
+    template: string,
+    to: string
+  }
+}
+
+export interface actionWebhook {
+  name: 'webhook',
+  data: {
+    url: string
+  }
+}
+
+export interface actionAny {
+  name: 'custom',
+  data: {
+    name: string
+  }
+}
+
+
+
 export abstract class PersistableModel {
 
 
@@ -146,7 +171,7 @@ export abstract class PersistableModel {
    * @param action
    * @returns {Promise<any>}
    */
-  public saveWithPromise(action?: { name: string, data?: {} }) {
+  public saveWithPromise(action?:actionEmail|actionWebhook|actionAny) {
 
     let self = this;
 
@@ -209,13 +234,14 @@ export abstract class PersistableModel {
   }
 
 
+
   /**
    * save with optional observable
    * @param action
    * @param silent
    * @returns {Observable<any>}
    */
-  public save(action?: { name: string, data?: {} }, silent?: boolean) {
+  public save(action?:actionEmail|actionWebhook|actionAny, silent?: boolean) {
 
     let self = this, observer = null;
 
@@ -239,9 +265,9 @@ export abstract class PersistableModel {
       if (observer) {
         observer.complete();
       } else {
-       if (!silent) {
-         self.notify(self.getMessage('done'));
-       }
+        if (!silent) {
+          self.notify(self.getMessage('done'));
+        }
       }
     });
 
@@ -258,7 +284,7 @@ export abstract class PersistableModel {
    * @param {any} action as an optinal argument for transmitting additional action metadata
    * @returns {Observable<any>}
    */
-  private executeSave(action?: { name: string, data?: {} }) {
+  private executeSave(action?:actionEmail|actionWebhook|actionAny) {
 
     let self = this;
 
@@ -850,7 +876,7 @@ export abstract class PersistableModel {
    * @param {any} action as an optional argument
    * @returns {PersistableModel}
    */
-  public setHasPendingChanges(state, action?) {
+  public setHasPendingChanges(state, action?:actionEmail|actionWebhook|actionAny) {
 
     if (state && this.__persistenceManager) {
       this.__persistenceManager.addPendingChanges(this, action);
