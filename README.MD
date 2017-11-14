@@ -23,6 +23,19 @@ Once you have kickstarted your ionic or angular ap, you can import appsApp to yo
 $ npm install appsapp-module
 ```
 
+Install peer dependencies if needed:
+
+```bash
+$ npm install --save angular-2-local-storage@^1.0.1
+$ npm install --save angular2-uuid@^1.1.1
+$ npm install --save angularfire2@5.0.0-rc.0
+$ npm install --save class-transformer@^0.1.8
+$ npm install --save class-validator@^0.7.3
+$ npm install --save firebase@^4.6.1
+$ npm install --save object-hash@1.2.0
+```
+
+
 and then from your Angular `AppModule`:
 
 ```typescript
@@ -41,8 +54,17 @@ import { AppsappModule } from 'appsapp-module';
   imports: [
     BrowserModule,
     AppsappModule.initializeApp({
-      apiKey: '***',
-      projectId: 'appsapp-io'
+      apiKey: '**firebase-public-api-key**',
+      projectId: '**firebase-project-id**'
+    }, {
+      saved: 'Die Änderungen wurden erfolgreich gespeichert.',
+      processing: 'Die Verarbeitung läuft.',
+      wait: 'Bitte warten.',
+      done: 'Erfolgreich abgeschlossen.',
+      submitted: 'Die Daten wurden übermittelt.',
+      submittedInBackground: 'Die Daten wurden gespeichert und werden übermittelt, sobald eine Internetverbindung besteht.',
+      disconnected: 'Die Verbindung wurde unterbrochen.',
+      connected: 'Die Verbindung wurde wiederhergestellt.'
     })
   ],
   providers: [],
