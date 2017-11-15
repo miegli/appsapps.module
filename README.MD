@@ -2,7 +2,7 @@
 
 **Attention: Don't use it in production environment. It's an alpha version for a concept study.** 
 
-This is an appsApp collection of high quality ui components with awesome backend and validation services full included. Now you build super sophisticated Angular2/Ionic2 apps using TypeScript. Supports Angular's ngc and Ahead-of-Time compiling.
+This is an appsApp collection of high quality ui components with awesome backend and validation services full included. Now you build super sophisticated Angular/Ionic apps using TypeScript. Supports Angular's ngc and Ahead-of-Time compiling.
 
 Circular condition validators are the unique selling points. You gonna love it!
  
@@ -19,18 +19,8 @@ $ npm install appsapp-module --save
 
 You also need mobiscroll. So please obtain a licence (see https://www.mobiscroll.com/) and then run:
 
-- `npm install -g @mobiscroll/cli`
-
-Install peer dependencies if needed:
-
 ```bash
-$ npm install --save angular-2-local-storage@^1.0.1
-$ npm install --save angular2-uuid@^1.1.1
-$ npm install --save angularfire2@5.0.0-rc.0
-$ npm install --save class-transformer@^0.1.8
-$ npm install --save class-validator@^0.7.3
-$ npm install --save firebase@^4.6.1
-$ npm install --save object-hash@1.2.0
+$ npm install -g @mobiscroll/cli`
 ```
 
 and then from your Angular `AppModule`:
