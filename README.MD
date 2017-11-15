@@ -1,4 +1,4 @@
-# appsapp-module for Angular and Ionicframework
+# appsapp-module for Ionicframework
 
 **Attention: Don't use it in production environment. It's an alpha version for a concept study.** 
 
@@ -11,23 +11,18 @@ Circular condition validators are the unique selling points. You gonna love it!
 
 ## Install
 
-Once you have kickstarted your ionic or angular app, you can import appsApp to your application by running:
-
-```bash
-$ npm install appsapp-module --save
-```
-
-You also need mobiscroll. So please obtain a licence (see https://www.mobiscroll.com/) and then run:
+You need mobiscroll. So please obtain a licence (see https://www.mobiscroll.com/) and then run:
 
 ```bash
 $ npm install -g @mobiscroll/cli
 ```
 
+Once you have kickstarted your ionic app, you can import appsApp to your application by running:
 
-If you are using ionic then run in your apps root directory:
 
 ```bash
 $ mobiscroll config ionic
+$ npm install appsapp-module --save
 ```
 
 
