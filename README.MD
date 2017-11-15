@@ -1,5 +1,7 @@
 # appsapp-module for Angular and Ionicframework
 
+**Attention: Don't use it in production environment. It's an alpha version for a concept study.** 
+
 This is an appsApp collection of high quality ui components with awesome backend and validation services full included. Now you build super sophisticated Angular2/Ionic2 apps using TypeScript. Supports Angular's ngc and Ahead-of-Time compiling.
 
 Circular condition validators are the unique selling points. You gonna love it!
@@ -7,21 +9,17 @@ Circular condition validators are the unique selling points. You gonna love it!
 ![Alt text](appsapp-module-screen.png?raw=true "appsApp.io")
 
 
-## Installation
+## Install
 
-To install this library, run:
+Once you have kickstarted your ionic or angular app, you can import appsApp to your application by running:
 
 ```bash
 $ npm install appsapp-module --save
 ```
 
-## Install
+You also need mobiscroll. So please obtain a licence (see https://www.mobiscroll.com/) and then run:
 
-Once you have kickstarted your ionic or angular ap, you can import appsApp to your application by running:
-
-```bash
-$ npm install appsapp-module
-```
+- `npm install -g @mobiscroll/cli`
 
 Install peer dependencies if needed:
 
@@ -34,7 +32,6 @@ $ npm install --save class-validator@^0.7.3
 $ npm install --save firebase@^4.6.1
 $ npm install --save object-hash@1.2.0
 ```
-
 
 and then from your Angular `AppModule`:
 
@@ -72,6 +69,51 @@ import { AppsappModule } from 'appsapp-module';
 })
 export class AppModule { }
 ```
+
+
+## Create your first form app
+
+Your component ts ends up with:
+```
+import {AppsappModuleProvider, PersistableModel, HasConditions, HasPrecision, HasLabel, IsDateRange, HasDescription} from "appsapp-module";
+import {IsInt, Min, Max, IsIn} from "class-validator";
+
+@Component({
+  selector: 'page-home',
+  template: ´
+  <appsapp-input [model]="myModel"></appsapp-input>
+  <button ion-button round outline (click)="save()" [disabled]="!myModel.hasChanges()">
+    Änderungen speichern
+  </button>
+  ´
+})
+
+export class HomePage {
+
+  myModel: myModel;
+
+  constructor(public navCtrl: NavController, appsappModuleProvider: AppsappModuleProvider) {
+    this.myModel = appsappModuleProvider.new(myModel);
+  }
+
+  save() {
+    this.myModel.save();
+  }
+
+}
+
+
+export class myModel extends PersistableModel {
+  @IsInt() @Min(5) @Max(15) @HasDescription('please enter a number') number: number;
+  @HasConditions([{property: 'number', value: 7, validator: 'min'}]) @HasLabel('Your text') text: string = 'test';
+  @IsDateRange() daterange: object;
+}
+
+```
+
+Congratulation, you have created your first form app with appsApp!
+
+![Alt text](appsapp-module-screen2.png?raw=true "appsApp.io")
 
 ## License
 

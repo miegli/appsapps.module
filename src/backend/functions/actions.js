@@ -1,4 +1,5 @@
 const actions = {
-  test: require('./actions/test')
+  webhook: require('./actions/webhook'),
+  email: require('./actions/email')
 }
 module.exports = actions;

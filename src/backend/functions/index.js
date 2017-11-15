@@ -21,13 +21,20 @@
 
 'use strict';
 
-
+/**
+ * load core modules
+ */
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+admin.initializeApp(functions.config().firebase);
 const uuidV1 = require('uuid/v1');
+const request = require('request-promise');
+
+/**
+ * load action modules
+ */
 const actions = require('./actions');
 
-admin.initializeApp(functions.config().firebase);
 
 
 /**
@@ -103,23 +110,51 @@ exports.connectCloudFirestore = functions.firestore.document('session/{user}/{pr
 function call(action, data, identifier) {
 
   if (action.action !== undefined && action.action.name !== undefined && actions[action.action.name] !== undefined) {
-    actions[action.action.name](action, data).then(function (data) {
-      admin.database().ref('_events/' + identifier).remove().then(function () {
-        admin.database().ref(action.target + "/action/" + action.actionid).update(data).then(function () {
-          admin.database().ref(action.target + "/action/" + action.actionid).remove().then();
-        });
 
-      });
-    }).catch(function (error) {
-      admin.database().ref('_events/' + identifier).remove().then(function () {
-        admin.database().ref(action.target + "/action/" + action.actionid).remove().then(function () {
-          console.log(error);
+    decrypt(action).then((action) => {
+
+      actions[action.action.name](action, data).then(function (data) {
+        admin.database().ref('_events/' + identifier).remove().then(function () {
+          admin.database().ref(action.target + "/action/" + action.actionid).update(data).then(function () {
+            admin.database().ref(action.target + "/action/" + action.actionid).remove().then();
+          });
+        });
+      }).catch(function (error) {
+        admin.database().ref('_events/' + identifier).remove().then(function () {
+          admin.database().ref(action.target + "/action/" + action.actionid).remove().then(function () {
+            console.log(error);
+          });
         });
       });
+
     });
+
+
   }
 
 
 }
 
+/**
+ *
+ * @param data
+ */
+function decrypt(data) {
+
+  return new Promise(function (resolve, reject) {
+
+
+    admin.database().ref("_sha1").once('value',(snapshot) => {
+
+      call(actiondata, snapshot.val(), identifier);
+
+
+    });
+
+    resolve(data);
+
+  });
+
+
+}
 
