@@ -74,7 +74,7 @@ export class AppModule { }
 ## Create your first form app
 
 Your component ts ends up with:
-```
+```typescript
 import {AppsappModuleProvider, PersistableModel, HasConditions, HasPrecision, HasLabel, IsDateRange, HasDescription} from "appsapp-module";
 import {IsInt, Min, Max, IsIn} from "class-validator";
 
@@ -111,7 +111,8 @@ export class myModel extends PersistableModel {
 
 ```
 
-Congratulation, you have created your first form app with appsApp!
+**Congratulation, you have created your first form app with appsApp!**
+
 
 ![Alt text](appsapp-module-screen2.png?raw=true "appsApp.io")
 
