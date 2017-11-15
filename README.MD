@@ -20,8 +20,16 @@ $ npm install appsapp-module --save
 You also need mobiscroll. So please obtain a licence (see https://www.mobiscroll.com/) and then run:
 
 ```bash
-$ npm install -g @mobiscroll/cli`
+$ npm install -g @mobiscroll/cli
 ```
+
+
+If you are using ionic then run in your apps root directory:
+
+```bash
+$ mobiscroll config ionic
+```
+
 
 and then from your Angular `AppModule`:
 
