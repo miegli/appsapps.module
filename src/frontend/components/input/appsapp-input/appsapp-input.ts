@@ -83,6 +83,8 @@ export class AppsappInputComponent extends AbstractComponent {
 
     let self = this;
 
+
+
     if (this.model) {
 
       if (this.property) {
@@ -94,6 +96,7 @@ export class AppsappInputComponent extends AbstractComponent {
         })});
 
       } else {
+
 
 
         Object.keys(this.model).forEach((property) => {

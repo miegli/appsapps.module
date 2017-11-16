@@ -8,6 +8,7 @@ import {mobiscroll} from "@mobiscroll/angular";
 import * as ts from "typescript";
 import * as CryptoJS from 'crypto-js';
 
+
 /*
   Generated class for the AppProvider provider.
 

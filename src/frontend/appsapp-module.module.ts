@@ -56,7 +56,10 @@ import {AppsappInputNumberPlainComponent} from "./components/input/appsapp-input
   exports: [
     // export the component(s) that you want others to be able to use
     AppsappInputComponent
-  ]
+  ],
+   entryComponents: [
+     AppsappInputIntegerComponent
+   ]
 })
 
 

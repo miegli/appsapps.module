@@ -13,7 +13,6 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
       <mbsc-form #mbscInstanceForm="mobiscroll">
         <mbsc-input [error]="validator | async" [ngModel]="_ngModelGettter | async" type="number" (ngModelChange)="modelChanges($event)">{{_label}}</mbsc-input>
       </mbsc-form>
-
     `
 })
 export class AppsappInputNumberPlainComponent extends AppsappInputAbstractComponent {
@@ -90,7 +89,7 @@ export class AppsappInputNumberPlainComponent extends AppsappInputAbstractCompon
 
     if (changed) {
       window.setTimeout(function () {
-        self._ngModelGettter = self.model.update(self.property, value).getProperty(self.property);
+        self._ngModelGettter = self.model.update(self.property, value).setProperty(self.property, value).getProperty(self.property);
       },1);
       return false;
     } else {

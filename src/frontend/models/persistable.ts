@@ -7,7 +7,7 @@ import {AngularFireAuth} from "angularfire2/auth";
 import {getFromContainer} from "class-validator";
 import {MetadataStorage} from "class-validator";
 import {AppsappModuleProviderMessages} from "../providers/appsapp-module-provider";
-
+import {UUID} from "angular2-uuid";
 
 export interface actionEmail {
   name: 'email',
@@ -615,7 +615,8 @@ export abstract class PersistableModel {
    */
   public setPersistanceManager(persistenceManager) {
     this.__persistenceManager = persistenceManager;
-    this.__uuid = "1";
+
+    this.__uuid = UUID.UUID();
     return this;
   }
 
@@ -1029,7 +1030,7 @@ export abstract class PersistableModel {
       'number': 'numberplain',
       'isPrecision': 'numberplain',
       'isNumber': 'number',
-      'isInt': 'numberplain',
+      'isInt': this.getMetadata(property,'max').length && this.getMetadataValue(property,'max') <= 50 ? 'integer' : 'numberplain',
       'isPhoneNumber': 'tel',
       'isPassword': 'password',
       'isEmail': 'email',
@@ -1067,11 +1068,12 @@ export abstract class PersistableModel {
 
     });
 
-    console.log(type,property, typeof this[property]);
 
     if (!type) {
       type = typeMappings[typeof this[property]] !== undefined ? typeMappings[typeof this[property]] : null;
     }
+
+
 
     return type ? type : 'text';
 
