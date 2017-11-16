@@ -1,6 +1,6 @@
 {
   "name": "appsapp-module",
-  "version": "0.6.7",
+  "version": "0.6.8",
   "scripts": {
     "build": "gulp build",
     "build:watch": "gulp",
@@ -13,7 +13,7 @@
     "playground:build": "tsc -p playground -w",
     "playground": "concurrently \"npm run build:watch\" \"npm run playground:build\" \"npm run lite\"",
     "test": "tsc && karma start",
-    "p": "npm i && npm build && npm publish dist && rm -rf ./node_modules"
+    "p": "npm i && npm run build && npm publish dist && rm -rf ./node_modules"
   },
   "repository": {
     "type": "git",
