@@ -13,7 +13,7 @@
     "playground:build": "tsc -p playground -w",
     "playground": "concurrently \"npm run build:watch\" \"npm run playground:build\" \"npm run lite\"",
     "test": "tsc && karma start",
-    "p": "npm i && npm run build && npm publish dist && rm -rf ./node_modules"
+    "p": "git add . && git commit -m 'new release' && git push && npm i && npm run build && npm publish dist && rm -rf ./node_modules"
   },
   "repository": {
     "type": "git",
