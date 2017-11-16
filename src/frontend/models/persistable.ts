@@ -258,6 +258,7 @@ export abstract class PersistableModel {
         observer.error(error);
       } else {
         if (!silent) {
+          console.log(error);
           self.notify(error);
         }
       }
@@ -604,6 +605,8 @@ export abstract class PersistableModel {
     }
 
   }
+
+
 
   /**
    * set persistenceManager
@@ -1023,8 +1026,10 @@ export abstract class PersistableModel {
     const typeMappings = {
 
       'isString': 'text',
+      'number': 'numberplain',
+      'isPrecision': 'numberplain',
       'isNumber': 'number',
-      'isInt': 'integer',
+      'isInt': 'numberplain',
       'isPhoneNumber': 'tel',
       'isPassword': 'password',
       'isEmail': 'email',
@@ -1037,8 +1042,8 @@ export abstract class PersistableModel {
       'isBirthDate': 'birthday',
       'isDateRange': 'dates',
       'isCalendar': 'date',
+      'isNumpad': 'number',
       'customValidation': (metadata) => {
-
 
         if (metadata.constraints[0].type && metadata.constraints[0].type && metadata.constraints[0].type.substr(0, 3) !== 'has') {
           return typeMappings[metadata.constraints[0].type] !== undefined ? typeMappings[metadata.constraints[0].type] : metadata.constraints[0].type;
@@ -1061,6 +1066,12 @@ export abstract class PersistableModel {
       }
 
     });
+
+    console.log(type,property, typeof this[property]);
+
+    if (!type) {
+      type = typeMappings[typeof this[property]] !== undefined ? typeMappings[typeof this[property]] : null;
+    }
 
     return type ? type : 'text';
 

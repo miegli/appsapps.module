@@ -21,6 +21,7 @@ import {AppsappModuleProvider} from "./providers/appsapp-module-provider";
 import {AngularFireModule} from "angularfire2";
 import {AppsappModuleProviderConfig} from "./providers/appsapp-module-provider";
 import {AppsappModuleProviderMessages} from "./providers/appsapp-module-provider";
+import {AppsappInputNumberPlainComponent} from "./components/input/appsapp-input-number-plain/appsapp-input-number-plain";
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import {AppsappModuleProviderMessages} from "./providers/appsapp-module-provider
     AppsappInputRatingComponent,
     AppsappInputBirthdayComponent,
     AppsappInputTextComponent,
-    AppsappInputAbstractComponent
+    AppsappInputAbstractComponent,
+    AppsappInputNumberPlainComponent
   ],
   providers: [AppsappModuleProvider],
   imports: [MbscModule, CommonModule, FormsModule, AngularFireModule.initializeApp(

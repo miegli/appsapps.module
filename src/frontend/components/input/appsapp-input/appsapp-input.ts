@@ -20,6 +20,9 @@ import {Observable} from "rxjs/Observable";
           <ng-container *ngSwitchCase="'number'">
               <appsapp-input-number [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-number>
           </ng-container>
+          <ng-container *ngSwitchCase="'numberplain'">
+              <appsapp-input-number-plain [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-number-plain>
+          </ng-container>
           <ng-container *ngSwitchCase="'integer'">
               <appsapp-input-integer [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-integer>
           </ng-container>
