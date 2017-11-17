@@ -128,16 +128,14 @@ export class AppsappInputTelComponent extends AppsappInputAbstractComponent {
     if (p.length) {
       if (value.length > p.length + 13) {
         value = value.substr(0, p.length + 13);
-        self._ngModelGettter = self.model.update(self.property, value).getProperty(self.property);
+        this.update(value);
       }
     } else {
       if (value.length > p.length + 16) {
         value = value.substr(0, p.length + 16);
-        self._ngModelGettter = self.model.update(self.property, value).getProperty(self.property);
+        this.update(value);
       }
     }
-
-    this.model.update(this.property, value).setProperty(this.property, value);
 
 
     return false;

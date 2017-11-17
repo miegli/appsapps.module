@@ -54,8 +54,7 @@ export class AppsappInputTextareaComponent extends AppsappInputAbstractComponent
 
 
       if (value.length > this.maxLength) {
-        value = value.substr(0, this.maxLength);
-        this._ngModelGettter = this.model.update(this.property, value).getProperty(this.property);
+        this.update(value.substr(0, this.maxLength));
         return false;
       } else {
         return true;

@@ -54,7 +54,6 @@ export class AppsappInputNumberPlainComponent extends AppsappInputAbstractCompon
    */
   beforeModelChanges(model, property, value) {
 
-    let self = this;
     let changed = false;
 
 
@@ -88,15 +87,11 @@ export class AppsappInputNumberPlainComponent extends AppsappInputAbstractCompon
     this.lastvalue = value;
 
     if (changed) {
-      window.setTimeout(function () {
-        self._ngModelGettter = self.model.update(self.property, value).setProperty(self.property, value).getProperty(self.property);
-      },1);
+      this.update(value);
       return false;
     } else {
       return true;
     }
-
-
 
 
   }

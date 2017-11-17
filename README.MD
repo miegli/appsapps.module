@@ -109,6 +109,106 @@ export class myModel extends PersistableModel {
 
 ![Alt text](appsapp-module-screen2.png?raw=true "appsApp.io")
 
+## Decorators
+
+### Basic validators from npm class-validator
+
+| Decorator                                       | Description                                                                                                                      |
+|-------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
+| **Common validation decorators**                                                                                                                                                   |
+| `@IsDefined(value: any)`                        | Checks if value is defined (!== undefined, !== null). This is the only decorator that ignores skipMissingProperties option.      |
+| `@IsOptional()`                                 | Checks if given value is empty (=== null, === undefined) and if so, ignores all the validators on the property.                         |
+| `@Equals(comparison: any)`                      | Checks if value equals ("===") comparison.                                                                                       |
+| `@NotEquals(comparison: any)`                   | Checks if value not equal ("!==") comparison.                                                                                    |
+| `@IsEmpty()`                                    | Checks if given value is empty (=== '', === null, === undefined).                                                                |
+| `@IsNotEmpty()`                                 | Checks if given value is not empty (!== '', !== null, !== undefined).                                                            |
+| `@IsIn(values: any[])`                          | Checks if value is in a array of allowed values.                                                                                 |
+| `@IsNotIn(values: any[])`                       | Checks if value is not in a array of disallowed values.                                                                          |
+| **Type validation decorators**                                                                                                                                                     |
+| `@IsBoolean()`                                  | Checks if a value is a boolean.                                                                                                  |
+| `@IsDate()`                                     | Checks if the string is a date.                                                                                                  |
+| `@IsString()`                                   | Checks if the string is a string.                                                                                                |
+| `@IsNumber()`                                   | Checks if the string is a number.                                                                                                |
+| `@IsInt()`                                      | Checks if the value is an integer number.                                                                                        |
+| `@IsArray()`                                    | Checks if the string is an array                                                                                                 |
+| `@IsEnum(entity: object)`                         | Checks if the value is an valid enum                                                                                             |
+| **Number validation decorators**                                                                                                                                                   |
+| `@IsDivisibleBy(num: number)`                   | Checks if the value is a number that's divisible by another.                                                                     |
+| `@IsPositive()`                                 | Checks if the value is a positive number.                                                                                        |
+| `@IsNegative()`                                 | Checks if the value is a negative number.                                                                                        |
+| `@Max(max: number)`                             | Checks if the given number is greater than given number.                                                                         |
+| `@Min(min: number)`                             | Checks if the given number is less than given number.                                                                            |
+| **Date validation decorators**                                                                                                                                                     |
+| `@MinDate(date: Date)`                          | Checks if the value is a date that's after the specified date.                                                                   |
+| `@MaxDate(date: Date)`                          | Checks if the value is a date that's before the specified date.                                                                  |                                                                                                                                                  |
+| **String-type validation decorators**                                                                                                                                              |
+| `@IsBooleanString()`                            | Checks if a string is a boolean (e.g. is "true" or "false").                                                                     |
+| `@IsDateString()`                               | Checks if a string is a date (e.g. "2017-06-07T14:34:08.700Z" or "2017-06-07T14:34:08.700").                                                                                                    |
+| `@IsNumberString()`                             | Checks if a string is a number.                                                                                                  |
+| **String validation decorators**                                                                                                                                                   |
+| `@Contains(seed: string)`                       | Checks if the string contains the seed.                                                                                          |
+| `@NotContains(seed: string)`                    | Checks if the string not contains the seed.                                                                                      |
+| `@IsAlpha()`                                    | Checks if the string contains only letters (a-zA-Z).                                                                             |
+| `@IsAlphanumeric()`                             | Checks if the string contains only letters and numbers.                                                                          |
+| `@IsAscii()`                                    | Checks if the string contains ASCII chars only.                                                                                  |
+| `@IsBase64()`                                   | Checks if a string is base64 encoded.                                                                                            |
+| `@IsByteLength(min: number, max?: number)`      | Checks if the string's length (in bytes) falls in a range.                                                                       |
+| `@IsCreditCard()`                               | Checks if the string is a credit card.                                                                                           |
+| `@IsCurrency(options?: IsCurrencyOptions)`      | Checks if the string is a valid currency amount.                                                                                 |
+| `@IsEmail(options?: IsEmailOptions)`            | Checks if the string is an email.                                                                                                |
+| `@IsFQDN(options?: IsFQDNOptions)`              | Checks if the string is a fully qualified domain name (e.g. domain.com).                                                         |
+| `@IsFullWidth()`                                | Checks if the string contains any full-width chars.                                                                              |
+| `@IsHalfWidth()`                                | Checks if the string contains any half-width chars.                                                                              |
+| `@IsVariableWidth()`                            | Checks if the string contains a mixture of full and half-width chars.                                                            |
+| `@IsHexColor()`                                 | Checks if the string is a hexadecimal color.                                                                                     |
+| `@IsHexadecimal()`                              | Checks if the string is a hexadecimal number.                                                                                    |
+| `@IsIP(version?: "4"|"6")`                      | Checks if the string is an IP (version 4 or 6).                                                                                  |
+| `@IsISBN(version?: "10"|"13")`                  | Checks if the string is an ISBN (version 10 or 13).                                                                              |
+| `@IsISIN()`                                     | Checks if the string is an ISIN (stock/security identifier).                                                                     |
+| `@IsISO8601()`                                  | Checks if the string is a valid ISO 8601 date.                                                                                   |
+| `@IsJSON()`                                     | Checks if the string is valid JSON.                                                                                              |
+| `@IsLowercase()`                                | Checks if the string is lowercase.                                                                                               |
+| `@IsMobilePhone(locale: string)`                | Checks if the string is a mobile phone number.                                                                                   |
+| `@IsMongoId()`                                  | Checks if the string is a valid hex-encoded representation of a MongoDB ObjectId.                                                |
+| `@IsMultibyte()`                                | Checks if the string contains one or more multibyte chars.                                                                       |
+| `@IsNumericString()`                            | Checks if the string is numeric.                                                                                                 |
+| `@IsSurrogatePair()`                            | Checks if the string contains any surrogate pairs chars.                                                                         |
+| `@IsUrl(options?: IsURLOptions)`                | Checks if the string is an url.                                                                                                  |
+| `@IsUUID(version?: "3"|"4"|"5")`                | Checks if the string is a UUID (version 3, 4 or 5).                                                                              |
+| `@IsUppercase()`                                | Checks if the string is uppercase.                                                                                               |
+| `@Length(min: number, max?: number)`            | Checks if the string's length falls in a range.                                                                                  |
+| `@MinLength(min: number)`                       | Checks if the string's length is not less than given number.                                                                     |
+| `@MaxLength(max: number)`                       | Checks if the string's length is not more than given number.                                                                     |
+| `@Matches(pattern: RegExp, modifiers?: string)` | Checks if string matches the pattern. Either matches('foo', /foo/i) or matches('foo', 'foo', 'i').
+| `@IsMilitaryTime()`                             | Checks if the string is a valid representation of military time in the format HH:MM.
+| **Array validation decorators**                                                                                                                                                    |
+| `@ArrayContains(values: any[])`                 | Checks if array contains all values from the given array of values.                                                              |
+| `@ArrayNotContains(values: any[])`              | Checks if array does not contain any of the given values.                                                                        |
+| `@ArrayNotEmpty()`                              | Checks if given array is not empty.                                                                                              |
+| `@ArrayMinSize(min: number)`                    | Checks if array's length is as minimal this number.                                                                              |
+| `@ArrayMaxSize(max: number)`                    | Checks if array's length is as maximal this number.                                                                              |
+| `@ArrayUnique()`                                | Checks if all array's values are unique. Comparison for objects is reference-based.                                              |
+
+### Special validators from npm appsapp-module
+
+| Decorator                                       | Description                                                                                                                      |
+|-------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
+| **General ui decorators**                                                                                                                                                |
+| `@HasConditions([...])`                        | Show/hide ui for this property by conditions      |
+| `@HasLabel(label: string)`        | Set the ui label for this property      |
+| `@HasDescriptions(description: string)`        | Adds a short decriptions to the ui for this property      |
+| `@HasPrecision(precision: number)`        | Defines precision like number of decimals     |
+| `@IsBirthDate(precision: number)`        | Defines precision like number of decimals     |
+| **Specific ui decorators**                                                                                                                                                |
+| `@IsBirthDate()`                        | Set special ui for birth dates      |
+| `@IsCalendar()`        | Set special ui for a calendar view      |
+| `@IsDateRange()`        | Set special ui for a date range view      |
+| `@IsNumpad()`        | Set special ui for a num pad view    |
+| `@IsPassword()`        | Set special ui password input element    |
+| `@IsRating(..)`        | Set special ui for ratings    |
+| `@IsRating(length: number)`        | Set special ui long text   |
+
+
 ## License
 
 MIT © [Michael Egli](mailto:michael.egli@appsapp.io)

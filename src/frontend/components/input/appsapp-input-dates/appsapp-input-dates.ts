@@ -47,11 +47,9 @@ export class AppsappInputDatesComponent extends AppsappInputAbstractComponent {
     this.setMbscOption({
       onShow: function (event, inst) {
         self.locked = true;
-        console.log(this);
       },
       onCancel: function (event, inst) {
         self.locked = false;
-        console.log(this);
       }
       ,
       onSet: function (event, inst) {

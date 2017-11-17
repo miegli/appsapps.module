@@ -4,7 +4,7 @@ export * from './frontend/models/persistable';
 export * from './frontend/validation/validators/HasConditions';
 export * from './frontend/validation/validators/HasDescription';
 export * from './frontend/validation/validators/HasLabel';
-export * from './frontend/validation/validators/IsPrecision';
+export * from './frontend/validation/validators/HasPrecision';
 export * from './frontend/validation/validators/IsBirthDate';
 export * from './frontend/validation/validators/IsCalendar';
 export * from './frontend/validation/validators/IsDateRange';

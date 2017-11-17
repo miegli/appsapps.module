@@ -24,7 +24,7 @@ export interface actionWebhook {
   }
 }
 
-export interface actionAny {
+export interface actionCustom {
   name: 'custom',
   data: {
     name: string
@@ -32,13 +32,12 @@ export interface actionAny {
 }
 
 
-
 export abstract class PersistableModel {
 
 
   private __observer: Observer<any>;
   private __observable: Observable<any>;
-  private __uuid: string = 'test';
+  private __uuid: string = '';
   private __firebaseDatabase: AngularFireDatabase;
   private __firebaseDatabasePath: string;
   private __firebaseDatabaseRoot: string = 'session';
@@ -171,7 +170,7 @@ export abstract class PersistableModel {
    * @param action
    * @returns {Promise<any>}
    */
-  public saveWithPromise(action?:actionEmail|actionWebhook|actionAny) {
+  public saveWithPromise(action?:actionEmail|actionWebhook|actionCustom) {
 
     let self = this;
 
@@ -241,7 +240,7 @@ export abstract class PersistableModel {
    * @param silent
    * @returns {Observable<any>}
    */
-  public save(action?:actionEmail|actionWebhook|actionAny, silent?: boolean) {
+  public save(action?:actionEmail|actionWebhook|actionCustom, silent?: boolean) {
 
     let self = this, observer = null;
 
@@ -285,7 +284,7 @@ export abstract class PersistableModel {
    * @param {any} action as an optinal argument for transmitting additional action metadata
    * @returns {Observable<any>}
    */
-  private executeSave(action?:actionEmail|actionWebhook|actionAny) {
+  private executeSave(action?:actionEmail|actionWebhook|actionCustom) {
 
     let self = this;
 
@@ -880,7 +879,7 @@ export abstract class PersistableModel {
    * @param {any} action as an optional argument
    * @returns {PersistableModel}
    */
-  public setHasPendingChanges(state, action?:actionEmail|actionWebhook|actionAny) {
+  public setHasPendingChanges(state, action?:actionEmail|actionWebhook|actionCustom) {
 
     if (state && this.__persistenceManager) {
       this.__persistenceManager.addPendingChanges(this, action);
