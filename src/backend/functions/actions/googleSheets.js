@@ -133,7 +133,11 @@ function addRow(spreadsheet, data, auth) {
 
       let cells = [];
       Object.keys(data).forEach((cell) => {
-        cells.push(data[cell]);
+        let v = data[cell];
+        if (typeof v !== 'string') {
+          v = JSON.stringify(v);
+        }
+        cells.push(v);
       });
 
 
@@ -222,13 +226,28 @@ module.exports = googleSheets;
 //   user: 'U3vMSLbEneW6WUBCEIqOo7YpV0B2',
 //   action:
 //     {
-//       data: {to: 'michael.egli@phlu.ch', subject: 'testmail', from: 'info@appsapp.io'},
 //       name: 'googleSheets',
 //       state: 'requested'
 //     },
 //   actionid: '55e3725ebb6bce9e52c3d30070941c782d974dfb',
 //   source: 'database',
 //   target: 'session/U3vMSLbEneW6WUBCEIqOo7YpV0B2/project/Test/059b3129-4953-1a00-816e-c26aa442c715'
-// }, {anrede: 'Herr', name: 'Hans', vorname: 'Muster', plz: 6000}).then((response) => {
+// },{
+//     "anrede" : "fsd",
+//     "anzahlkinder" : 3,
+//     "geburtsdatum" : "2016-11-16T23:00:00.000Z",
+//     "kalender" : "2017-11-29T23:00:00.000Z",
+//     "lieblingszahl" : 10.5,
+//     "name" : "fsdfsd",
+//     "ort" : "luzern",
+//     "plz" : 3434,
+//     "rating" : 4,
+//     "strasse" : "fsdf",
+//     "strasseNr" : "3fd",
+//     "text" : "fsdfsdfsdf",
+//     "vonbis" : [ "2017-11-24T23:00:00.000Z", "2017-11-26T22:59:59.999Z" ],
+//     "vorname" : "fsdfsd"
+//   }
+//   ).then((response) => {
 //   console.log(response);
 // })
