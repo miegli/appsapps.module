@@ -4,7 +4,7 @@ function webhook(action, data) {
     console.log(data);
     console.log(action);
 
-    resolve({state: 'done'});
+    resolve({response: {state: 'done'}});
   });
 }
 

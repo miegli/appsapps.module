@@ -46,6 +46,7 @@ admin.database().ref("_sha1").on('value', (snapshot) => {
 });
 
 
+
 /**
  * Connects database
  *
@@ -165,17 +166,18 @@ exports.connectEvents = functions.database.ref('_events/{actionid}').onCreate(ev
 
   return new Promise(function (resolve, reject) {
 
-    call(actiondata, original.snapshot !== undefined ? original.snapshot : null).then((status) => {
+    call(actiondata, original.snapshot !== undefined ? original.snapshot : null).then((data) => {
 
       admin.database().ref('_events/' + identifier).remove().then(function () {
         if (actiondata.target !== undefined && actiondata.target) {
-          admin.database().ref(actiondata.target + "/action/" + actiondata.actionid).update(status).then(function () {
+          admin.database().ref(actiondata.target + "/action/" + actiondata.actionid).set(data).then(function () {
             admin.database().ref(actiondata.target + "/action/" + actiondata.actionid).remove().then();
-            resolve(true);
+            resolve(data);
           });
+        } else {
+          resolve(data);
         }
       });
-
       resolve(data);
     }).catch((error) => {
       console.log(error);
@@ -198,11 +200,30 @@ function call(action, data) {
     if (action.action !== undefined && action.action.name !== undefined && actions[action.action.name] !== undefined) {
 
       decrypt(action).then((action) => {
-        actions[action.action.name](action, data).then(function (data) {
-          resolve(data);
-        }).catch(function (error) {
-          reject(error);
+
+
+        admin.database().ref('_config/' + action.object + "/" + action.action.name).once('value', (snapshot) => {
+
+          let config = snapshot.val();
+
+          actions[action.action.name](action, data, config).then(function (data) {
+
+            if (data.config) {
+              return admin.database().ref('_config/' + action.object + "/" + action.action.name).set(data.config).then(function () {
+                resolve(data.response);
+              }).catch(function (error) {
+                reject(error);
+              });
+            } else {
+              resolve(data.response);
+            }
+
+          }).catch(function (error) {
+            reject(error);
+          });
+
         });
+
       });
 
     }

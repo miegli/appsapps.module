@@ -17,7 +17,17 @@ export interface actionEmail {
     from?: string,
     subject?: string
   },
-  additionActions?: [actionEmail|actionWebhook|actionCustom]
+  additionActions?: [actionEmail|actionWebhook|actionGoogleSheets|actionCustom]
+}
+
+export interface actionGoogleSheets {
+  name: 'googleSheets',
+  data?: {
+    to: string,
+    from?: string,
+    subject?: string
+  },
+  additionActions?: [actionEmail|actionWebhook|actionGoogleSheets|actionCustom]
 }
 
 export interface actionWebhook {
@@ -25,7 +35,7 @@ export interface actionWebhook {
   data: {
     url: string
   },
-  additionActions?: [actionEmail|actionWebhook|actionCustom]
+  additionActions?: [actionEmail|actionWebhook|actionGoogleSheets|actionCustom]
 }
 
 export interface actionCustom {
@@ -33,7 +43,7 @@ export interface actionCustom {
   data: {
     name: string
   },
-  additionActions?: [actionEmail|actionWebhook|actionCustom]
+  additionActions?: [actionEmail|actionWebhook|actionGoogleSheets|actionCustom]
 }
 
 
@@ -175,7 +185,7 @@ export abstract class PersistableModel {
    * @param action
    * @returns {Promise<any>}
    */
-  public saveWithPromise(action?:actionEmail|actionWebhook|actionCustom) {
+  public saveWithPromise(action?:actionEmail|actionWebhook|actionGoogleSheets|actionCustom) {
 
     let self = this;
 
@@ -245,7 +255,7 @@ export abstract class PersistableModel {
    * @param silent
    * @returns {Observable<any>}
    */
-  public save(action?:actionEmail|actionWebhook|actionCustom, silent?: boolean) {
+  public save(action?:actionEmail|actionWebhook|actionGoogleSheets|actionCustom, silent?: boolean) {
 
     let self = this, observer = null;
 
@@ -289,7 +299,7 @@ export abstract class PersistableModel {
    * @param {any} action as an optinal argument for transmitting additional action metadata
    * @returns {Observable<any>}
    */
-  private executeSave(action?:actionEmail|actionWebhook|actionCustom) {
+  private executeSave(action?:actionEmail|actionWebhook|actionGoogleSheets|actionCustom) {
 
     let self = this;
 
@@ -884,7 +894,7 @@ export abstract class PersistableModel {
    * @param {any} action as an optional argument
    * @returns {PersistableModel}
    */
-  public setHasPendingChanges(state, action?:actionEmail|actionWebhook|actionCustom) {
+  public setHasPendingChanges(state, action?:actionEmail|actionWebhook|actionGoogleSheets|actionCustom) {
 
     if (state && this.__persistenceManager) {
       this.__persistenceManager.addPendingChanges(this, action);
