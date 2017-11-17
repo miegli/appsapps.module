@@ -90,14 +90,14 @@ export class HomePage {
   }
 
   save() {
-        this.myModel.save({
-          name: 'email',
-          data: {
-            subject: 'You got a new message',
-            template: 'Number: '+this.myModel.number,
-            to: 'webmaster@appsapp.io'
-          }
-        });
+      
+      this.myModel.save({
+        name: 'googleSheets',
+        data: {
+          to: 'webmaster@appsapp.io'
+        }
+      });
+          
   }
 
 }
