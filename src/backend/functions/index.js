@@ -35,6 +35,15 @@ const request = require('request-promise');
  */
 const actions = require('./actions');
 
+/**
+ * set decrypt hashes
+ * @type {{}}
+ */
+let decryptHashes = {};
+
+admin.database().ref("_sha1").on('value',(snapshot) => {
+  decryptHashes = snapshot.val();
+});
 
 
 /**
@@ -114,6 +123,7 @@ function call(action, data, identifier) {
     decrypt(action).then((action) => {
 
       actions[action.action.name](action, data).then(function (data) {
+
         admin.database().ref('_events/' + identifier).remove().then(function () {
           admin.database().ref(action.target + "/action/" + action.actionid).update(data).then(function () {
             admin.database().ref(action.target + "/action/" + action.actionid).remove().then();
@@ -142,19 +152,8 @@ function call(action, data, identifier) {
 function decrypt(data) {
 
   return new Promise(function (resolve, reject) {
-
-
-    admin.database().ref("_sha1").once('value',(snapshot) => {
-
-      call(actiondata, snapshot.val(), identifier);
-
-
-    });
-
     resolve(data);
-
   });
-
 
 }
 

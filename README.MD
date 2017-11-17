@@ -90,7 +90,14 @@ export class HomePage {
   }
 
   save() {
-    this.myModel.save();
+        this.myModel.save({
+          name: 'email',
+          data: {
+            subject: 'You got a new message',
+            template: 'Number: '+this.myModel.number,
+            to: 'webmaster@appsapp.io'
+          }
+        });
   }
 
 }

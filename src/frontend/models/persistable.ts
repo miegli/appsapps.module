@@ -12,8 +12,10 @@ import {UUID} from "angular2-uuid";
 export interface actionEmail {
   name: 'email',
   data: {
-    template: string,
-    to: string
+    template?: string,
+    to: string,
+    from?: string,
+    subject?: string
   }
 }
 
