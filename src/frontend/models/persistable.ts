@@ -16,21 +16,24 @@ export interface actionEmail {
     to: string,
     from?: string,
     subject?: string
-  }
+  },
+  additionActions?: [actionEmail|actionWebhook|actionCustom]
 }
 
 export interface actionWebhook {
   name: 'webhook',
   data: {
     url: string
-  }
+  },
+  additionActions?: [actionEmail|actionWebhook|actionCustom]
 }
 
 export interface actionCustom {
   name: 'custom',
   data: {
     name: string
-  }
+  },
+  additionActions?: [actionEmail|actionWebhook|actionCustom]
 }
 
 
