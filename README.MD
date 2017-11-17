@@ -44,8 +44,8 @@ import { AppsappModule } from 'appsapp-module';
   imports: [
     BrowserModule,
     AppsappModule.initializeApp({
-      apiKey: '**firebase-public-api-key**',
-      projectId: '**firebase-project-id**'
+      apiKey: 'AIzaSyBEsibRXWWJrtSQ0SSKf7z8V9HpjdsnOF8',
+      projectId: 'test-32b81'
     }, {
       saved: 'Die Änderungen wurden erfolgreich gespeichert.',
       processing: 'Die Verarbeitung läuft.',
