@@ -41,7 +41,6 @@ export class AppsappModuleProvider {
 
   public config: ConfigModel;
   private firebaseProject: FirebaseModel;
-  private firebaseGlobal: FirebaseModel;
   private persistenceManager: any;
   private notificationProvider: object;
 
@@ -57,13 +56,10 @@ export class AppsappModuleProvider {
     // init configuration instance
     this.config = new ConfigModel();
 
-    // init global firebase instance
-    this.firebaseGlobal = new FirebaseModel();
-    this.firebaseGlobal.init({firebaseProjectId: providerConfig.projectId, firebaseApiKey: providerConfig.apiKey});
-
-
     // init projects firebase instance
-    self.firebaseProject = new FirebaseModel();
+    this.firebaseProject = new FirebaseModel();
+    this.firebaseProject.init({firebaseProjectId: providerConfig.projectId, firebaseApiKey: providerConfig.apiKey});
+
 
     // init notification provider
     let timeout = null;
@@ -82,16 +78,20 @@ export class AppsappModuleProvider {
     this.config.getObservable().subscribe((config) => {
 
       self.firebaseProject.init(config);
-
       // try to auto-login
       if (self.config.getFirebaseUserPassword() && self.config.getFirebaseUserName()) {
         self.userSignIn(self.config.getFirebaseUserName(), self.config.getFirebaseUserPassword()).then((user) => {
           //
-          console.log(user);
         }).catch((error) => {
-          //
           console.log(error);
         });
+      } else {
+        // try to authenticate with Firebase Anonymously
+        self.anonymousSignIn().then((user) => {
+          //
+        }).catch((error) => {
+          console.log(error);
+        })
       }
 
     });
@@ -200,6 +200,35 @@ export class AppsappModuleProvider {
 
         });
       }
+
+
+    });
+  }
+
+  /**
+   * Login anonymous
+   * @returns {Promise<any>}
+   */
+  private anonymousSignIn() {
+
+
+    let self = this;
+    let t = <any>{};
+
+    return new Promise(function (resolve, reject) {
+
+      t.resolve = resolve;
+      t.reject = reject;
+
+        self.firebaseProject.getAuth().then((auth: AngularFireAuth) => {
+          auth.auth.signInAnonymously().then(function(user) {
+            resolve(user);
+          }).catch((error) => {
+            reject(error);
+          });
+
+        });
+
 
 
     });

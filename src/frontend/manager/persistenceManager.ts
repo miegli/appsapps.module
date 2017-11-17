@@ -126,11 +126,9 @@ export class PersistenceManager {
    * return string|null
    */
   public getFirebaseUserId() {
-
     if (this.getFirebaseDatabase() && this.getFirebaseDatabase().app && this.getFirebaseDatabase().app.auth().currentUser) {
       return this.getFirebaseDatabase().app.auth().currentUser.uid;
     }
-
     return null;
 
   }
@@ -170,7 +168,7 @@ export class PersistenceManager {
           this.workOnPendingChanges(model);
         }
 
-        if (data.action == 'initFirebaseDatabase' && self.getFirebasePath(model) && (!model.getFirebaseDatabase() || !model.getFirebaseDatabasePath())) {
+        if (data.action == 'initFirebaseDatabase' && self.getFirebasePath(model)) {
           model.setFirebaseDatabase(self.getFirebaseDatabase());
           model.setFirebaseDatabasePath(self.getFirebasePath(model));
         }
@@ -575,7 +573,17 @@ export class PersistenceManager {
 
 
                 }).catch((error) => {
-                  reject(error);
+                 try {
+                   delete self._pendingChangesModels[object]
+                 } catch (e) {
+                   //
+                 }
+                  self.storageWrapper.set('_pendingChanges', self._pendingChangesModels).then((m) => {
+                    resolve(o);
+                  }).catch((e) => {
+                    reject(error);
+                  });
+
                 });
 
               } catch (e) {

@@ -4,12 +4,12 @@ import {PersistableModel} from "./persistable";
 export class ConfigModel extends PersistableModel {
 
 
-  private firebaseProjectId: string = 'test-32b81';
-  private firebaseApiKey: string = 'AIzaSyBEsibRXWWJrtSQ0SSKf7z8V9HpjdsnOF8';
+  private firebaseProjectId: string = '';
+  private firebaseApiKey: string = '';
   private authenticationMethod: string = 'mail';
   private projectLabel: string = 'm';
-  private firebaseUserName: string = 'info@assoftware.ch';
-  private firebaseUserPassword: string = '123456';
+  private firebaseUserName: string = '';
+  private firebaseUserPassword: string = '';
   private _os: string;
 
   /**
