@@ -5,8 +5,7 @@ import {FirebaseModel} from "../models/firebase";
 import {AngularFireAuth} from "angularfire2/auth";
 import {PersistenceManager} from "../manager/persistenceManager";
 import {mobiscroll} from "@mobiscroll/angular";
-import * as ts from "typescript";
-import * as CryptoJS from 'crypto-js';
+import {AppsappModuleProviderMessages} from "../models/persistable";
 
 
 /*
@@ -23,16 +22,7 @@ export interface AppsappModuleProviderConfig {
   projectId: string
 };
 
-export interface AppsappModuleProviderMessages {
-  saved: string,
-  processing: string,
-  wait: string,
-  done: string,
-  submitted: string,
-  submittedInBackground: string,
-  disconnected: string,
-  connected: string
-};
+
 
 
 declare var require: any

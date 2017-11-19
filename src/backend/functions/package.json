@@ -10,8 +10,6 @@
   },
   "dependencies": {
     "aws-sdk": "^2.152.0",
-    "babel-polyfill": "^6.26.0",
-    "es6-transpiler": "^0.7.18",
     "firebase-admin": "~5.5.0",
     "firebase-functions": "^0.7.3",
     "google-auth-library": "^0.11.0",
@@ -20,8 +18,10 @@
     "request-promise": "^2.0.1",
     "uuid": "^3.1.0",
     "rxjs": "5.5.2",
-    "appsapp-module": "^0.8.1",
-    "class-validator": "^0.7.3"
+    "class-transformer": "^0.1.8",
+    "class-validator": "^0.7.3",
+    "angularfire2": "=5.0.0-rc.0",
+    "angular-uuid": "^0.0.4"
   },
   "private": true
 }

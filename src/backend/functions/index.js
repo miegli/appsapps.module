@@ -30,8 +30,7 @@ admin.initializeApp(functions.config().firebase);
 const uuidV1 = require('uuid/v1');
 const request = require('request-promise');
 var classValidator = require("class-validator");
-var appsappModule = require("appsapp-module");
-const persistable_1 = appsappModule;
+const persistable_1 = require('./models/persistable').PersistableModel;
 const class_validator_1 = classValidator;
 
 
