@@ -191,9 +191,11 @@ function googleSheets(action, data, config, model) {
 
           action.action.data.template = res.spreadsheet.spreadsheetUrl;
 
-          email(action, data).then(() => {
-            resolve({config: {spreadsheet: res.spreadsheet}, response: {state: 'done'}});
-          });
+          if (action.action.data.to) {
+            email(action, data).then(() => {
+              resolve({config: {spreadsheet: res.spreadsheet}, response: {state: 'done'}});
+            });
+          }
 
         } else {
           resolve({config: {spreadsheet: res.spreadsheet}, response: {state: 'done'}});
