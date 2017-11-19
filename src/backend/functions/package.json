@@ -21,7 +21,7 @@
     "class-transformer": "^0.1.8",
     "class-validator": "^0.7.3",
     "angularfire2": "=5.0.0-rc.0",
-    "angular-uuid": "^0.0.4"
+    "angular2-uuid": "^1.1.1"
   },
   "private": true
 }
