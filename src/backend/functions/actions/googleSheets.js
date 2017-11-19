@@ -175,7 +175,7 @@ function addRow(spreadsheet, data, auth) {
 
 }
 
-function googleSheets(action, data, config) {
+function googleSheets(action, data, config, model) {
 
 
   return new Promise(function (resolve, reject) {

@@ -29,6 +29,11 @@ const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 const uuidV1 = require('uuid/v1');
 const request = require('request-promise');
+var classValidator = require("class-validator");
+var appsappModule = require("appsapp-module");
+const persistable_1 = appsappModule;
+const class_validator_1 = classValidator;
+
 
 /**
  * load action modules
@@ -202,11 +207,24 @@ function call(action, data) {
       decrypt(action).then((action) => {
 
 
-        admin.database().ref('_config/' + action.object + "/" + action.action.name).once('value', (snapshot) => {
+        admin.database().ref('_config/' + action.object).once('value', (snapshot) => {
 
           let config = snapshot.val();
+          let configAction = config[action.action.name] !== undefined ? config[action.action.name] : null;
 
-          actions[action.action.name](action, data, config).then(function (data) {
+          if (config['constructor'] !== undefined) {
+            let model = null;
+            try {
+              eval(config['constructor']);
+              eval('model = new '+action.object+'();');
+            } catch (error) {
+              model = null;
+            }
+          }
+
+          console.log(model);
+
+          actions[action.action.name](action, data, configAction, model).then(function (data) {
 
             if (data.config) {
               return admin.database().ref('_config/' + action.object + "/" + action.action.name).set(data.config).then(function () {
@@ -223,6 +241,8 @@ function call(action, data) {
           });
 
         });
+
+
 
       });
 
