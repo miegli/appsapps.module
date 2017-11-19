@@ -252,31 +252,35 @@ function call(action, data) {
             model = new global[action.object];
 
             model.loadJson(data).then(() => {
-              console.log(model);
 
-              actions[action.action.name](action, data, configAction, model).then(function (data) {
+              model.validate().then(() => {
 
-                if (data.config) {
-                  return admin.database().ref('_config/' + action.object + "/" + action.action.name).set(data.config).then(function () {
+                actions[action.action.name](action, data, configAction, model).then(function (data) {
+
+                  if (data.config) {
+                    return admin.database().ref('_config/' + action.object + "/" + action.action.name).set(data.config).then(function () {
+                      resolve(data.response);
+                    }).catch(function (error) {
+                      reject(error);
+                    });
+                  } else {
                     resolve(data.response);
-                  }).catch(function (error) {
-                    reject(error);
-                  });
-                } else {
-                  resolve(data.response);
-                }
+                  }
 
-              }).catch(function (error) {
-                reject(error);
+                }).catch(function (error) {
+                  reject(error);
+                });
+
+              }).catch((err) => {
+                reject(err);
               });
 
             });
 
 
           } else {
-            reject('_config constructor not set for '+action.action.name);
+            reject('_config constructor not set for ' + action.action.name);
           }
-
 
 
         });
