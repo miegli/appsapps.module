@@ -18,14 +18,9 @@
     "googleapis": "^22.2.0",
     "nodemailer": "^4.0.1",
     "request-promise": "^2.0.1",
-    "systemjs": "^0.20.19",
     "uuid": "^3.1.0",
-    "grpc": "^1.7.1",
-    "@angular/core": "5.0.1",
     "rxjs": "5.5.2",
-    "sw-toolbox": "3.6.0",
-    "zone.js": "0.8.18",
-    "appsapp-module": "^0.7.8",
+    "appsapp-module": "^0.8.0",
     "class-validator": "^0.7.3"
   },
   "private": true
