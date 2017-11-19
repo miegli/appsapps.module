@@ -20,7 +20,7 @@
     "request-promise": "^2.0.1",
     "uuid": "^3.1.0",
     "rxjs": "5.5.2",
-    "appsapp-module": "^0.8.0",
+    "appsapp-module": "^0.8.1",
     "class-validator": "^0.7.3"
   },
   "private": true

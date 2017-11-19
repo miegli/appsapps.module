@@ -1,6 +1,6 @@
 {
   "name": "appsapp-module",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "scripts": {
     "build": "gulp build",
     "build:watch": "gulp",
@@ -71,6 +71,8 @@
     "zone.js": "^0.8.4"
   },
   "dependencies": {
+    "@mobiscroll/angular": "^3.2.6",
+    "appsapp-cli": "^1.0.2",
     "angular-2-local-storage": "^1.0.1",
     "angular2-uuid": "^1.1.1",
     "angularfire2": "=5.0.0-rc.0",
