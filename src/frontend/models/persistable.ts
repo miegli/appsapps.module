@@ -16,7 +16,8 @@ export interface AppsappModuleProviderMessages {
   submitted: string,
   submittedInBackground: string,
   disconnected: string,
-  connected: string
+  connected: string,
+  error: string
 };
 
 
@@ -283,8 +284,7 @@ export abstract class PersistableModel {
         observer.error(error);
       } else {
         if (!silent) {
-          console.log(error);
-          self.notify(error);
+          self.notify(error,true);
         }
       }
     }, () => {
@@ -1380,11 +1380,12 @@ export abstract class PersistableModel {
   /**
    * send notification message to user
    * @param message
+   * @param error
    * @returns {PersistableModel}
    */
-  public notify(message) {
+  public notify(message, error?) {
 
-    this.__notificationProvider(message);
+    this.__notificationProvider(message, error);
 
     return this;
 

@@ -53,15 +53,34 @@ export class AppsappModuleProvider {
 
     // init notification provider
     let timeout = null;
-    this.notificationProvider = function (message) {
-      if (timeout) {
-        window.clearTimeout(timeout);
+    this.notificationProvider = function (message, error?) {
+      if (!error) {
+        if (timeout) {
+          window.clearTimeout(timeout);
+        }
+        timeout = window.setTimeout(function () {
+          mobiscroll.toast({
+            message: message
+          }).then();
+        }, timeout ? 1000 : 1);
+      } else {
+
+        if (typeof message == 'string') {
+
+          mobiscroll.alert({
+            title: providerMessages.error,
+            message: message
+          });
+
+        } else {
+          console.log(message);
+          mobiscroll.toast({
+            message: providerMessages.error
+          }).then();
+        }
+
+
       }
-      timeout = window.setTimeout(function () {
-        mobiscroll.toast({
-          message: message
-        }).then();
-      }, timeout ? 1000 : 1);
     }
 
 

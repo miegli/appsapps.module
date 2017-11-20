@@ -278,8 +278,12 @@ export class PersistenceManager {
         let p = action.payload.val();
         if (p && p.state && p.state !== 'requested') {
 
-          if (p.message && p.message !== 'done' && p.state !== 'done') {
+          if (p.message && p.message !== 'done' && p.state !== 'done' && p.state !== 'error') {
             observer.next(model.getMessage(p.message));
+          }
+
+          if (p.state == 'error') {
+            observer.error(p.message ? p.message : 'error');
           }
 
           if (p.state == 'done') {
