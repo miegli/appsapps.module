@@ -18,7 +18,6 @@ import {AppsappInputAbstractComponent} from "./components/input/appsapp-input-ab
 import {MbscModule} from "@mobiscroll/angular";
 import {FormsModule} from "@angular/forms";
 import {AppsappModuleProvider} from "./providers/appsapp-module-provider";
-import {AngularFireModule} from "angularfire2";
 import {AppsappModuleProviderConfig} from "./providers/appsapp-module-provider";
 import {AppsappModuleProviderMessages} from "./models/persistable";
 import {AppsappInputNumberPlainComponent} from "./components/input/appsapp-input-number-plain/appsapp-input-number-plain";
@@ -44,15 +43,7 @@ import {AppsappInputNumberPlainComponent} from "./components/input/appsapp-input
     AppsappInputNumberPlainComponent
   ],
   providers: [AppsappModuleProvider],
-  imports: [MbscModule, CommonModule, FormsModule, AngularFireModule.initializeApp(
-    {
-      apiKey: "<your-key>",
-      authDomain: "<your-project-authdomain>",
-      databaseURL: "<your-database-URL>",
-      projectId: "<your-project-id>",
-      storageBucket: "<your-storage-bucket>",
-      messagingSenderId: "<your-messaging-sender-id>"
-    })],
+  imports: [MbscModule, CommonModule, FormsModule],
   exports: [
     // export the component(s) that you want others to be able to use
     AppsappInputComponent

@@ -150,7 +150,6 @@ export class FirebaseModel extends PersistableModel {
         }
 
 
-
         if (rawConfig.firebaseProjectId && rawConfig.firebaseApiKey && this.firebase) {
 
             this.config = config;
@@ -177,7 +176,6 @@ export class FirebaseModel extends PersistableModel {
 
 
                     this.instance = this.firebase.initializeApp(this.firebaseAppConfig, rawConfig.firebaseProjectId);
-
                 } catch (error) {
                   console.log(error);
                     this.instance = null;

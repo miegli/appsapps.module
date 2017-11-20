@@ -48,7 +48,7 @@ export class AppsappModuleProvider {
 
     // init projects firebase instance
     this.firebaseProject = new FirebaseModel();
-    this.firebaseProject.init({firebaseProjectId: providerConfig.projectId, firebaseApiKey: providerConfig.apiKey});
+    this.firebaseProject.init({firebaseProjectId: providerConfig.projectId, firebaseApiKey: providerConfig.apiKey, firebaseDatabaseURL: 'https://'+providerConfig.projectId+'.firebaseio.com/', firebaseAuthDomain: 'https://'+providerConfig.projectId+'.firebaseio.com/'});
 
 
     // init notification provider
@@ -67,7 +67,6 @@ export class AppsappModuleProvider {
 
     this.config.getObservable().subscribe((config) => {
 
-      self.firebaseProject.init(config);
       // try to auto-login
       if (self.config.getFirebaseUserPassword() && self.config.getFirebaseUserName()) {
         self.userSignIn(self.config.getFirebaseUserName(), self.config.getFirebaseUserPassword()).then((user) => {

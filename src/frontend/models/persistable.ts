@@ -436,9 +436,9 @@ export abstract class PersistableModel {
 
 
     let connectedRef = this.__firebaseDatabase.app.database().ref(".info/connected");
+
     connectedRef.on("value", (snap) => {
       self.__isOnline = snap.val();
-
       if (self.__persistenceManager && self.__isOnline) {
         self.__persistenceManager.getObserver().next({'action': 'connected'});
       }
@@ -451,6 +451,10 @@ export abstract class PersistableModel {
 
     this.getPersistanceManager().getFirebase().getAuth().then((auth: AngularFireAuth) => {
       auth.authState.subscribe((user) => {
+        if (user && self.__persistenceManager) {
+          self.__isOnline = true;
+          self.__persistenceManager.getObserver().next({'action': 'connected'});
+        }
         self.emit();
       });
     });
