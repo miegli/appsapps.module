@@ -17,6 +17,12 @@ You need mobiscroll. So please obtain a licence (see https://www.mobiscroll.com/
 $ npm install -g @mobiscroll/cli
 ```
 
+You also need apppsapp-cli. So please install it by running:
+
+```bash
+$ npm install -g appsapp-cli
+```
+
 Once you have kickstarted your ionic app, you can import appsApp to your application by running:
 
 
@@ -69,7 +75,8 @@ export class AppModule { }
 
 Your component ts ends up with:
 ```typescript
-import {AppsappModuleProvider, PersistableModel, HasConditions, HasPrecision, HasLabel, IsDateRange, HasDescription} from "appsapp-module";
+import { PersistableModel, HasConditions, HasPrecision, HasLabel, IsDateRange, HasDescription} from "appsapp-cli";
+import {AppsappModuleProvider} from "appsapp-module";
 import {IsInt, Min, Max, IsIn} from "class-validator";
 
 @Component({
@@ -116,6 +123,49 @@ export class myModel extends PersistableModel {
 
 
 ![Alt text](appsapp-module-screen2.png?raw=true "appsApp.io")
+
+
+
+## Using built-in backend services
+
+### Overview
+
+AppsApp has build-in backend services. Every model you define in the frontend (ts) is automatically used for validation in the backend services. So you must not write any backend code yourself. Everythin is fine and respecting security rules. Pre build are:
+- Email finisher
+- Google Spredsheet finisher
+- .. more are upcoming
+
+### Install
+
+First of all you need firebase-cli:
+
+```bash
+$ npm install -g firebase-cli
+```
+
+Then go to your apps project root and run:
+
+```bash
+$ firebase init
+```
+Choose `◯ Functions: Configure and deploy Cloud Functions` and select one of your previously created firebase project as the `default project` for this project root.
+
+Now you are ready to deploy the build-in backend services the first time:
+
+```bash
+$ appsapp
+```
+
+### Deploy
+
+While deploying firebase functions it takes a while. After first run you can speed up it by watching changes. So start the following command whenever you are editing your apps source.
+
+```bash
+$ appsapp -w
+```
+
+
+
 
 ## Decorators
 
