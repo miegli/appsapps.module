@@ -1,4 +1,4 @@
-import {PersistableModel} from "./persistable";
+import {PersistableModel} from "appsapp-cli";
 import {AngularFireDatabase} from "angularfire2/database";
 import {AngularFirestore} from "angularfire2/firestore";
 import {AngularFireAuth} from 'angularfire2/auth';

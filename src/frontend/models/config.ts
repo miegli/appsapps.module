@@ -1,4 +1,4 @@
-import {PersistableModel} from "./persistable";
+import {PersistableModel} from "appsapp-cli";
 
 
 export class ConfigModel extends PersistableModel {

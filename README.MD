@@ -54,7 +54,8 @@ import { AppsappModule } from 'appsapp-module';
       submitted: 'Die Daten wurden übermittelt.',
       submittedInBackground: 'Die Daten wurden gespeichert und werden übermittelt, sobald eine Internetverbindung besteht.',
       disconnected: 'Die Verbindung wurde unterbrochen.',
-      connected: 'Die Verbindung wurde wiederhergestellt.'
+      connected: 'Die Verbindung wurde wiederhergestellt.',
+      error: 'Fehler'
     })
   ],
   providers: [],

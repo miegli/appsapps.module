@@ -5,7 +5,7 @@ import {FirebaseModel} from "../models/firebase";
 import {AngularFireAuth} from "angularfire2/auth";
 import {PersistenceManager} from "../manager/persistenceManager";
 import {mobiscroll} from "@mobiscroll/angular";
-import {AppsappModuleProviderMessages} from "../models/persistable";
+import {AppsappModuleProviderMessages} from "appsapp-cli";
 
 
 /*

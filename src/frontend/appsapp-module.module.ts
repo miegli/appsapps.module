@@ -19,7 +19,7 @@ import {MbscModule} from "@mobiscroll/angular";
 import {FormsModule} from "@angular/forms";
 import {AppsappModuleProvider} from "./providers/appsapp-module-provider";
 import {AppsappModuleProviderConfig} from "./providers/appsapp-module-provider";
-import {AppsappModuleProviderMessages} from "./models/persistable";
+import {AppsappModuleProviderMessages} from "appsapp-cli";
 import {AppsappInputNumberPlainComponent} from "./components/input/appsapp-input-number-plain/appsapp-input-number-plain";
 
 @NgModule({
