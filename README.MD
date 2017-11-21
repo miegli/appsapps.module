@@ -32,23 +32,13 @@ $ npm install appsapp-module --save
 ```
 
 
-and then from your Angular `AppModule`:
+and then import appsapp-module to your Angular `app.module.ts`
 
 ```typescript
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
-import { AppComponent } from './app.component';
-
-// Import appsApp module
 import { AppsappModule } from 'appsapp-module';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
   imports: [
-    BrowserModule,
     AppsappModule.initializeApp({
       apiKey: 'AIzaSyBEsibRXWWJrtSQ0SSKf7z8V9HpjdsnOF8',
       projectId: 'test-32b81'
@@ -63,9 +53,7 @@ import { AppsappModule } from 'appsapp-module';
       connected: 'Die Verbindung wurde wiederhergestellt.',
       error: 'Fehler'
     })
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+  ]
 })
 export class AppModule { }
 ```
@@ -73,11 +61,10 @@ export class AppModule { }
 
 ## Create your first form app
 
-Your component ts ends up with:
+Your component `pages/home.ts` ts ends up with something like this:
+
 ```typescript
-import { PersistableModel, HasConditions, HasPrecision, HasLabel, IsDateRange, HasDescription} from "appsapp-cli";
-import {AppsappModuleProvider} from "appsapp-module";
-import {IsInt, Min, Max, IsIn} from "class-validator";
+import { AppsappModuleProvider, PersistableModel, HasConditions, IsInt, Min, Max, HasPrecision, HasLabel, IsDateRange, HasDescription} from "appsapp-cli";
 
 @Component({
   selector: 'page-home',
@@ -121,19 +108,36 @@ export class myModel extends PersistableModel {
 
 **Congratulation, you have created your first form app with appsApp!**
 
-
 ![Alt text](appsapp-module-screen2.png?raw=true "appsApp.io")
 
-
+***
 
 ## Using built-in backend services
 
 ### Overview
 
-AppsApp has build-in backend services. Every model you define in the frontend (ts) is automatically used for validation in the backend services. So you must not write any backend code yourself. Everythin is fine and respecting security rules. Pre build are:
-- Email finisher
-- Google Spredsheet finisher
-- .. more are upcoming
+AppsApp has build-in backend services. Every model you define in the frontend (ts) is automatically used for validation in the backend services. You must not write any backend code yourself. Pre built are:
+#### Email finisher 
+Add `amazonAccessKey.json` to yours project root with your Amazon SES IAM credentials.
+```json
+ {
+  "accessKeyId": "XXXX",
+  "secretAccessKey": "YYYY",
+  "region": "eu-west-1"
+  }
+```
+
+#### Google Spredsheet finisher
+Add `serviceAccountKey.json` to yours project root with your google service account credentials.
+```json
+{
+  "type": "service_account",
+  "private_key": "-----BEGIN PRIVATE KEY----------END PRIVATE KEY-----",
+  "client_email": "firebase-adminsdk-yyy@xxxx.iam.gserviceaccount.com",
+}
+
+```
+More finishers and backend services are upcoming.
 
 ### Install
 
