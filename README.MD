@@ -116,7 +116,7 @@ export class myModel extends PersistableModel {
 
 ### Overview
 
-AppsApp has build-in backend services. Every model you define in the frontend (ts) is automatically used for validation in the backend services. You must not write any backend code yourself. Pre built are:
+AppsApp has built-in backend services. Every model you define in the frontend (ts) is automatically used for validation in the backend services. You must not write any backend code yourself. Pre built are:
 #### Email finisher 
 Add `amazonAccessKey.json` to yours project root with your Amazon SES IAM credentials.
 ```json
@@ -154,7 +154,7 @@ $ firebase init
 ```
 Choose `◯ Functions: Configure and deploy Cloud Functions` and select one of your previously created firebase project as the `default project` for this project root.
 
-Now you are ready to deploy the build-in backend services the first time:
+Now you are ready to deploy the built-in backend services the first time:
 
 ```bash
 $ appsapp
