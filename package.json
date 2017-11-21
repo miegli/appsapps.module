@@ -1,6 +1,6 @@
 {
   "name": "appsapp-module",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "scripts": {
     "build": "gulp build",
     "build:watch": "gulp",
@@ -86,7 +86,7 @@
     "object-hash": "^1.2.0",
     "core-js": "^2.5.1",
     "firebase-admin": "~5.4.2",
-    "json-stringify-pretty-compact":"^1.0.4"
+    "json-stringify-pretty-compact": "^1.0.4"
   },
   "engines": {
     "node": ">=6.0.0"
