@@ -64,7 +64,7 @@ export class AppModule { }
 Your component `pages/home.ts` ts ends up with something like this:
 
 ```typescript
-import { AppsappModuleProvider, PersistableModel, HasConditions, IsInt, Min, Max, HasPrecision, HasLabel, IsDateRange, HasDescription} from "appsapp-cli";
+import { AppsappModuleProvider, PersistableModel, HasConditions, IsInt, Min, Max, HasPrecision, HasLabel, IsDateRange, HasDescription} from "appsapp-module";
 
 @Component({
   selector: 'page-home',
