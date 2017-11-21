@@ -6,8 +6,11 @@ var gulp = require('gulp'),
   rename = require('gulp-rename'),
   del = require('del'),
   runSequence = require('run-sequence'),
-  inlineResources = require('./tools/gulp/inline-resources');
+  inlineResources = require('./tools/gulp/inline-resources'),
+  stringify = require("json-stringify-pretty-compact");
 
+var fs = require('fs');
+var request = require('request');
 const rootFolder = path.join(__dirname);
 const srcFolder = path.join(rootFolder, 'src');
 const tmpFolder = path.join(rootFolder, '.tmp');
@@ -153,6 +156,41 @@ gulp.task('copy:build', function () {
     .pipe(gulp.dest(distFolder));
 });
 
+
+/**
+ * 8A. increment version for package.json
+ */
+gulp.task('version:manifest', function () {
+
+
+    var basePackage = require(`./package.json`);
+    var srcPackage = require(`${srcFolder}/package.json`);
+    srcPackage.version = basePackage.version;
+    fs.writeFile(`${srcFolder}/package.json`, stringify(srcPackage), function(e) {
+        //
+    });
+
+    request('https://raw.githubusercontent.com/miegli/appsapp.cli/master/package.json',  (error, response, body)  => {
+
+       if (!error) {
+           var package = JSON.parse(body);
+          if (package.version) {
+              console.log(package.version);
+              console.log(`${srcFolder}/package.json`);
+              basePackage.dependencies['appsapp-cli'] = "^"+package.version;
+              fs.writeFile(`${srcFolder}/package.json`, stringify(srcPackage), function (e) {
+                  //
+              });
+
+          }
+       }
+    });
+
+
+
+
+});
+
 /**
  * 8. Copy package.json from /src to /dist
  */
@@ -192,6 +230,7 @@ gulp.task('compile', function () {
     'rollup:fesm',
     'rollup:umd',
     'copy:build',
+    'version:manifest',
     'copy:manifest',
     'copy:readme',
     'clean:build',
@@ -218,6 +257,7 @@ gulp.task('clean', ['clean:dist', 'clean:tmp', 'clean:build']);
 gulp.task('build', ['clean', 'compile']);
 gulp.task('build:watch', ['build', 'watch']);
 gulp.task('default', ['build:watch']);
+gulp.task('test', ['version:manifest']);
 
 /**
  * Deletes the specified folder
