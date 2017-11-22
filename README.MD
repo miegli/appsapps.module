@@ -2,28 +2,28 @@
 
 **Attention: Don't use it in production environment. It's an alpha version for a concept study.** 
 
-This is an appsApp collection of high quality ui components with awesome backend and validation services full included. Now you build super sophisticated Angular/Ionic apps using TypeScript. Supports Angular's ngc and Ahead-of-Time compiling.
+This is an appsApp collection of high quality ui components with awesome backend and validation services full included. Now you build super sophisticated Angular/Ionic apps using TypeScript.
 
-Circular condition validators are the unique selling points. You gonna love it!
+Circular condition validators (frontend and backend all-in-one!) are the unique selling points. You gonna love it!
  
 ![Alt text](appsapp-module-screen.png?raw=true "appsApp.io")
 
 
 ## Install
 
-You need mobiscroll. So please obtain a licence (see https://www.mobiscroll.com/) and then run:
+You need `mobiscroll`. Please obtain a licence (see https://www.mobiscroll.com/) and then run:
 
 ```bash
 $ npm install -g @mobiscroll/cli
 ```
 
-You also need apppsapp-cli. So please install it by running:
+You also need `apppsapp-cli`. So please install it by running:
 
 ```bash
 $ npm install -g appsapp-cli
 ```
 
-Once you have kickstarted your ionic app, you can import appsApp to your application by running:
+Once you have kick-started your ionic app, you have to import `appsapp-module` and append `mobiscroll`. Switch to your apps project root and run:
 
 
 ```bash
@@ -31,8 +31,7 @@ $ mobiscroll config ionic
 $ npm install appsapp-module --save
 ```
 
-
-and then import appsapp-module to your Angular `app.module.ts`
+and then add `appsapp-module` to your Angular `app.module.ts`
 
 ```typescript
 import { AppsappModule } from 'appsapp-module';
@@ -58,13 +57,15 @@ import { AppsappModule } from 'appsapp-module';
 export class AppModule { }
 ```
 
+It's very recommended that you create your own `google firebase project` first and then provide its `apiKey` and `projectId` to the initializeApp config parameters.
+
 
 ## Create your first form app
 
 Your component `pages/home.ts` ts ends up with something like this:
 
 ```typescript
-import { AppsappModuleProvider, PersistableModel, HasConditions, IsInt, Min, Max, HasPrecision, HasLabel, IsDateRange, HasDescription} from "appsapp-module";
+import { AppsappModuleProvider, PersistableModel, HasConditions, IsInt, Min, Max, HasLabel, IsDateRange, HasDescription} from "appsapp-module";
 
 @Component({
   selector: 'page-home',
@@ -117,8 +118,9 @@ export class myModel extends PersistableModel {
 ### Overview
 
 AppsApp has built-in backend services. Every model you define in the frontend (ts) is automatically used for validation in the backend services. You must not write any backend code yourself. Pre built are:
+
 #### Email finisher 
-Add `amazonAccessKey.json` to yours project root with your Amazon SES IAM credentials.
+Add `amazonAccessKey.json` to your project root and provide your Amazon SES IAM credentials, you have created before. 
 ```json
  {
   "accessKeyId": "XXXX",
@@ -127,8 +129,8 @@ Add `amazonAccessKey.json` to yours project root with your Amazon SES IAM creden
   }
 ```
 
-#### Google Spredsheet finisher
-Add `serviceAccountKey.json` to yours project root with your google service account credentials.
+#### Google Spreadsheet finisher
+Add `serviceAccountKey.json` to yours project root with your google service account credentials. Don't forget the enable the relevant api services like `google spreadsheet` and `google drive` in your google developer console.
 ```json
 {
   "type": "service_account",
@@ -141,7 +143,7 @@ More finishers and backend services are upcoming.
 
 ### Install
 
-First of all you need firebase-cli:
+To make run the pre-build backend services described above, first of all you need `firebase-cli`:
 
 ```bash
 $ npm install -g firebase-cli
@@ -160,20 +162,24 @@ Now you are ready to deploy the built-in backend services the first time:
 $ appsapp
 ```
 
+Please ensure that you have a working internet connection all the time.
+
 ### Deploy
 
-While deploying firebase functions it takes a while. After first run you can speed up it by watching changes. So start the following command whenever you are editing your apps source.
+While deploying firebase functions it takes a while. After first run you can speed it up by watching your apps build files for any changes. Start the following command whenever you are editing your apps source.
 
 ```bash
 $ appsapp -w
 ```
-
+Please note, that you have an internet connection while the script above is running. If not, then stop the script execution and start it again when you are connected next time.
 
 
 
 ## Decorators
 
 ### Basic validators from npm class-validator
+
+All of the validators are also available from the `appsapp-module` for  importing to your ts files without any care.
 
 | Decorator                                       | Description                                                                                                                      |
 |-------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
