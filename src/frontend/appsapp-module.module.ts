@@ -14,6 +14,7 @@ import {AppsappInputBooleanComponent} from "./components/input/appsapp-input-boo
 import {AppsappInputRatingComponent} from "./components/input/appsapp-input-rating/appsapp-input-rating";
 import {AppsappInputBirthdayComponent} from "./components/input/appsapp-input-birthday/appsapp-input-birthday";
 import {AppsappInputTextComponent} from "./components/input/appsapp-input-text/appsapp-input-text";
+import {AppsappInputSelectComponent} from "./components/input/appsapp-input-select/appsapp-input-select";
 import {AppsappInputAbstractComponent} from "./components/input/appsapp-input-abstract";
 import {MbscModule} from "@mobiscroll/angular";
 import {FormsModule} from "@angular/forms";
@@ -21,6 +22,7 @@ import {AppsappModuleProvider} from "./providers/appsapp-module-provider";
 import {AppsappModuleProviderConfig} from "./providers/appsapp-module-provider";
 import {AppsappModuleProviderMessages} from "appsapp-cli";
 import {AppsappInputNumberPlainComponent} from "./components/input/appsapp-input-number-plain/appsapp-input-number-plain";
+import {HttpClientModule, HttpClient} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -40,10 +42,11 @@ import {AppsappInputNumberPlainComponent} from "./components/input/appsapp-input
     AppsappInputBirthdayComponent,
     AppsappInputTextComponent,
     AppsappInputAbstractComponent,
+    AppsappInputSelectComponent,
     AppsappInputNumberPlainComponent
   ],
-  providers: [AppsappModuleProvider],
-  imports: [MbscModule, CommonModule, FormsModule],
+  providers: [AppsappModuleProvider, HttpClient],
+  imports: [MbscModule, CommonModule, FormsModule, HttpClientModule],
   exports: [
     // export the component(s) that you want others to be able to use
     AppsappInputComponent

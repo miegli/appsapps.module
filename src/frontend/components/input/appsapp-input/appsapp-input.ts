@@ -55,6 +55,9 @@ import {Observable} from "rxjs/Observable";
           </ng-container>
           <ng-container *ngSwitchCase="'birthday'">
               <appsapp-input-birthday [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-birthday>
+          </ng-container> 
+          <ng-container *ngSwitchCase="'select'">
+              <appsapp-input-select [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-select>
           </ng-container>
       </ng-container>
 
