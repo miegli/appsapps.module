@@ -17,16 +17,22 @@ var persistenceManager_1 = require("../manager/persistenceManager");
 var angular_1 = require("@mobiscroll/angular");
 ;
 var AppsappModuleProvider = (function () {
-    function AppsappModuleProvider(providerConfig, providerMessages) {
+    function AppsappModuleProvider(providerConfig, providerMessages, http) {
         this.providerConfig = providerConfig;
         this.providerMessages = providerMessages;
+        this.http = http;
         var self = this;
         this.persistenceManager = new persistenceManager_1.PersistenceManager();
         // init configuration instance
         this.config = new config_1.ConfigModel();
         // init projects firebase instance
         this.firebaseProject = new firebase_1.FirebaseModel();
-        this.firebaseProject.init({ firebaseProjectId: providerConfig.projectId, firebaseApiKey: providerConfig.apiKey, firebaseDatabaseURL: 'https://' + providerConfig.projectId + '.firebaseio.com/', firebaseAuthDomain: 'https://' + providerConfig.projectId + '.firebaseio.com/' });
+        this.firebaseProject.init({
+            firebaseProjectId: providerConfig.projectId,
+            firebaseApiKey: providerConfig.apiKey,
+            firebaseDatabaseURL: 'https://' + providerConfig.projectId + '.firebaseio.com/',
+            firebaseAuthDomain: 'https://' + providerConfig.projectId + '.firebaseio.com/'
+        });
         // init notification provider
         var timeout = null;
         this.notificationProvider = function (message, error) {
@@ -83,13 +89,34 @@ var AppsappModuleProvider = (function () {
         });
     }
     /**
+     * get http client
+     * @returns HttpClient
+     */
+    AppsappModuleProvider.prototype.getHttpClient = function () {
+        return this.http;
+    };
+    /**
      * creates and return new persistable model
      * @param constructor
+     * @param uuid string
+     * @param data
+     * @returns any
      */
-    AppsappModuleProvider.prototype["new"] = function (constructor) {
+    AppsappModuleProvider.prototype["new"] = function (constructor, uuid, data) {
         var model = new constructor();
         var pm = new persistenceManager_1.PersistenceManager();
-        model.setNotificationProvider(this.notificationProvider).setMessages(this.providerMessages).setPersistanceManager(pm.setFirebase(this.firebaseProject).initAndload(model));
+        var self = this;
+        if (uuid) {
+            model.setUuid(uuid);
+        }
+        var p = new Promise(function (resolve, reject) {
+            model.setHttpClient(self.http).setNotificationProvider(self.notificationProvider).setMessages(self.providerMessages).setPersistenceManager(pm.setFirebase(self.firebaseProject)).getPersistenceManager().initAndload(model, data).then(function (model) {
+                resolve(model);
+            })["catch"](function () {
+                resolve(model);
+            });
+        });
+        model.setIsLoadedPromise(p);
         return model;
     };
     /**

@@ -111,8 +111,8 @@ var PersistenceManager = (function () {
     PersistenceManager.prototype.initModelForFirebaseDatabase = function (model) {
         var _this = this;
         var self = this;
-        if (!model.getPersistanceManager() || !model.getFirebaseDatabasePath()) {
-            model.setPersistanceManager(this);
+        if (!model.getPersistenceManager() || !model.getFirebaseDatabasePath()) {
+            model.setPersistenceManager(this);
             this.observable.subscribe(function (data) {
                 if (data.action == 'connected' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
                     _this.workOnPendingChanges(model);
@@ -270,19 +270,38 @@ var PersistenceManager = (function () {
         return d;
     };
     /**
-     * load and autsave data model
-     * @param model
-     * @returns {PersistenceManager}
+     * get hash
+     * @param string
      */
-    PersistenceManager.prototype.initAndload = function (model) {
-        this.initModelForFirebaseDatabase(model);
-        this.load(model).then(function (m) {
-            // loaded and update bindings
-            Object.keys(model.__bindingsObserver).forEach(function (property) {
-                model.__bindingsObserver[property].next(model[property]);
+    PersistenceManager.prototype.getHash = function (string) {
+        return objectHash.sha1(string);
+    };
+    /**
+     * load and autosave data model
+     * @param model
+     * @param any data
+     * @returns {Promise<any>}
+     */
+    PersistenceManager.prototype.initAndload = function (model, data) {
+        var self = this;
+        return new Promise(function (resolve, reject) {
+            self.initModelForFirebaseDatabase(model);
+            self.load(model).then(function (m) {
+                // set default data
+                if (data) {
+                    Object.keys(data).forEach(function (property) {
+                        model[property] = data[property];
+                    });
+                }
+                // loaded and update bindings
+                Object.keys(model.__bindingsObserver).forEach(function (property) {
+                    model.__bindingsObserver[property].next(model[property]);
+                });
+                resolve(model);
+            })["catch"](function () {
+                resolve(model);
             });
         });
-        return this;
     };
     /**
      * load one model from storage
