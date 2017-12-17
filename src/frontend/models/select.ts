@@ -9,8 +9,9 @@ export class SelectModel extends PersistableModel {
     private data: any = [];
     private url: string = '';
     private mapping: {
-        text: string,
-        value: string,
+        text: string|Function,
+        value: string|Function,
+        disabled?: boolean|Function,
         group?: string
     };
     private dataType: string = 'json';
@@ -48,7 +49,8 @@ export class SelectModel extends PersistableModel {
                 data.forEach((item) => {
                     options.push({
                         value: self._getPropertyFromObject(item, self.mapping.value),
-                        text: self._getPropertyFromObject(item, self.mapping.text)
+                        text: self._getPropertyFromObject(item, self.mapping.text),
+                        disabled: self.mapping.disabled !== undefined ? self._getPropertyFromObject(item, self.mapping.disabled) : false,
                     })
                 });
 
@@ -75,7 +77,7 @@ export class SelectModel extends PersistableModel {
         let self = this;
 
         if (typeof property == 'function') {
-            return property(inputObject);
+            return inputObject !== undefined ? property(inputObject) : null;
         }
 
         if (property.indexOf(".") > 0) {
