@@ -40,7 +40,8 @@ var SelectModel = (function (_super) {
                 data.forEach(function (item) {
                     options.push({
                         value: self._getPropertyFromObject(item, self.mapping.value),
-                        text: self._getPropertyFromObject(item, self.mapping.text)
+                        text: self._getPropertyFromObject(item, self.mapping.text),
+                        disabled: self.mapping.disabled !== undefined ? self._getPropertyFromObject(item, self.mapping.disabled) : false
                     });
                 });
                 self.update('options', options).saveWithPromise().then(function () {
@@ -60,7 +61,7 @@ var SelectModel = (function (_super) {
     SelectModel.prototype._getPropertyFromObject = function (inputObject, property) {
         var self = this;
         if (typeof property == 'function') {
-            return property(inputObject);
+            return inputObject !== undefined ? property(inputObject) : null;
         }
         if (property.indexOf(".") > 0) {
             return self._getPropertyFromObject(inputObject[property.substr(0, property.indexOf("."))], property.substr(property.indexOf(".") + 1));
