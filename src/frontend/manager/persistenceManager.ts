@@ -524,6 +524,7 @@ export class PersistenceManager {
 
             let m = new model.constructor();
             m.loadJson(model.serialize(true, true)).then((m) => {
+                m['__hashedValues'] = model['__hashedValues'];
                 resolve(m);
             }).catch((error) => {
                 reject(error);

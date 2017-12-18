@@ -234,14 +234,18 @@ var PersistenceManager = (function () {
             model.validate(localStorageOnly).then(function () {
                 self.storageWrapper.set(self.getPersistanceIdentifier(model), model.serialize(false, true)).then(function (m) {
                     if (!localStorageOnly && model.getFirebaseDatabasePath() && model.getFirebaseDatabase()) {
-                        resolve(model);
-                        model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(model.serialize(true, true)).then(function (data) {
-                            if (action) {
-                                self.callAction(model, observer, action, resolve, reject);
-                            }
-                            else {
-                                model.setHasPendingChanges(false);
-                            }
+                        self.clone(model).then(function (c) {
+                            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(c.transformAllProperties().serialize(true, true)).then(function (data) {
+                                if (action) {
+                                    self.callAction(model, observer, action, resolve, reject);
+                                }
+                                else {
+                                    model.setHasPendingChanges(false);
+                                }
+                                resolve(model);
+                            })["catch"](function (error) {
+                                reject(error);
+                            });
                         })["catch"](function (error) {
                             reject(error);
                         });
@@ -356,6 +360,21 @@ var PersistenceManager = (function () {
                 })["catch"](function (error) {
                     reject(error);
                 });
+            });
+        });
+    };
+    /**
+     * clone  model
+     * @param model
+     * @returns {Promise<any>}
+     */
+    PersistenceManager.prototype.clone = function (model) {
+        return new Promise(function (resolve, reject) {
+            var m = new model.constructor();
+            m.loadJson(model.serialize(true, true)).then(function (m) {
+                resolve(m);
+            })["catch"](function (error) {
+                reject(error);
             });
         });
     };
