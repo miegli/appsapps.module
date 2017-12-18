@@ -1,6 +1,7 @@
 import {Component, Output} from '@angular/core';
 import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 import {SelectModel} from "../../../models/select";
+import * as objectHash from 'object-hash';
 
 /**
  * Generated class for the AppsappInputSelectComponent component.
@@ -21,6 +22,7 @@ import {SelectModel} from "../../../models/select";
 export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
 
     @Output() options: any = [];
+    select: SelectModel;
 
     ngAfterContentInit() {
 
@@ -35,10 +37,28 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
 
             if (data.source) {
 
-                this.appsappModuleProvider.new(SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url), {url: data.source.url, mapping: data.source.mapping}).loaded().then((select: any) => {
+                this.appsappModuleProvider.new(SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url), {
+                    url: data.source.url,
+                    mapping: data.source.mapping
+                }).loaded().then((select: any) => {
+
                     select.getOptions().subscribe((options) => {
                         self.options = options;
                         self.mbsc.instance.refresh(options);
+                        select.getHashedValues().forEach((v) => {
+                            self.model.addHashedValue(v.value,v.hash);
+                        });
+
+
+                        let hashedValues = [];
+                        self.model.getPropertyValue(self.property,true).forEach((value) => {
+                            hashedValues.push(self.model.setHashedValue(value));
+                        });
+
+                        self.update(hashedValues);
+                        self.mbsc.instance.setVal(hashedValues,false,true)
+
+
                     });
                 });
 
@@ -65,6 +85,8 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
             });
         }
 
+
+
         this.setMbscOption({
             group: self.options.length <= 20 ? {
                 groupWheel: Object.keys(groups).length > 5,
@@ -78,6 +100,7 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
         });
 
     }
+
 
 
 }

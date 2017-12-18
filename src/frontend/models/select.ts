@@ -16,12 +16,12 @@ export class SelectModel extends PersistableModel {
     };
     private dataType: string = 'json';
 
-
     constructor() {
 
         super();
 
     }
+
 
 
     /**
@@ -47,8 +47,9 @@ export class SelectModel extends PersistableModel {
                 let options = [];
 
                 data.forEach((item) => {
+
                     options.push({
-                        value: self._getPropertyFromObject(item, self.mapping.value),
+                        value: self.setHashedValue(self._getPropertyFromObject(item, self.mapping.value)),
                         text: self._getPropertyFromObject(item, self.mapping.text),
                         disabled: self.mapping.disabled !== undefined ? self._getPropertyFromObject(item, self.mapping.disabled) : false,
                     })
