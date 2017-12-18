@@ -40,10 +40,22 @@ var AppsappInputSelectComponent = (function (_super) {
                 this.options = data.options;
             }
             if (data.source) {
-                this.appsappModuleProvider["new"](select_1.SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url), { url: data.source.url, mapping: data.source.mapping }).loaded().then(function (select) {
+                this.appsappModuleProvider["new"](select_1.SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url), {
+                    url: data.source.url,
+                    mapping: data.source.mapping
+                }).loaded().then(function (select) {
                     select.getOptions().subscribe(function (options) {
                         self.options = options;
                         self.mbsc.instance.refresh(options);
+                        select.getHashedValues().forEach(function (v) {
+                            self.model.addHashedValue(v.value, v.hash);
+                        });
+                        var hashedValues = [];
+                        self.model.getPropertyValue(self.property, true).forEach(function (value) {
+                            hashedValues.push(self.model.setHashedValue(value));
+                        });
+                        self.update(hashedValues);
+                        self.mbsc.instance.setVal(hashedValues, false, true);
                     });
                 });
             }

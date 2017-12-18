@@ -39,7 +39,7 @@ var SelectModel = (function (_super) {
                 var options = [];
                 data.forEach(function (item) {
                     options.push({
-                        value: self._getPropertyFromObject(item, self.mapping.value),
+                        value: self.setHashedValue(self._getPropertyFromObject(item, self.mapping.value)),
                         text: self._getPropertyFromObject(item, self.mapping.text),
                         disabled: self.mapping.disabled !== undefined ? self._getPropertyFromObject(item, self.mapping.disabled) : false
                     });

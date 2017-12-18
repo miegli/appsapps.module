@@ -331,19 +331,25 @@ export class PersistenceManager {
 
                     if (!localStorageOnly && model.getFirebaseDatabasePath() && model.getFirebaseDatabase()) {
 
-                        resolve(model);
+                       self.clone(model).then((c:any) => {
+                           model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(c.transformAllProperties().serialize(true, true)).then((data) => {
+                               if (action) {
+                                   self.callAction(model, observer, action, resolve, reject);
+                               } else {
+                                   model.setHasPendingChanges(false);
+                               }
+                               resolve(model);
 
-                        model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(model.serialize(true, true)).then((data) => {
+                           }).catch((error) => {
+                               reject(error);
+                           });
 
-                            if (action) {
-                                self.callAction(model, observer, action, resolve, reject);
-                            } else {
-                                model.setHasPendingChanges(false);
-                            }
+                       }).catch((error) => {
+                           reject(error);
+                       });
 
-                        }).catch((error) => {
-                            reject(error);
-                        });
+
+
 
 
                     } else {
@@ -500,6 +506,27 @@ export class PersistenceManager {
                 }).catch((error) => {
                     reject(error);
                 });
+            });
+
+
+        });
+
+    }
+
+    /**
+     * clone  model
+     * @param model
+     * @returns {Promise<any>}
+     */
+    public clone(model) {
+
+        return new Promise(function (resolve, reject) {
+
+            let m = new model.constructor();
+            m.loadJson(model.serialize(true, true)).then((m) => {
+                resolve(m);
+            }).catch((error) => {
+                reject(error);
             });
 
 
