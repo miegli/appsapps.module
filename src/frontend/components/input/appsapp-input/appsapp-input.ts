@@ -50,9 +50,6 @@ import {Observable} from "rxjs/Observable";
           <ng-container *ngSwitchCase="'boolean'">
               <appsapp-input-boolean [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-boolean>
           </ng-container>
-          <ng-container *ngSwitchCase="'rating'">
-              <appsapp-input-rating [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-rating>
-          </ng-container>
           <ng-container *ngSwitchCase="'birthday'">
               <appsapp-input-birthday [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-birthday>
           </ng-container> 

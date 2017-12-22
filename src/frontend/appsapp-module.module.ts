@@ -11,7 +11,6 @@ import {AppsappInputDateComponent} from "./components/input/appsapp-input-date/a
 import {AppsappInputPasswordComponent} from "./components/input/appsapp-input-password/appsapp-input-password";
 import {AppsappInputIntegerComponent} from "./components/input/appsapp-input-integer/appsapp-input-integer";
 import {AppsappInputBooleanComponent} from "./components/input/appsapp-input-boolean/appsapp-input-boolean";
-import {AppsappInputRatingComponent} from "./components/input/appsapp-input-rating/appsapp-input-rating";
 import {AppsappInputBirthdayComponent} from "./components/input/appsapp-input-birthday/appsapp-input-birthday";
 import {AppsappInputTextComponent} from "./components/input/appsapp-input-text/appsapp-input-text";
 import {AppsappInputSelectComponent} from "./components/input/appsapp-input-select/appsapp-input-select";
@@ -38,7 +37,6 @@ import {HttpClientModule, HttpClient} from "@angular/common/http";
     AppsappInputPasswordComponent,
     AppsappInputIntegerComponent,
     AppsappInputBooleanComponent,
-    AppsappInputRatingComponent,
     AppsappInputBirthdayComponent,
     AppsappInputTextComponent,
     AppsappInputAbstractComponent,
