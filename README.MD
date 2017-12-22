@@ -65,7 +65,7 @@ It's very recommended that you create your own `google firebase project` first a
 Your component `pages/home.ts` ts ends up with something like this:
 
 ```typescript
-import { AppsappModuleProvider, PersistableModel, HasConditions, IsInt, Min, Max, HasLabel, IsDateRange, HasDescription} from "appsapp-module";
+import { AppsappModuleProvider, PersistableModel, HasConditions, IsInt, Min, Max, HasLabel, IsDateRange, HasDescription, IsSelect} from "appsapp-module";
 
 @Component({
   selector: 'page-home',
@@ -103,6 +103,12 @@ export class myModel extends PersistableModel {
   @IsInt() @Min(5) @Max(15) @HasDescription('please enter a number') number: number;
   @HasConditions([{property: 'number', value: 7, validator: 'min'}]) @HasLabel('Your text') text: string = 'test';
   @IsDateRange() daterange: object;
+  @IsSelect({
+      source: {
+        url: 'https://jsonplaceholder.typicode.com/users/',
+        mapping: {text: 'address.city', value: 'address.geo'}
+      }
+    }) adressen: object = [];
 }
 
 ```

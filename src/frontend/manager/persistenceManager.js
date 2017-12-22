@@ -372,6 +372,7 @@ var PersistenceManager = (function () {
         return new Promise(function (resolve, reject) {
             var m = new model.constructor();
             m.loadJson(model.serialize(true, true)).then(function (m) {
+                m['__hashedValues'] = model['__hashedValues'];
                 resolve(m);
             })["catch"](function (error) {
                 reject(error);
