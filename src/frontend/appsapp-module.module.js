@@ -19,7 +19,6 @@ var appsapp_input_date_1 = require("./components/input/appsapp-input-date/appsap
 var appsapp_input_password_1 = require("./components/input/appsapp-input-password/appsapp-input-password");
 var appsapp_input_integer_1 = require("./components/input/appsapp-input-integer/appsapp-input-integer");
 var appsapp_input_boolean_1 = require("./components/input/appsapp-input-boolean/appsapp-input-boolean");
-var appsapp_input_rating_1 = require("./components/input/appsapp-input-rating/appsapp-input-rating");
 var appsapp_input_birthday_1 = require("./components/input/appsapp-input-birthday/appsapp-input-birthday");
 var appsapp_input_text_1 = require("./components/input/appsapp-input-text/appsapp-input-text");
 var appsapp_input_select_1 = require("./components/input/appsapp-input-select/appsapp-input-select");
@@ -55,7 +54,6 @@ AppsappModule = AppsappModule_1 = __decorate([
             appsapp_input_password_1.AppsappInputPasswordComponent,
             appsapp_input_integer_1.AppsappInputIntegerComponent,
             appsapp_input_boolean_1.AppsappInputBooleanComponent,
-            appsapp_input_rating_1.AppsappInputRatingComponent,
             appsapp_input_birthday_1.AppsappInputBirthdayComponent,
             appsapp_input_text_1.AppsappInputTextComponent,
             appsapp_input_abstract_1.AppsappInputAbstractComponent,

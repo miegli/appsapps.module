@@ -185,7 +185,7 @@ export class FirebaseModel extends PersistableModel {
 
             if (this.instance) {
                 this.database = new AngularFireDatabase(this.instance);
-                this.firestore = new AngularFirestore(this.instance, false);
+                //this.firestore = new AngularFirestore(this.instance, false);
                 this.auth = new AngularFireAuth(this.instance);
                 this.emit();
             }
