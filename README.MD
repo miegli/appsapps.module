@@ -279,7 +279,7 @@ All of the validators are also available from the `appsapp-module` for  importin
 | `@IsDateRange()`        | Set special ui for a date range view      |
 | `@IsNumpad()`        | Set special ui for a num pad view    |
 | `@IsPassword()`        | Set special ui password input element    |
-| `@IsRating(..)`        | Set special ui for ratings    |
+| `@IsList(itemType)`        | Adds a repeater of given itemType (reusable model or object)   |
 | `@IsRating(length: number)`        | Set special ui long text   |
 
 

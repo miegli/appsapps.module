@@ -14,6 +14,7 @@ import {AppsappInputBooleanComponent} from "./components/input/appsapp-input-boo
 import {AppsappInputBirthdayComponent} from "./components/input/appsapp-input-birthday/appsapp-input-birthday";
 import {AppsappInputTextComponent} from "./components/input/appsapp-input-text/appsapp-input-text";
 import {AppsappInputSelectComponent} from "./components/input/appsapp-input-select/appsapp-input-select";
+import {AppsappInputListComponent} from "./components/input/appsapp-input-list/appsapp-input-list";
 import {AppsappInputAbstractComponent} from "./components/input/appsapp-input-abstract";
 import {MbscModule} from "@mobiscroll/angular";
 import {FormsModule} from "@angular/forms";
@@ -24,43 +25,47 @@ import {AppsappInputNumberPlainComponent} from "./components/input/appsapp-input
 import {HttpClientModule, HttpClient} from "@angular/common/http";
 
 @NgModule({
-  declarations: [
-    // declare all components that your module uses
-    AppsappInputComponent,
-    AppsappInputUrlComponent,
-    AppsappInputNumberComponent,
-    AppsappInputTextareaComponent,
-    AppsappInputTelComponent,
-    AppsappInputEmailComponent,
-    AppsappInputDatesComponent,
-    AppsappInputDateComponent,
-    AppsappInputPasswordComponent,
-    AppsappInputIntegerComponent,
-    AppsappInputBooleanComponent,
-    AppsappInputBirthdayComponent,
-    AppsappInputTextComponent,
-    AppsappInputAbstractComponent,
-    AppsappInputSelectComponent,
-    AppsappInputNumberPlainComponent
-  ],
-  providers: [AppsappModuleProvider, HttpClient],
-  imports: [MbscModule, CommonModule, FormsModule, HttpClientModule],
-  exports: [
-    // export the component(s) that you want others to be able to use
-    AppsappInputComponent
-  ],
-   entryComponents: [
-     AppsappInputIntegerComponent
-   ]
+    declarations: [
+        // declare all components that your module uses
+        AppsappInputComponent,
+        AppsappInputUrlComponent,
+        AppsappInputNumberComponent,
+        AppsappInputTextareaComponent,
+        AppsappInputTelComponent,
+        AppsappInputEmailComponent,
+        AppsappInputDatesComponent,
+        AppsappInputDateComponent,
+        AppsappInputPasswordComponent,
+        AppsappInputIntegerComponent,
+        AppsappInputBooleanComponent,
+        AppsappInputBirthdayComponent,
+        AppsappInputTextComponent,
+        AppsappInputAbstractComponent,
+        AppsappInputSelectComponent,
+        AppsappInputListComponent,
+        AppsappInputNumberPlainComponent
+    ],
+    providers: [AppsappModuleProvider, HttpClient],
+    imports: [MbscModule, CommonModule, FormsModule, HttpClientModule],
+    exports: [
+        // export the component(s) that you want others to be able to use
+        AppsappInputComponent
+    ],
+    entryComponents: [
+        AppsappInputIntegerComponent
+    ]
 })
 
 
 export class AppsappModule {
-  static initializeApp(config: AppsappModuleProviderConfig, messages: AppsappModuleProviderMessages): ModuleWithProviders {
-    return {
-      ngModule: AppsappModule,
-      providers: [AppsappModuleProvider, {provide: 'config', useValue: config}, {provide: 'messages', useValue: messages}]
-    };
-  }
+    static initializeApp(config: AppsappModuleProviderConfig, messages: AppsappModuleProviderMessages): ModuleWithProviders {
+        return {
+            ngModule: AppsappModule,
+            providers: [AppsappModuleProvider, {provide: 'config', useValue: config}, {
+                provide: 'messages',
+                useValue: messages
+            }]
+        };
+    }
 }
 

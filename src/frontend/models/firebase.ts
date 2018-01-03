@@ -2,7 +2,9 @@ import {PersistableModel} from "appsapp-cli";
 import {AngularFireDatabase} from "angularfire2/database";
 import {AngularFirestore} from "angularfire2/firestore";
 import {AngularFireAuth} from 'angularfire2/auth';
-import * as firebase from 'firebase';
+
+
+import {firebase} from '@firebase/app'
 
 export class FirebaseModel extends PersistableModel {
 
@@ -185,7 +187,7 @@ export class FirebaseModel extends PersistableModel {
 
             if (this.instance) {
                 this.database = new AngularFireDatabase(this.instance);
-                //this.firestore = new AngularFirestore(this.instance, false);
+                this.firestore = new AngularFirestore(this.instance, false);
                 this.auth = new AngularFireAuth(this.instance);
                 this.emit();
             }

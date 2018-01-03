@@ -125,7 +125,7 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
    */
   setMbscOption(option: any) {
 
-    if (this.mbsc !== undefined) {
+    if (this.mbsc !== undefined && this.mbsc.instance) {
       this.mbsc.instance.option(option);
     }
 
