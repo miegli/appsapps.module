@@ -12,14 +12,15 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 var appsapp_cli_1 = require("appsapp-cli");
 var database_1 = require("angularfire2/database");
+var firestore_1 = require("angularfire2/firestore");
 var auth_1 = require("angularfire2/auth");
-var firebase = require("firebase");
+var app_1 = require("@firebase/app");
 var FirebaseModel = (function (_super) {
     __extends(FirebaseModel, _super);
     function FirebaseModel() {
         var _this = _super.call(this) || this;
         _this.config = {};
-        _this.firebase = firebase;
+        _this.firebase = app_1.firebase;
         return _this;
     }
     /**
@@ -148,7 +149,7 @@ var FirebaseModel = (function (_super) {
             }
             if (this.instance) {
                 this.database = new database_1.AngularFireDatabase(this.instance);
-                //this.firestore = new AngularFirestore(this.instance, false);
+                this.firestore = new firestore_1.AngularFirestore(this.instance, false);
                 this.auth = new auth_1.AngularFireAuth(this.instance);
                 this.emit();
             }

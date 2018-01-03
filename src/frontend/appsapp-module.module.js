@@ -22,6 +22,7 @@ var appsapp_input_boolean_1 = require("./components/input/appsapp-input-boolean/
 var appsapp_input_birthday_1 = require("./components/input/appsapp-input-birthday/appsapp-input-birthday");
 var appsapp_input_text_1 = require("./components/input/appsapp-input-text/appsapp-input-text");
 var appsapp_input_select_1 = require("./components/input/appsapp-input-select/appsapp-input-select");
+var appsapp_input_list_1 = require("./components/input/appsapp-input-list/appsapp-input-list");
 var appsapp_input_abstract_1 = require("./components/input/appsapp-input-abstract");
 var angular_1 = require("@mobiscroll/angular");
 var forms_1 = require("@angular/forms");
@@ -34,7 +35,10 @@ var AppsappModule = AppsappModule_1 = (function () {
     AppsappModule.initializeApp = function (config, messages) {
         return {
             ngModule: AppsappModule_1,
-            providers: [appsapp_module_provider_1.AppsappModuleProvider, { provide: 'config', useValue: config }, { provide: 'messages', useValue: messages }]
+            providers: [appsapp_module_provider_1.AppsappModuleProvider, { provide: 'config', useValue: config }, {
+                    provide: 'messages',
+                    useValue: messages
+                }]
         };
     };
     return AppsappModule;
@@ -58,6 +62,7 @@ AppsappModule = AppsappModule_1 = __decorate([
             appsapp_input_text_1.AppsappInputTextComponent,
             appsapp_input_abstract_1.AppsappInputAbstractComponent,
             appsapp_input_select_1.AppsappInputSelectComponent,
+            appsapp_input_list_1.AppsappInputListComponent,
             appsapp_input_number_plain_1.AppsappInputNumberPlainComponent
         ],
         providers: [appsapp_module_provider_1.AppsappModuleProvider, http_1.HttpClient],

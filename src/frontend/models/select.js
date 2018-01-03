@@ -63,7 +63,7 @@ var SelectModel = (function (_super) {
         if (typeof property == 'function') {
             return inputObject !== undefined ? property(inputObject) : null;
         }
-        if (property.indexOf(".") > 0) {
+        if (typeof property == 'string' && property.indexOf(".") > 0) {
             return self._getPropertyFromObject(inputObject[property.substr(0, property.indexOf("."))], property.substr(property.indexOf(".") + 1));
         }
         else {

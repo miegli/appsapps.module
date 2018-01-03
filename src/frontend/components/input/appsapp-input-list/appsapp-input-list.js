@@ -18,84 +18,141 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 var core_1 = require("@angular/core");
 var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
-var select_1 = require("../../../models/select");
+var appsapp_cli_1 = require("appsapp-cli");
 /**
  * Generated class for the AppsappInputSelectComponent component.
  *
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputSelectComponent = (function (_super) {
-    __extends(AppsappInputSelectComponent, _super);
-    function AppsappInputSelectComponent() {
+var AppsappInputListComponent = (function (_super) {
+    __extends(AppsappInputListComponent, _super);
+    function AppsappInputListComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.options = [];
         return _this;
     }
-    AppsappInputSelectComponent.prototype.ngAfterContentInit = function () {
+    AppsappInputListComponent.prototype.afterInit = function (config) {
+        this.updateConfig();
+    };
+    AppsappInputListComponent.prototype.reCalculateAfterSorting = function () {
         var self = this;
-        var data = this.model.getMetadataValue(this.property, 'isSelect');
-        if (data) {
-            if (data.options && typeof data.options == 'object') {
-                this.options = data.options;
+        if (self.mbsc && self.mbsc.element !== undefined && self.mbsc.element) {
+            var valueAsObject_1 = {};
+            var valueSorted = [];
+            var value = self.model.getPropertyValue(self.property, true);
+            if (typeof value !== 'object' && value.length == undefined) {
+                value = [];
             }
-            if (data.source) {
-                this.appsappModuleProvider["new"](select_1.SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url), {
-                    url: data.source.url,
-                    mapping: data.source.mapping
-                }).loaded().then(function (select) {
-                    select.getOptions().subscribe(function (options) {
-                        self.options = options;
-                        self.mbsc.instance.refresh(options);
-                        select.getHashedValues().forEach(function (v) {
-                            self.model.addHashedValue(v.value, v.hash);
-                        });
-                        var hashedValues = [];
-                        self.model.getPropertyValue(self.property, true).forEach(function (value) {
-                            hashedValues.push(self.model.setHashedValue(value));
-                        });
-                        self.update(hashedValues);
-                        self.mbsc.instance.setVal(hashedValues, false, true);
-                    });
-                });
+            value.forEach(function (item) {
+                valueAsObject_1[item.__uuid] = item;
+            });
+            for (var i = 0; i < self.mbsc.element.children.length; i++) {
+                if (self.mbsc.element.children.item(i)) {
+                    valueSorted.push(valueAsObject_1[self.mbsc.element.children.item(i).getAttribute('data-id')]);
+                }
+            }
+            if (valueSorted.length) {
+                self.model.update(self.property, valueSorted).setProperty(self.property, valueSorted);
+            }
+        }
+        console.log(self.model);
+    };
+    AppsappInputListComponent.prototype.updateConfig = function () {
+        var _this = this;
+        var self = this, value = this.model.getPropertyValue(this.property, true);
+        if (typeof value !== 'object' && value.length == undefined) {
+            value = [];
+        }
+        this.setMbscOption({
+            onSortUpdate: function (event, inst) {
+                self.reCalculateAfterSorting();
+            },
+            sortable: { handle: 'right' }, striped: false, stages: [{
+                    percent: -25,
+                    color: 'red',
+                    icon: 'remove',
+                    text: 'Delete',
+                    confirm: false,
+                    disabled: !this.model.getMetadataValue(this.property, 'min') || this.model.getMetadataValue(this.property, 'min') < value.length ? false : true,
+                    action: function (event, inst) {
+                        _this.removeItem(event.index);
+                        return false;
+                    }
+                },
+                {
+                    percent: 25,
+                    color: 'green',
+                    icon: 'plus',
+                    text: '',
+                    undo: false,
+                    disabled: !this.model.getMetadataValue(this.property, 'max') || this.model.getMetadataValue(this.property, 'max') > value.length ? false : true,
+                    action: function (event, inst) {
+                        _this.addItem();
+                    }
+                }]
+        });
+    };
+    AppsappInputListComponent.prototype.ngAfterContentInit = function () {
+        if (this.model.getMetadataValue(this.property, 'min')) {
+            for (var i = 0; i < this.model.getMetadataValue(this.property, 'min'); i++) {
+                this.addItem();
             }
         }
     };
     /**
-     *
-     * @param {ConfigModel} config
+     * remove by uuid or index
+     * @param uuid
      */
-    AppsappInputSelectComponent.prototype.afterInit = function (config) {
-        var self = this;
-        var groups = {};
-        if (typeof this.options.length == 'number') {
-            this.options.forEach(function (item) {
-                if (item.group !== undefined) {
-                    groups[item.group] = true;
+    AppsappInputListComponent.prototype.removeItem = function (uuidOrIndex) {
+        var value = this.model.getPropertyValue(this.property, true);
+        if (typeof value !== 'object' && value.length == undefined) {
+            value = [];
+        }
+        if (!this.model.getMetadataValue(this.property, 'min') || this.model.getMetadataValue(this.property, 'min') < value.length) {
+            var index_1 = 0;
+            var wasdeleted_1 = false;
+            value.forEach(function (item) {
+                if (!wasdeleted_1 && (item.getUuid() == uuidOrIndex || uuidOrIndex == index_1)) {
+                    value.splice(index_1, 1);
+                    wasdeleted_1 = true;
                 }
+                index_1++;
             });
         }
-        this.setMbscOption({
-            group: self.options.length <= 20 ? {
-                groupWheel: Object.keys(groups).length > 5,
-                header: Object.keys(groups).length > 0,
-                clustered: Object.keys(groups).length > 2
-            } : null,
-            filter: self.options.length > 20,
-            display: 'center',
-            data: self.options,
-            select: self.model.getMetadataValue(self.property, 'arrayMaxSize') ? self.model.getMetadataValue(self.property, 'arrayMaxSize') : (self.model.isArray(self.property) ? 'multiple' : 'single')
-        });
+        this.updateConfig();
     };
-    return AppsappInputSelectComponent;
+    AppsappInputListComponent.prototype.addItem = function () {
+        var model = this.model.getMetadataValue(this.property, 'isList'), item = null;
+        try {
+            item = new model();
+        }
+        catch (e) {
+            item = new model.constructor();
+        }
+        var value = this.model.getPropertyValue(this.property, true);
+        if (typeof value !== 'object' && value.length == undefined) {
+            value = [];
+        }
+        if (!this.model.getMetadataValue(this.property, 'max') || this.model.getMetadataValue(this.property, 'max') > value.length) {
+            if (Object.keys(item).length == 0 || item instanceof appsapp_cli_1.PersistableModel == false) {
+                item = new appsapp_cli_1.PersistableModel();
+                item.importDynamicProperties(model);
+            }
+            item.setUuid();
+            value.push(item);
+        }
+        this.updateConfig();
+    };
+    return AppsappInputListComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
 __decorate([
     core_1.Output()
-], AppsappInputSelectComponent.prototype, "options");
-AppsappInputSelectComponent = __decorate([
+], AppsappInputListComponent.prototype, "options");
+AppsappInputListComponent = __decorate([
     core_1.Component({
-        selector: 'appsapp-input-select',
-        template: "\n        <mbsc-form #mbscInstanceForm=\"mobiscroll\">\n            <mbsc-input mbsc-select [error]=\"validator | async\" #mbscInstance=\"mobiscroll\"\n                        [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n            </mbsc-input>\n        </mbsc-form>\n    "
+        selector: 'appsapp-input-list',
+        template: "\n\n        <mbsc-listview #mbscInstance=\"mobiscroll\">\n            <mbsc-listview-item *ngFor=\"let item of _ngModelGettter | async\" [id]=\"item.__uuid\">\n                <appsapp-input [model]=\"item\"></appsapp-input>\n            </mbsc-listview-item>\n        </mbsc-listview>\n\n    "
     })
-], AppsappInputSelectComponent);
-exports.AppsappInputSelectComponent = AppsappInputSelectComponent;
+], AppsappInputListComponent);
+exports.AppsappInputListComponent = AppsappInputListComponent;

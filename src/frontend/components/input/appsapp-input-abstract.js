@@ -99,7 +99,7 @@ var AppsappInputAbstractComponent = (function (_super) {
      * @param {Object} options
      */
     AppsappInputAbstractComponent.prototype.setMbscOption = function (option) {
-        if (this.mbsc !== undefined) {
+        if (this.mbsc !== undefined && this.mbsc.instance) {
             this.mbsc.instance.option(option);
         }
     };
