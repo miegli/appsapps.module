@@ -54,9 +54,11 @@ var AppsappInputListComponent = (function (_super) {
             }
             if (valueSorted.length) {
                 self.model.update(self.property, valueSorted).setProperty(self.property, valueSorted);
+                if (self.model.getParent()) {
+                    self.model.getParent().setProperty(self.property, self.model.getPropertyValue(self.property, true));
+                }
             }
         }
-        console.log(self.model);
     };
     AppsappInputListComponent.prototype.updateConfig = function () {
         var _this = this;
@@ -69,24 +71,24 @@ var AppsappInputListComponent = (function (_super) {
                 self.reCalculateAfterSorting();
             },
             sortable: { handle: 'right' }, striped: false, stages: [{
-                    percent: -25,
+                    percent: -10,
                     color: 'red',
                     icon: 'remove',
-                    text: 'Delete',
+                    text: this.model.getMessage('delete'),
                     confirm: false,
-                    disabled: !this.model.getMetadataValue(this.property, 'min') || this.model.getMetadataValue(this.property, 'min') < value.length ? false : true,
+                    disabled: !this.model.getMetadataValue(this.property, 'arrayMinSize') || this.model.getMetadataValue(this.property, 'arrayMinSize') < value.length ? false : true,
                     action: function (event, inst) {
                         _this.removeItem(event.index);
                         return false;
                     }
                 },
                 {
-                    percent: 25,
+                    percent: 10,
                     color: 'green',
                     icon: 'plus',
-                    text: '',
+                    text: this.model.getMessage('add'),
                     undo: false,
-                    disabled: !this.model.getMetadataValue(this.property, 'max') || this.model.getMetadataValue(this.property, 'max') > value.length ? false : true,
+                    disabled: !this.model.getMetadataValue(this.property, 'arrayMaxSize') || this.model.getMetadataValue(this.property, 'arrayMaxSize') > value.length ? false : true,
                     action: function (event, inst) {
                         _this.addItem();
                     }
@@ -94,8 +96,8 @@ var AppsappInputListComponent = (function (_super) {
         });
     };
     AppsappInputListComponent.prototype.ngAfterContentInit = function () {
-        if (this.model.getMetadataValue(this.property, 'min')) {
-            for (var i = 0; i < this.model.getMetadataValue(this.property, 'min'); i++) {
+        if (this.model.getMetadataValue(this.property, 'arrayMinSize')) {
+            for (var i = this.model.getPropertyValue(this.property, true).length; i < this.model.getMetadataValue(this.property, 'arrayMinSize'); i++) {
                 this.addItem();
             }
         }
@@ -109,7 +111,7 @@ var AppsappInputListComponent = (function (_super) {
         if (typeof value !== 'object' && value.length == undefined) {
             value = [];
         }
-        if (!this.model.getMetadataValue(this.property, 'min') || this.model.getMetadataValue(this.property, 'min') < value.length) {
+        if (!this.model.getMetadataValue(this.property, 'arrayMinSize') || this.model.getMetadataValue(this.property, 'arrayMinSize') < value.length) {
             var index_1 = 0;
             var wasdeleted_1 = false;
             value.forEach(function (item) {
@@ -120,12 +122,13 @@ var AppsappInputListComponent = (function (_super) {
                 index_1++;
             });
         }
+        this.model.setProperty(this.property, this.model.getPropertyValue(this.property, true));
         this.updateConfig();
     };
     AppsappInputListComponent.prototype.addItem = function () {
-        var model = this.model.getMetadataValue(this.property, 'isList'), item = null;
+        var self = this, model = this.model.getMetadataValue(this.property, 'isList'), item = null;
         try {
-            item = new model();
+            item = this.model.getAppsAppModuleProvider() ? this.model.getAppsAppModuleProvider()["new"](model) : new model();
         }
         catch (e) {
             item = new model.constructor();
@@ -134,7 +137,17 @@ var AppsappInputListComponent = (function (_super) {
         if (typeof value !== 'object' && value.length == undefined) {
             value = [];
         }
-        if (!this.model.getMetadataValue(this.property, 'max') || this.model.getMetadataValue(this.property, 'max') > value.length) {
+        if (item instanceof appsapp_cli_1.PersistableModel) {
+            item.setParent(this.model);
+            item.loaded().then(function (m) {
+                item.getChangesObserverable().subscribe(function (next) {
+                    if (next.model.getParent()) {
+                        next.model.getParent().setProperty(self.property, self.model.getPropertyValue(self.property, true));
+                    }
+                });
+            });
+        }
+        if (!this.model.getMetadataValue(this.property, 'arrayMaxSize') || this.model.getMetadataValue(this.property, 'arrayMaxSize') > value.length) {
             if (Object.keys(item).length == 0 || item instanceof appsapp_cli_1.PersistableModel == false) {
                 item = new appsapp_cli_1.PersistableModel();
                 item.importDynamicProperties(model);
@@ -142,6 +155,7 @@ var AppsappInputListComponent = (function (_super) {
             item.setUuid();
             value.push(item);
         }
+        this.model.setProperty(this.property, this.model.getPropertyValue(this.property, true));
         this.updateConfig();
     };
     return AppsappInputListComponent;

@@ -117,6 +117,7 @@ var AppsappModuleProvider = (function () {
             });
         });
         model.setIsLoadedPromise(p);
+        model.setAppsAppModuleProvider(this);
         return model;
     };
     /**
