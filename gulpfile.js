@@ -247,7 +247,7 @@ gulp.task('compile', function () {
 
 gulp.task('compilewatch', function () {
   runSequence(
-    'clean:dist',
+    //'clean:dist',
     'copy:source',
     'inline-resources',
     'ngc',

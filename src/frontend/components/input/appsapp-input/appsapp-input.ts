@@ -100,8 +100,6 @@ export class AppsappInputComponent extends AbstractComponent {
 
       } else {
 
-
-
         Object.keys(this.model).forEach((property) => {
 
           if (property.substr(0, 1) !== "_") {

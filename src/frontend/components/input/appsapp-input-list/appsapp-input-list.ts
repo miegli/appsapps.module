@@ -54,10 +54,19 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
             }
             if (valueSorted.length) {
                 self.model.update(self.property, valueSorted).setProperty(self.property, valueSorted);
+
+                if (self.model.getParent()) {
+                    self.model.getParent().setProperty(self.property,self.model.getPropertyValue(self.property, true));
+                }
+
+
             }
+
+
+
         }
 
-        console.log(self.model);
+
 
     }
 
@@ -74,24 +83,24 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
                 self.reCalculateAfterSorting();
             },
             sortable: {handle: 'right'}, striped: false, stages: [{
-                percent: -25,
+                percent: -10,
                 color: 'red',
                 icon: 'remove',
-                text: 'Delete',
+                text: this.model.getMessage('delete'),
                 confirm: false,
-                disabled: !this.model.getMetadataValue(this.property, 'min') || this.model.getMetadataValue(this.property, 'min') < value.length ? false : true,
+                disabled: !this.model.getMetadataValue(this.property, 'arrayMinSize') || this.model.getMetadataValue(this.property, 'arrayMinSize') < value.length ? false : true,
                 action: (event, inst) => {
                     this.removeItem(event.index);
                     return false;
                 }
             },
                 {
-                    percent: 25,
+                    percent: 10,
                     color: 'green',
                     icon: 'plus',
-                    text: '',
+                    text: this.model.getMessage('add'),
                     undo: false,
-                    disabled: !this.model.getMetadataValue(this.property, 'max') || this.model.getMetadataValue(this.property, 'max') > value.length ? false : true,
+                    disabled: !this.model.getMetadataValue(this.property, 'arrayMaxSize') || this.model.getMetadataValue(this.property, 'arrayMaxSize') > value.length ? false : true,
                     action: (event, inst) => {
                         this.addItem();
                     }
@@ -106,10 +115,12 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
 
     ngAfterContentInit() {
 
-        if (this.model.getMetadataValue(this.property, 'min')) {
-            for (let i = 0; i < this.model.getMetadataValue(this.property, 'min'); i++) {
+        if (this.model.getMetadataValue(this.property, 'arrayMinSize')) {
+
+            for (let i = this.model.getPropertyValue(this.property, true).length; i < this.model.getMetadataValue(this.property, 'arrayMinSize'); i++) {
                 this.addItem();
             }
+
         }
 
     }
@@ -125,7 +136,7 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
             value = [];
         }
 
-        if (!this.model.getMetadataValue(this.property, 'min') || this.model.getMetadataValue(this.property, 'min') < value.length) {
+        if (!this.model.getMetadataValue(this.property, 'arrayMinSize') || this.model.getMetadataValue(this.property, 'arrayMinSize') < value.length) {
             let index = 0;
             let wasdeleted = false;
             value.forEach((item) => {
@@ -137,6 +148,9 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
             });
         }
 
+       this.model.setProperty(this.property,this.model.getPropertyValue(this.property, true));
+
+
         this.updateConfig();
 
 
@@ -145,10 +159,10 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
     addItem() {
 
 
-        let model = this.model.getMetadataValue(this.property, 'isList'), item = null;
+        let self = this, model = this.model.getMetadataValue(this.property, 'isList'), item = null;
 
         try {
-            item = new model();
+            item = this.model.getAppsAppModuleProvider() ? this.model.getAppsAppModuleProvider().new(model) : new model();
         } catch (e) {
             item = new model.constructor();
         }
@@ -158,8 +172,22 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
             value = [];
         }
 
+        if (item instanceof PersistableModel) {
+            item.setParent(this.model);
 
-        if (!this.model.getMetadataValue(this.property, 'max') || this.model.getMetadataValue(this.property, 'max') > value.length) {
+            item.loaded().then((m) => {
+                item.getChangesObserverable().subscribe((next) => {
+                    if (next.model.getParent()) {
+                        next.model.getParent().setProperty(self.property,self.model.getPropertyValue(self.property, true));
+                    }
+
+                })
+            });
+
+
+        }
+
+        if (!this.model.getMetadataValue(this.property, 'arrayMaxSize') || this.model.getMetadataValue(this.property, 'arrayMaxSize') > value.length) {
             if (Object.keys(item).length == 0 || item instanceof PersistableModel == false) {
                 item = new PersistableModel();
                 item.importDynamicProperties(model);
@@ -170,6 +198,7 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
 
         }
 
+        this.model.setProperty(this.property,this.model.getPropertyValue(this.property, true));
         this.updateConfig();
 
     }

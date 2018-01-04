@@ -153,7 +153,9 @@ export class AppsappModuleProvider {
                 resolve(model);
             });
         })
+
         model.setIsLoadedPromise(p);
+        model.setAppsAppModuleProvider(this);
 
         return model;
 
