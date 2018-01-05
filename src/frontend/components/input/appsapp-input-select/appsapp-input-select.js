@@ -19,6 +19,7 @@ exports.__esModule = true;
 var core_1 = require("@angular/core");
 var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
 var select_1 = require("../../../models/select");
+var appsapp_cli_1 = require("appsapp-cli");
 /**
  * Generated class for the AppsappInputSelectComponent component.
  *
@@ -30,11 +31,55 @@ var AppsappInputSelectComponent = (function (_super) {
     function AppsappInputSelectComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.options = [];
+        _this.isUnique = false;
         return _this;
     }
+    /**
+     * set options
+     * @param values
+     */
+    AppsappInputSelectComponent.prototype.setOptions = function (values) {
+        var self = this;
+        var optionsPreProcessed = [];
+        var currentSelectedOptions = {};
+        var value = values === undefined ? this.model.getParent().getPropertyValue(this.parentProperty) : values;
+        if (value && value.length) {
+            value.forEach(function () {
+                value.forEach(function (option) {
+                    if (option instanceof appsapp_cli_1.PersistableModel && option.getUuid() !== self.model.getUuid()) {
+                        option.getPropertyValue(self.property).forEach(function (option) {
+                            currentSelectedOptions[option] = true;
+                        });
+                    }
+                });
+            });
+        }
+        var clonedOptions = JSON.parse(JSON.stringify(self.options));
+        clonedOptions.forEach(function (option) {
+            if (currentSelectedOptions[option.value] !== undefined) {
+                option.disabled = true;
+            }
+            optionsPreProcessed.push(option);
+        });
+        self.mbsc.instance.refresh(optionsPreProcessed);
+    };
+    AppsappInputSelectComponent.prototype.applyOptionsPostprocess = function () {
+        var self = this;
+        if (this.isUnique) {
+            this.model.getParent().getChangesWithCallback(function (event) {
+                if (event.property == self.parentProperty) {
+                    self.setOptions(event.value);
+                }
+            });
+        }
+    };
     AppsappInputSelectComponent.prototype.ngAfterContentInit = function () {
         var self = this;
         var data = this.model.getMetadataValue(this.property, 'isSelect');
+        if (this.parentPropertyMetadata) {
+            this.isUnique = this.model.getMetadataValue(null, 'isList', this.parentPropertyMetadata, 'uniqueItems');
+        }
+        self.applyOptionsPostprocess();
         if (data) {
             if (data.options && typeof data.options == 'object') {
                 this.options = data.options;
@@ -46,7 +91,7 @@ var AppsappInputSelectComponent = (function (_super) {
                 }).loaded().then(function (select) {
                     select.getOptions().subscribe(function (options) {
                         self.options = options;
-                        self.mbsc.instance.refresh(options);
+                        self.setOptions();
                         select.getHashedValues().forEach(function (v) {
                             self.model.addHashedValue(v.value, v.hash);
                         });

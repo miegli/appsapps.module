@@ -30,9 +30,13 @@ var AppsappInputListComponent = (function (_super) {
     function AppsappInputListComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.options = [];
+        _this.parentPropertyMetadata = null;
+        _this.parentProperty = null;
         return _this;
     }
     AppsappInputListComponent.prototype.afterInit = function (config) {
+        this.parentPropertyMetadata = this.model.getMetadata(this.property);
+        this.parentProperty = this.property;
         this.updateConfig();
     };
     AppsappInputListComponent.prototype.reCalculateAfterSorting = function () {
@@ -163,10 +167,16 @@ var AppsappInputListComponent = (function (_super) {
 __decorate([
     core_1.Output()
 ], AppsappInputListComponent.prototype, "options");
+__decorate([
+    core_1.Output()
+], AppsappInputListComponent.prototype, "parentPropertyMetadata");
+__decorate([
+    core_1.Output()
+], AppsappInputListComponent.prototype, "parentProperty");
 AppsappInputListComponent = __decorate([
     core_1.Component({
         selector: 'appsapp-input-list',
-        template: "\n\n        <mbsc-listview #mbscInstance=\"mobiscroll\">\n            <mbsc-listview-item *ngFor=\"let item of _ngModelGettter | async\" [id]=\"item.__uuid\">\n                <appsapp-input [model]=\"item\"></appsapp-input>\n            </mbsc-listview-item>\n        </mbsc-listview>\n\n    "
+        template: "\n\n        <mbsc-listview #mbscInstance=\"mobiscroll\">\n            <mbsc-listview-item *ngFor=\"let item of _ngModelGettter | async\" [id]=\"item.__uuid\">\n                <appsapp-input [model]=\"item\" [parentPropertyMetadata]=\"parentPropertyMetadata\" [parentProperty]=\"parentProperty\"></appsapp-input>\n            </mbsc-listview-item>\n        </mbsc-listview>\n\n    "
     })
 ], AppsappInputListComponent);
 exports.AppsappInputListComponent = AppsappInputListComponent;

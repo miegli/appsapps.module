@@ -28,6 +28,7 @@ var SelectModel = (function (_super) {
      */
     SelectModel.prototype.getOptions = function () {
         var self = this;
+        var lastHash = null;
         this.getHttpClient().get(this.url).subscribe(function (data) {
             self.update('data', data);
         }, function (error) {
@@ -37,19 +38,23 @@ var SelectModel = (function (_super) {
             var o = observer;
             self.getProperty('data').subscribe(function (data) {
                 var options = [];
-                data.forEach(function (item) {
-                    options.push({
-                        value: self.setHashedValue(self._getPropertyFromObject(item, self.mapping.value)),
-                        text: self._getPropertyFromObject(item, self.mapping.text),
-                        disabled: self.mapping.disabled !== undefined ? self._getPropertyFromObject(item, self.mapping.disabled) : false
+                var currentHash = self.setHashedValue(data);
+                if (currentHash !== lastHash) {
+                    data.forEach(function (item) {
+                        options.push({
+                            value: self.setHashedValue(self._getPropertyFromObject(item, self.mapping.value)),
+                            text: self._getPropertyFromObject(item, self.mapping.text),
+                            disabled: self.mapping.disabled !== undefined ? self._getPropertyFromObject(item, self.mapping.disabled) : false
+                        });
                     });
-                });
-                self.update('options', options).saveWithPromise().then(function () {
-                    //
-                })["catch"](function (e) {
-                    console.log(e);
-                });
-                o.next(options);
+                    self.update('options', options).saveWithPromise().then(function () {
+                        //
+                    })["catch"](function (e) {
+                        console.log(e);
+                    });
+                    o.next(options);
+                }
+                lastHash = currentHash;
             });
         });
     };
