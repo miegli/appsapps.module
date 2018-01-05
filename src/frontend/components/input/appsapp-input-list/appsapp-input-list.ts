@@ -14,7 +14,7 @@ import {PersistableModel} from "appsapp-cli";
 
         <mbsc-listview #mbscInstance="mobiscroll">
             <mbsc-listview-item *ngFor="let item of _ngModelGettter | async" [id]="item.__uuid">
-                <appsapp-input [model]="item"></appsapp-input>
+                <appsapp-input [model]="item" [parentPropertyMetadata]="parentPropertyMetadata" [parentProperty]="parentProperty"></appsapp-input>
             </mbsc-listview-item>
         </mbsc-listview>
 
@@ -23,8 +23,13 @@ import {PersistableModel} from "appsapp-cli";
 export class AppsappInputListComponent extends AppsappInputAbstractComponent {
 
     @Output() options: any = [];
+    @Output() parentPropertyMetadata: any = null;
+    @Output() parentProperty: any = null;
 
     afterInit(config) {
+
+        this.parentPropertyMetadata = this.model.getMetadata(this.property);
+        this.parentProperty = this.property;
 
         this.updateConfig();
 

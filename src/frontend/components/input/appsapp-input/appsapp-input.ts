@@ -15,49 +15,49 @@ import {Observable} from "rxjs/Observable";
   template: `
       <ng-container [ngSwitch]="input.type" *ngFor="let input of _inputs">
           <ng-container *ngSwitchCase="'text'">
-              <appsapp-input-text [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-text>
+              <appsapp-input-text [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async" [parentPropertyMetadata]="input.parentPropertyMetadata" [parentProperty]="input.parentProperty"></appsapp-input-text>
           </ng-container>
           <ng-container *ngSwitchCase="'number'">
-              <appsapp-input-number [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-number>
+              <appsapp-input-number [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async" [parentPropertyMetadata]="input.parentPropertyMetadata" [parentProperty]="input.parentProperty"></appsapp-input-number>
           </ng-container>
           <ng-container *ngSwitchCase="'numberplain'">
-              <appsapp-input-number-plain [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-number-plain>
+              <appsapp-input-number-plain [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async" [parentPropertyMetadata]="input.parentPropertyMetadata" [parentProperty]="input.parentProperty"></appsapp-input-number-plain>
           </ng-container>
           <ng-container *ngSwitchCase="'integer'">
-              <appsapp-input-integer [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-integer>
+              <appsapp-input-integer [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async" [parentPropertyMetadata]="input.parentPropertyMetadata" [parentProperty]="input.parentProperty"></appsapp-input-integer>
           </ng-container>
           <ng-container *ngSwitchCase="'tel'">
-              <appsapp-input-tel [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-tel>
+              <appsapp-input-tel [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async" [parentPropertyMetadata]="input.parentPropertyMetadata" [parentProperty]="input.parentProperty"></appsapp-input-tel>
           </ng-container>
           <ng-container *ngSwitchCase="'password'">
-              <appsapp-input-password [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-password>
+              <appsapp-input-password [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async" [parentPropertyMetadata]="input.parentPropertyMetadata" [parentProperty]="input.parentProperty"></appsapp-input-password>
           </ng-container>
           <ng-container *ngSwitchCase="'email'">
-              <appsapp-input-email [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-email>
+              <appsapp-input-email [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async" [parentPropertyMetadata]="input.parentPropertyMetadata" [parentProperty]="input.parentProperty"></appsapp-input-email>
           </ng-container>
           <ng-container *ngSwitchCase="'url'">
-              <appsapp-input-url [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-url>
+              <appsapp-input-url [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async" [parentPropertyMetadata]="input.parentPropertyMetadata" [parentProperty]="input.parentProperty"></appsapp-input-url>
           </ng-container>
           <ng-container *ngSwitchCase="'textarea'">
-              <appsapp-input-textarea [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-textarea>
+              <appsapp-input-textarea [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async" [parentPropertyMetadata]="input.parentPropertyMetadata" [parentProperty]="input.parentProperty"></appsapp-input-textarea>
           </ng-container>
           <ng-container *ngSwitchCase="'date'">
-              <appsapp-input-date [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-date>
+              <appsapp-input-date [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async" [parentPropertyMetadata]="input.parentPropertyMetadata" [parentProperty]="input.parentProperty"></appsapp-input-date>
           </ng-container>
           <ng-container *ngSwitchCase="'dates'">
-              <appsapp-input-dates [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-dates>
+              <appsapp-input-dates [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async" [parentPropertyMetadata]="input.parentPropertyMetadata" [parentProperty]="input.parentProperty"></appsapp-input-dates>
           </ng-container>
           <ng-container *ngSwitchCase="'boolean'">
-              <appsapp-input-boolean [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-boolean>
+              <appsapp-input-boolean [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async" [parentPropertyMetadata]="input.parentPropertyMetadata" [parentProperty]="input.parentProperty"></appsapp-input-boolean>
           </ng-container>
           <ng-container *ngSwitchCase="'birthday'">
-              <appsapp-input-birthday [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-birthday>
+              <appsapp-input-birthday [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async" [parentPropertyMetadata]="input.parentPropertyMetadata" [parentProperty]="input.parentProperty"></appsapp-input-birthday>
           </ng-container> 
           <ng-container *ngSwitchCase="'select'">
-              <appsapp-input-select [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-select>
+              <appsapp-input-select [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async" [parentPropertyMetadata]="input.parentPropertyMetadata" [parentProperty]="input.parentProperty"></appsapp-input-select>
           </ng-container>     
           <ng-container *ngSwitchCase="'list'">
-              <appsapp-input-list [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async"></appsapp-input-list>
+              <appsapp-input-list [model]="model" [property]="input.property" [label]="input.label" [hidden]="input.hidden | async" [parentPropertyMetadata]="input.parentPropertyMetadata" [parentProperty]="input.parentProperty"></appsapp-input-list>
           </ng-container>
       </ng-container>
 
@@ -68,6 +68,8 @@ export class AppsappInputComponent extends AbstractComponent {
 
 
   @Input() property: any;
+  @Input() parentPropertyMetadata: any = null;
+  @Input() parentProperty: any = null;
   @Input() model: any;
   @Input() label: string;
   @Output() options: any = {};
@@ -92,7 +94,7 @@ export class AppsappInputComponent extends AbstractComponent {
 
       if (this.property) {
 
-        this._inputs.push({type: this.model.getType(this.property), property: this.property, label: this.label, hidden: new Observable((observer) => {
+        this._inputs.push({type: this.model.getType(this.property), property: this.property, parentPropertyMetadata: this.parentPropertyMetadata, parentPropertyM: this.parentProperty, label: this.label, hidden: new Observable((observer) => {
           self.model.getCondition(self.property).subscribe((c) => {
             observer.next(self.isHidden(c));
           });
@@ -104,7 +106,7 @@ export class AppsappInputComponent extends AbstractComponent {
 
           if (property.substr(0, 1) !== "_") {
             this._inputs.push({
-              type: this.model.getType(property), property: property, hidden: new Observable((observer) => {
+              type: this.model.getType(property), property: property, parentPropertyMetadata: this.parentPropertyMetadata, parentProperty: this.parentProperty, hidden: new Observable((observer) => {
                 self.model.getCondition(property).subscribe((c) => {
                   observer.next(self.isHidden(c));
                 });

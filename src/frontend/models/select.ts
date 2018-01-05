@@ -31,7 +31,7 @@ export class SelectModel extends PersistableModel {
     public getOptions() {
 
         let self = this;
-
+        let lastHash = null;
 
         this.getHttpClient().get(this.url).subscribe((data) => {
             self.update('data', data);
@@ -45,23 +45,28 @@ export class SelectModel extends PersistableModel {
             self.getProperty('data').subscribe((data) => {
 
                 let options = [];
+                let currentHash = self.setHashedValue(data);
 
-                data.forEach((item) => {
+                if (currentHash !== lastHash) {
+                    data.forEach((item) => {
 
-                    options.push({
-                        value: self.setHashedValue(self._getPropertyFromObject(item, self.mapping.value)),
-                        text: self._getPropertyFromObject(item, self.mapping.text),
-                        disabled: self.mapping.disabled !== undefined ? self._getPropertyFromObject(item, self.mapping.disabled) : false,
-                    })
-                });
+                        options.push({
+                            value: self.setHashedValue(self._getPropertyFromObject(item, self.mapping.value)),
+                            text: self._getPropertyFromObject(item, self.mapping.text),
+                            disabled: self.mapping.disabled !== undefined ? self._getPropertyFromObject(item, self.mapping.disabled) : false,
+                        })
+                    });
 
-                self.update('options', options).saveWithPromise().then(() => {
-                    //
-                }).catch((e) => {
-                    console.log(e);
-                });
+                    self.update('options', options).saveWithPromise().then(() => {
+                        //
+                    }).catch((e) => {
+                        console.log(e);
+                    });
 
-                o.next(options);
+                    o.next(options);
+                }
+
+                lastHash = currentHash;
 
             });
         });
