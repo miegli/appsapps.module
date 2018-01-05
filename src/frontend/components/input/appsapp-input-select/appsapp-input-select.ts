@@ -106,7 +106,11 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
                     select.getOptions().subscribe((options) => {
 
                         self.options = options;
-                        self.setOptions();
+                        if (self.isUnique) {
+                            self.setOptions();
+                        } else {
+                            self.mbsc.instance.refresh(options);
+                        }
                         select.getHashedValues().forEach((v) => {
                             self.model.addHashedValue(v.value, v.hash);
                         });
