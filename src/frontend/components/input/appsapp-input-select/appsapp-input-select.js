@@ -91,7 +91,12 @@ var AppsappInputSelectComponent = (function (_super) {
                 }).loaded().then(function (select) {
                     select.getOptions().subscribe(function (options) {
                         self.options = options;
-                        self.setOptions();
+                        if (self.isUnique) {
+                            self.setOptions();
+                        }
+                        else {
+                            self.mbsc.instance.refresh(options);
+                        }
                         select.getHashedValues().forEach(function (v) {
                             self.model.addHashedValue(v.value, v.hash);
                         });
