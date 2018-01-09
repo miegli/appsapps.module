@@ -5,6 +5,7 @@ import {AngularFireAuth} from 'angularfire2/auth';
 
 
 import {firebase} from '@firebase/app'
+import {raw} from "body-parser";
 
 export class FirebaseModel extends PersistableModel {
 
@@ -152,6 +153,7 @@ export class FirebaseModel extends PersistableModel {
         }
 
 
+
         if (rawConfig.firebaseProjectId && rawConfig.firebaseApiKey && this.firebase) {
 
             this.config = config;
@@ -184,8 +186,7 @@ export class FirebaseModel extends PersistableModel {
                 }
             }
 
-
-            if (this.instance && this.instance.firebase !== undefined) {
+            if (this.instance) {
                 this.database = new AngularFireDatabase(this.instance);
                 this.firestore = new AngularFirestore(this.instance, false);
                 this.auth = new AngularFireAuth(this.instance);
