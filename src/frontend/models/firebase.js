@@ -148,7 +148,7 @@ var FirebaseModel = (function (_super) {
                 }
             }
             if (this.instance) {
-                this.database = new database_1.AngularFireDatabase(this.instance);
+                this.database = new database_1.AngularFireDatabase(this.instance.database !== undefined ? this.instance : this.firebase);
                 this.firestore = new firestore_1.AngularFirestore(this.instance, false);
                 this.auth = new auth_1.AngularFireAuth(this.instance);
                 this.emit();
