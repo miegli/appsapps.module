@@ -101,6 +101,7 @@ export class AppsappModuleProvider {
                     //
                 }).catch((error) => {
                     console.log(error);
+                    config.setIs
                 })
             }
 
