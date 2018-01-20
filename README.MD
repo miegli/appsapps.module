@@ -50,7 +50,9 @@ import { AppsappModule } from 'appsapp-module';
       submittedInBackground: 'Die Daten wurden gespeichert und werden übermittelt, sobald eine Internetverbindung besteht.',
       disconnected: 'Die Verbindung wurde unterbrochen.',
       connected: 'Die Verbindung wurde wiederhergestellt.',
-      error: 'Fehler'
+      error: 'Fehler',
+      delete: 'Löschen',
+      add: 'Hinzufügen'
     })
   ]
 })
