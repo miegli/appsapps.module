@@ -6,7 +6,6 @@ import {Observer} from "rxjs/Observer";
 import {Observable} from "rxjs/Observable";
 import {FirebaseModel} from "../models/firebase";
 import {AngularFireAuth} from "angularfire2/auth";
-
 import * as objectHash from 'object-hash';
 
 @Injectable()
@@ -226,6 +225,19 @@ export class PersistenceManager {
             self.callAction(model, observer, action, resolve, reject);
 
         });
+
+    }
+
+    /**
+     * trigger custom action
+     * @param model
+     * @param observer
+     * @param action
+     * @returns void
+     */
+    private trigger(model, observer, action) {
+
+         this.callAction(model, observer, action, null, null);
 
     }
 
