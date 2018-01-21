@@ -127,8 +127,9 @@ export class myModel extends PersistableModel {
 
 AppsApp has built-in backend services. Every model you define in the frontend (ts) is automatically used for validation in the backend services. You must not write any backend code yourself. Pre built are:
 
-#### Email finisher 
+#### Email (finisher on save) 
 Add `amazonAccessKey.json` to your project root and provide your Amazon SES IAM credentials, you have created before. 
+
 ```json
  {
   "accessKeyId": "XXXX",
@@ -137,16 +138,60 @@ Add `amazonAccessKey.json` to your project root and provide your Amazon SES IAM 
   }
 ```
 
-#### Google Spreadsheet finisher
+#### Google Spreadsheet (finisher on save)
 Add `serviceAccountKey.json` to yours project root with your google service account credentials. Don't forget the enable the relevant api services like `google spreadsheet` and `google drive` in your google developer console.
+
 ```json
 {
   "type": "service_account",
   "private_key": "-----BEGIN PRIVATE KEY----------END PRIVATE KEY-----",
   "client_email": "firebase-adminsdk-yyy@xxxx.iam.gserviceaccount.com",
 }
+```
+
+#### Custom 
+You can define your own backend services for using as finishers, loading data or whatever you want to do with its. Just call a trigger action on your model:
+
+##### Client
+
+```typescript
+   this.yourModel.trigger('nameOfYourBackendFunction').subscribe((a) => {
+      // done
+    });
+```
+
+##### Server
+
+Calling a trigger is invoking the backend function by adding an event queue entry named like your triggered action. Connecting to the event queues's actions is done by a simple node.js script (connectors for php and others is coming sonn):
+
+```js
+var connector = require("appsapp-cli/connector").init('https://your-project.firebaseio.com/', path.dirname(__filename) + path.sep + 'serviceAccountKey.json');
+connector.on({action: 'nameOfYourBackendFunction'}, (request, response, observer) => {
+    
+    // request: object with users request data
+    // response: your triggered model
+
+    execSql('SELECT TOP 1 A, B FROM YourDatabaseTable WHERE user = '+request.id).then((result) => {
+
+        result.data.forEach((row) => {
+            response.setProperty('A', row.A);
+            response.setProperty('B', row.B);
+        });
+
+    // observer: resolve will synchronize the updated model to the client
+        observer.resolve();
+
+    }).catch((err) => {
+       reject(err);
+    })
+
+
+})
+
 
 ```
+
+
 More finishers and backend services are upcoming.
 
 ### Install
@@ -288,3 +333,5 @@ All of the validators are also available from the `appsapp-module` for  importin
 ## License
 
 MIT © [Michael Egli](mailto:michael.egli@appsapp.io)
+
+
