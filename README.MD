@@ -152,20 +152,20 @@ Add `serviceAccountKey.json` to yours project root with your google service acco
 #### Custom 
 You can define your own backend services for using as finishers, loading data or whatever you want to do with its. Just call a trigger action on your model:
 
-##### Client
+###### Client
 
 ```typescript
-   this.yourModel.trigger('nameOfYourBackendFunction').subscribe((a) => {
+   myModel.trigger('nameOfYourBackendFunction').subscribe((a) => {
       // done
     });
 ```
 
-##### Server
+###### Server
 
 Calling a trigger is invoking the backend function by adding an event queue entry named like your triggered action. Connecting to the event queues's actions is done by a simple node.js script (connectors for php and others is coming sonn):
 
 ```js
-var connector = require("appsapp-cli/connector").init('https://your-project.firebaseio.com/', path.dirname(__filename) + path.sep + 'serviceAccountKey.json');
+var connector = require("appsapp-cli/connector").init('https://your-project.firebaseio.com/', path.dirname(__filename) + '/serviceAccountKey.json');
 connector.on({action: 'nameOfYourBackendFunction'}, (request, response, observer) => {
     
     // request: object with users request data
