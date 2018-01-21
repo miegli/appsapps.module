@@ -160,6 +160,16 @@ var PersistenceManager = (function () {
         });
     };
     /**
+     * trigger custom action
+     * @param model
+     * @param observer
+     * @param action
+     * @returns void
+     */
+    PersistenceManager.prototype.trigger = function (model, observer, action) {
+        this.callAction(model, observer, action, null, null);
+    };
+    /**
      *
      * @param model
      * @param observer
