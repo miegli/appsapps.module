@@ -109,42 +109,44 @@ var PersistenceManager = (function () {
         return this.storageWrapper.ready();
     };
     PersistenceManager.prototype.initModelForFirebaseDatabase = function (model) {
-        var _this = this;
         var self = this;
-        if (!model.getPersistenceManager() || !model.getFirebaseDatabasePath()) {
-            model.setPersistenceManager(this);
-            this.observable.subscribe(function (data) {
-                if (data.action == 'connected' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
-                    _this.workOnPendingChanges(model);
-                }
-                if (data.action == 'initFirebaseDatabase' && self.getFirebasePath(model)) {
-                    model.setFirebaseDatabase(self.getFirebaseDatabase());
-                    model.setFirebaseDatabasePath(self.getFirebasePath(model));
-                }
-                if (data.action == 'initFirebaseDatabase' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
-                    model.setFirebaseDatabaseObject(model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + "/data")).getFirebaseDatabaseObject().snapshotChanges().subscribe(function (action) {
-                        if (model.hasPendingChanges()) {
-                            window.setTimeout(function () {
-                                self.workOnPendingChanges(model).then(function () {
-                                    model.setHasPendingChanges(false).emit();
-                                })["catch"]();
-                            }, 2000);
-                        }
-                        else {
-                            model.loadJson(action.payload.val()).then(function (m) {
-                                m.emit();
-                            })["catch"](function (error) {
-                                //
-                                console.log('error', error);
-                            });
-                        }
-                    }, function (error) {
-                        // skip access denied
-                    });
-                }
-            });
-        }
-        return this;
+        return new Promise(function (resolve, reject) {
+            var _this = this;
+            if (!model.getPersistenceManager() || !model.getFirebaseDatabasePath()) {
+                model.setPersistenceManager(this);
+                this.observable.subscribe(function (data) {
+                    if (data.action == 'connected' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
+                        _this.workOnPendingChanges(model);
+                    }
+                    if (data.action == 'initFirebaseDatabase' && self.getFirebasePath(model)) {
+                        model.setFirebaseDatabase(self.getFirebaseDatabase());
+                        model.setFirebaseDatabasePath(self.getFirebasePath(model));
+                        resolve(model);
+                    }
+                    if (data.action == 'initFirebaseDatabase' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
+                        model.setFirebaseDatabaseObject(model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + "/data")).getFirebaseDatabaseObject().snapshotChanges().subscribe(function (action) {
+                            if (model.hasPendingChanges()) {
+                                window.setTimeout(function () {
+                                    self.workOnPendingChanges(model).then(function () {
+                                        model.setHasPendingChanges(false).emit();
+                                    })["catch"]();
+                                }, 2000);
+                            }
+                            else {
+                                model.loadJson(action.payload.val()).then(function (m) {
+                                    m.emit();
+                                })["catch"](function (error) {
+                                    //
+                                    console.log('error', error);
+                                });
+                            }
+                        }, function (error) {
+                            // skip access denied
+                        });
+                    }
+                });
+            }
+        });
     };
     /**
      * save one model to storage
@@ -299,21 +301,22 @@ var PersistenceManager = (function () {
     PersistenceManager.prototype.initAndload = function (model, data) {
         var self = this;
         return new Promise(function (resolve, reject) {
-            self.initModelForFirebaseDatabase(model);
-            self.load(model).then(function (m) {
-                // set default data
-                if (data) {
-                    Object.keys(data).forEach(function (property) {
-                        model[property] = data[property];
+            self.initModelForFirebaseDatabase(model).then(function (model) {
+                self.load(model).then(function (m) {
+                    // set default data
+                    if (data) {
+                        Object.keys(data).forEach(function (property) {
+                            model[property] = data[property];
+                        });
+                    }
+                    // loaded and update bindings
+                    Object.keys(model.__bindingsObserver).forEach(function (property) {
+                        model.__bindingsObserver[property].next(model[property]);
                     });
-                }
-                // loaded and update bindings
-                Object.keys(model.__bindingsObserver).forEach(function (property) {
-                    model.__bindingsObserver[property].next(model[property]);
+                    resolve(model);
+                })["catch"](function () {
+                    resolve(model);
                 });
-                resolve(model);
-            })["catch"](function () {
-                resolve(model);
             });
         });
     };
