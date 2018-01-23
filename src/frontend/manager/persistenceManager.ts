@@ -162,10 +162,10 @@ export class PersistenceManager {
 
                 model.setPersistenceManager(this);
 
-                this.observable.subscribe((data) => {
+                self.observable.subscribe((data) => {
 
                     if (data.action == 'connected' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
-                        this.workOnPendingChanges(model);
+                        self.workOnPendingChanges(model);
                     }
 
                     if (data.action == 'initFirebaseDatabase' && self.getFirebasePath(model)) {
