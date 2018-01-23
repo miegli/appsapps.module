@@ -156,55 +156,58 @@ export class PersistenceManager {
 
         let self = this;
 
+        return new Promise(function (resolve, reject) {
 
-        if (!model.getPersistenceManager() || !model.getFirebaseDatabasePath()) {
+            if (!model.getPersistenceManager() || !model.getFirebaseDatabasePath()) {
 
-            model.setPersistenceManager(this);
+                model.setPersistenceManager(this);
 
-            this.observable.subscribe((data) => {
+                this.observable.subscribe((data) => {
 
-                if (data.action == 'connected' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
-                    this.workOnPendingChanges(model);
-                }
+                    if (data.action == 'connected' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
+                        this.workOnPendingChanges(model);
+                    }
 
-                if (data.action == 'initFirebaseDatabase' && self.getFirebasePath(model)) {
-                    model.setFirebaseDatabase(self.getFirebaseDatabase());
-                    model.setFirebaseDatabasePath(self.getFirebasePath(model));
-                }
+                    if (data.action == 'initFirebaseDatabase' && self.getFirebasePath(model)) {
+                        model.setFirebaseDatabase(self.getFirebaseDatabase());
+                        model.setFirebaseDatabasePath(self.getFirebasePath(model));
+                        resolve(model);
+                    }
 
-                if (data.action == 'initFirebaseDatabase' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
+                    if (data.action == 'initFirebaseDatabase' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
 
-                    model.setFirebaseDatabaseObject(model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + "/data")).getFirebaseDatabaseObject().snapshotChanges().subscribe((action) => {
+                        model.setFirebaseDatabaseObject(model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + "/data")).getFirebaseDatabaseObject().snapshotChanges().subscribe((action) => {
 
-                        if (model.hasPendingChanges()) {
+                            if (model.hasPendingChanges()) {
 
-                            window.setTimeout(function () {
-                                self.workOnPendingChanges(model).then(() => {
-                                    model.setHasPendingChanges(false).emit();
-                                }).catch();
-                            }, 2000);
+                                window.setTimeout(function () {
+                                    self.workOnPendingChanges(model).then(() => {
+                                        model.setHasPendingChanges(false).emit();
+                                    }).catch();
+                                }, 2000);
 
-                        } else {
+                            } else {
 
-                            model.loadJson(action.payload.val()).then((m) => {
-                                m.emit();
-                            }).catch((error) => {
-                                //
-                                console.log('error', error);
-                            });
-                        }
+                                model.loadJson(action.payload.val()).then((m) => {
+                                    m.emit();
+                                }).catch((error) => {
+                                    //
+                                    console.log('error', error);
+                                });
+                            }
 
-                    }, (error) => {
-                        // skip access denied
-                    });
-                }
+                        }, (error) => {
+                            // skip access denied
+                        });
+                    }
 
-            });
+                });
 
 
-        }
+            }
 
-        return this;
+        });
+
 
     }
 
@@ -237,7 +240,7 @@ export class PersistenceManager {
      */
     private trigger(model, observer, action) {
 
-         this.callAction(model, observer, action, null, null);
+        this.callAction(model, observer, action, null, null);
 
     }
 
@@ -343,25 +346,22 @@ export class PersistenceManager {
 
                     if (!localStorageOnly && model.getFirebaseDatabasePath() && model.getFirebaseDatabase()) {
 
-                       self.clone(model).then((c:any) => {
-                           model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(c.transformAllProperties().serialize(true, true)).then((data) => {
-                               if (action) {
-                                   self.callAction(model, observer, action, resolve, reject);
-                               } else {
-                                   model.setHasPendingChanges(false);
-                               }
-                               resolve(model);
+                        self.clone(model).then((c: any) => {
+                            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(c.transformAllProperties().serialize(true, true)).then((data) => {
+                                if (action) {
+                                    self.callAction(model, observer, action, resolve, reject);
+                                } else {
+                                    model.setHasPendingChanges(false);
+                                }
+                                resolve(model);
 
-                           }).catch((error) => {
-                               reject(error);
-                           });
+                            }).catch((error) => {
+                                reject(error);
+                            });
 
-                       }).catch((error) => {
-                           reject(error);
-                       });
-
-
-
+                        }).catch((error) => {
+                            reject(error);
+                        });
 
 
                     } else {
@@ -422,30 +422,31 @@ export class PersistenceManager {
 
         return new Promise(function (resolve, reject) {
 
-            self.initModelForFirebaseDatabase(model);
+            self.initModelForFirebaseDatabase(model).then((model) => {
 
-            self.load(model).then((m) => {
+                self.load(model).then((m) => {
 
-                // set default data
-                if (data) {
-                    Object.keys(data).forEach((property) => {
-                        model[property] = data[property];
+                    // set default data
+                    if (data) {
+                        Object.keys(data).forEach((property) => {
+                            model[property] = data[property];
+                        });
+                    }
+
+                    // loaded and update bindings
+                    Object.keys(model.__bindingsObserver).forEach((property) => {
+                        model.__bindingsObserver[property].next(model[property]);
                     });
-                }
 
-                // loaded and update bindings
-                Object.keys(model.__bindingsObserver).forEach((property) => {
-                    model.__bindingsObserver[property].next(model[property]);
+                    resolve(model);
+
+                }).catch(() => {
+                    resolve(model);
                 });
 
-                resolve(model);
-
-            }).catch(() => {
-                resolve(model);
             });
 
         });
-
 
     }
 
