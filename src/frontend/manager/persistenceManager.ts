@@ -422,7 +422,7 @@ export class PersistenceManager {
 
         return new Promise(function (resolve, reject) {
 
-            self.initModelForFirebaseDatabase(model).then((model) => {
+            self.initModelForFirebaseDatabase(model).then((model:any) => {
 
                 self.load(model).then((m) => {
 
