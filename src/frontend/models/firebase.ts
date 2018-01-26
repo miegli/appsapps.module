@@ -144,6 +144,7 @@ export class FirebaseModel extends PersistableModel {
      */
     public init(config) {
 
+
         let rawConfig = {
 
             'firebaseProjectId': config.firebaseProjectId !== undefined ? config.firebaseProjectId : (config.getFirebaseProjectId !== undefined ? config.getFirebaseProjectId() : null),

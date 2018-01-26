@@ -111,12 +111,11 @@ var PersistenceManager = (function () {
     PersistenceManager.prototype.initModelForFirebaseDatabase = function (model) {
         var self = this;
         return new Promise(function (resolve, reject) {
-            var _this = this;
             if (!model.getPersistenceManager() || !model.getFirebaseDatabasePath()) {
                 model.setPersistenceManager(this);
-                this.observable.subscribe(function (data) {
+                self.observable.subscribe(function (data) {
                     if (data.action == 'connected' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
-                        _this.workOnPendingChanges(model);
+                        self.workOnPendingChanges(model);
                     }
                     if (data.action == 'initFirebaseDatabase' && self.getFirebasePath(model)) {
                         model.setFirebaseDatabase(self.getFirebaseDatabase());

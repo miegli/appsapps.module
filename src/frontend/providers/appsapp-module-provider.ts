@@ -38,7 +38,8 @@ export class AppsappModuleProvider {
 
         let self = this;
 
-        this.persistenceManager = new PersistenceManager();
+
+       this.persistenceManager = new PersistenceManager();
 
         // init configuration instance
         this.config = new ConfigModel();
@@ -96,13 +97,13 @@ export class AppsappModuleProvider {
                     console.log(error);
                 });
             } else {
+
                 // try to authenticate with Firebase Anonymously
                 self.anonymousSignIn().then((user) => {
                     //
                 }).catch((error) => {
                     console.log(error);
-                    config.setIs
-                })
+                });
             }
 
         });
@@ -146,6 +147,7 @@ export class AppsappModuleProvider {
         if (uuid) {
             model.setUuid(uuid);
         }
+
 
         let p = new Promise(function (resolve, reject) {
             model.setHttpClient(self.http).setNotificationProvider(self.notificationProvider).setMessages(self.providerMessages).setPersistenceManager(pm.setFirebase(self.firebaseProject)).getPersistenceManager().initAndload(model, data).then((model) => {
@@ -261,11 +263,13 @@ export class AppsappModuleProvider {
             t.reject = reject;
 
             self.firebaseProject.getAuth().then((auth: AngularFireAuth) => {
+
                 auth.auth.signInAnonymously().then(function (user) {
                     resolve(user);
                 }).catch((error) => {
                     reject(error);
                 });
+
 
             });
 

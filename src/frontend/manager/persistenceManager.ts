@@ -19,6 +19,7 @@ export class PersistenceManager {
     private observer: Observer<any>;
     private observable: Observable<any>;
     private _pendingChangesModels: any = {};
+    private _isConnected: boolean = false;
 
     constructor() {
 
@@ -79,6 +80,22 @@ export class PersistenceManager {
         return this.observer;
     }
 
+    /**
+     * if is connected
+     * @returns boolean
+     */
+    public isConnected() {
+        return this._isConnected;
+    }
+
+    /**
+     * set is connected
+     */
+    public setIsConnected() {
+        this._isConnected = true;
+        return this;
+    }
+
 
     /**
      * connect with firebaseModel
@@ -89,20 +106,22 @@ export class PersistenceManager {
 
         let self = this;
 
-
-        firebaseModel.getDatabase().then((database) => {
-            self.firebaseDatabase = database;
-        });
-
-        firebaseModel.getAuth().then((auth: AngularFireAuth) => {
-            auth.authState.subscribe((user) => {
-                if (self.observer) {
-                    self.observer.next({action: 'initFirebaseDatabase'});
-                }
+        if (!this.firebaseModel) {
+            firebaseModel.getDatabase().then((database) => {
+                self.firebaseDatabase = database;
             });
-        });
 
-        this.firebaseModel = firebaseModel;
+            firebaseModel.getAuth().then((auth: AngularFireAuth) => {
+                auth.authState.subscribe((user) => {
+                    if (self.observer) {
+                        self.observer.next({action: 'initFirebaseDatabase'});
+                    }
+                });
+            });
+
+            this.firebaseModel = firebaseModel;
+
+        }
 
         return this;
 
@@ -158,9 +177,9 @@ export class PersistenceManager {
 
         return new Promise(function (resolve, reject) {
 
-            if (!model.getPersistenceManager() || !model.getFirebaseDatabasePath()) {
+            model.setPersistenceManager(self);
 
-                model.setPersistenceManager(this);
+            if (!model.getPersistenceManager() || !model.getFirebaseDatabasePath()) {
 
                 self.observable.subscribe((data) => {
 
@@ -184,7 +203,7 @@ export class PersistenceManager {
                                     self.workOnPendingChanges(model).then(() => {
                                         model.setHasPendingChanges(false).emit();
                                     }).catch();
-                                }, 2000);
+                                }, 1000);
 
                             } else {
 
@@ -257,40 +276,27 @@ export class PersistenceManager {
     private callAction(model, observer, action: { name: string, data?: {} }, resolve, reject) {
 
 
-        let self = this, c = self.getActionDataWithIdentifier(action, model);
+        let self = this, c = self.getActionDataWithIdentifier(action, model), emit = (model) => {
+
+            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').query.once('value',(event) => {
+                self.storageWrapper.set(self.getPersistanceIdentifier(model), event.val()).then((m) => {
+                    console.log(m);
+                });
+            });
+
+        };
 
         observer.next(model.getMessage('processing'));
 
-        self.observable.subscribe((data) => {
-
-            let timeout = null;
-
-            if (data.action == 'disconnected') {
-                observer.next(model.getMessage('disconnected'));
-                timeout = window.setTimeout(function () {
-                    if (!model.isOnline()) {
-                        observer.next(model.getMessage('submittedInBackground'));
-                        window.setTimeout(function () {
-                            observer.complete();
-                        }, 5000);
-                    }
-                }, 15000);
-
-            }
-            if (data.action == 'connected') {
-                window.clearTimeout(timeout);
-                observer.next(model.getMessage('connected'));
-                window.setTimeout(function () {
-                    observer.next(model.getMessage('processing'));
-                }, 3000);
-            }
-
-        });
-
         model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action').set(c).then((data) => {
-            model.setHasPendingChanges(false);
-            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action/' + Object.keys(c)[0]).snapshotChanges().subscribe((action) => {
+            model.setHasPendingChanges(false).getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action/' + Object.keys(c)[0]).snapshotChanges().subscribe((action) => {
+
                 let p = action.payload.val();
+
+                if (p === null) {
+                    emit(model);
+                    observer.complete();
+                }
                 if (p && p.state && p.state !== 'requested') {
 
                     if (p.message && p.message !== 'done' && p.state !== 'done' && p.state !== 'error') {
@@ -305,8 +311,10 @@ export class PersistenceManager {
 
                         if (p.message && p.message !== 'done') {
                             observer.next(model.getMessage(p.message));
+                            emit(model);
                             observer.complete();
                         } else {
+                            emit(model);
                             observer.complete();
                         }
 
@@ -422,29 +430,35 @@ export class PersistenceManager {
 
         return new Promise(function (resolve, reject) {
 
-            self.initModelForFirebaseDatabase(model).then((model:any) => {
+            self.load(model, data).then((model: any) => {
 
-                self.load(model).then((m) => {
-
-                    // set default data
-                    if (data) {
-                        Object.keys(data).forEach((property) => {
-                            model[property] = data[property];
-                        });
-                    }
-
-                    // loaded and update bindings
-                    Object.keys(model.__bindingsObserver).forEach((property) => {
-                        model.__bindingsObserver[property].next(model[property]);
+                // set default data
+                if (data) {
+                    Object.keys(data).forEach((property) => {
+                        model[property] = data[property];
+                        if (model.__bindingsObserver[property] !== undefined) {
+                            model.__bindingsObserver[property].next(model[property]);
+                        }
                     });
+                }
 
-                    resolve(model);
+                // load and update bindings
+                // Object.keys(model.__bindingsObserver).forEach((property) => {
+                //     model.__bindingsObserver[property].next(model[property]);
+                // });
 
-                }).catch(() => {
+                // init remote firebase connection
+                self.initModelForFirebaseDatabase(model).then((model) => {
                     resolve(model);
+                }).catch((err) => {
+                    reject(err);
                 });
 
+
+            }).catch((err) => {
+                reject(err);
             });
+
 
         });
 
