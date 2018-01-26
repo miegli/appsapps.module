@@ -280,7 +280,7 @@ export class PersistenceManager {
 
             model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').query.once('value',(event) => {
                 self.storageWrapper.set(self.getPersistanceIdentifier(model), event.val()).then((m) => {
-                    console.log(m);
+                    observer.complete();
                 });
             });
 
@@ -295,7 +295,6 @@ export class PersistenceManager {
 
                 if (p === null) {
                     emit(model);
-                    observer.complete();
                 }
                 if (p && p.state && p.state !== 'requested') {
 
@@ -312,10 +311,8 @@ export class PersistenceManager {
                         if (p.message && p.message !== 'done') {
                             observer.next(model.getMessage(p.message));
                             emit(model);
-                            observer.complete();
                         } else {
                             emit(model);
-                            observer.complete();
                         }
 
                     }
