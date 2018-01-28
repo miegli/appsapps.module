@@ -199,7 +199,8 @@ var PersistenceManager = (function () {
     PersistenceManager.prototype.callAction = function (model, observer, action, resolve, reject) {
         var self = this, c = self.getActionDataWithIdentifier(action, model), emit = function (model) {
             model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').query.once('value', function (event) {
-                self.storageWrapper.set(self.getPersistanceIdentifier(model), event.val()).then(function (m) {
+                var next = event.val();
+                self.storageWrapper.set(self.getPersistanceIdentifier(model), next).then(function (m) {
                     observer.complete();
                 });
             });

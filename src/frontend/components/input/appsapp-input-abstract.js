@@ -18,6 +18,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 var core_1 = require("@angular/core");
 var appsapp_input_1 = require("./appsapp-input/appsapp-input");
+var Observable_1 = require("rxjs/Observable");
 /**
  * Generated class for the AppsappInputAbstractComponent component.
  *
@@ -38,18 +39,33 @@ var AppsappInputAbstractComponent = (function (_super) {
         _this.init();
         return _this;
     }
-    /**
+    /**.
      * init with config model
      * @param {ConfigModel} config
      */
     AppsappInputAbstractComponent.prototype.init = function (config) {
+        var self = this;
         if (this.property) {
             if (!this.validator) {
                 this.validator = this.model.getValidation(this.property);
             }
-            if (!this._ngModelGettter) {
-                this._ngModelGettter = this.model.getProperty(this.property);
+            if (self._ngModelGettterObserver == undefined) {
+                this._ngModelGettter = new Observable_1.Observable(function (observer) {
+                    self._ngModelGettterObserver = observer;
+                    window.setTimeout(function () {
+                        self._ngModelGettterObserver.next(self.model.getPropertyValue(self.property));
+                    }, 1);
+                });
+                this._ngModelGettter.share();
             }
+            else {
+                self._ngModelGettterObserver.next(self.model.getPropertyValue(self.property));
+            }
+            self.model.watch(self.property, function (value) {
+                if (self._ngModelGettterObserver !== undefined) {
+                    self._ngModelGettterObserver.next(value);
+                }
+            });
         }
         if (config) {
             var theme = 'material';
@@ -158,7 +174,8 @@ var AppsappInputAbstractComponent = (function (_super) {
         var self = this;
         if (this.model) {
             window.setTimeout(function () {
-                self._ngModelGettter = self.model.update(self.property, value).setProperty(self.property, value).getProperty(self.property);
+                //self._ngModelGettter = self.model.update(self.property, value).setProperty(self.property, value).getProperty(self.property);
+                self.model.update(self.property, value).setProperty(self.property, value);
             }, 1);
             return this.model;
         }

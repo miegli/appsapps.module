@@ -27,13 +27,14 @@ var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
 var AppsappInputDateComponent = (function (_super) {
     __extends(AppsappInputDateComponent, _super);
     function AppsappInputDateComponent() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.isInline = false;
+        return _this;
     }
     AppsappInputDateComponent.prototype.beforeModelChanges = function (model, property, value) {
         // create iso date
         var date = Date.parse(value);
         value = !isNaN(date) ? new Date(date) : null;
-        console.log(property, value);
         model.setProperty(property, value);
         return false;
     };
@@ -50,7 +51,7 @@ var AppsappInputDateComponent = (function (_super) {
             var minDate = this.model.getMetadataValue(this.property, 'minDate');
             this.setMbscOption({ min: minDate });
         }
-        var options = this.model.getMetadataValue(this.property, 'calendar');
+        var options = this.model.getMetadataValue(this.property, 'isCalendar');
         if (options) {
             if (options.maxDate) {
                 this.setMbscOption({ max: options.maxDate });
@@ -67,6 +68,12 @@ var AppsappInputDateComponent = (function (_super) {
             if (options.steps) {
                 this.setMbscOption({ steps: options.steps });
             }
+            if (options.weeks) {
+                this.setMbscOption({ weeks: options.weeks });
+            }
+            if (options.display == 'inline') {
+                this.isInline = true;
+            }
         }
         this.setMbscOption({
             display: options && options.display ? options.display : (config.getOs() !== 'desktop' ? 'bottom' : 'center')
@@ -74,10 +81,13 @@ var AppsappInputDateComponent = (function (_super) {
     };
     return AppsappInputDateComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
+__decorate([
+    core_1.Output()
+], AppsappInputDateComponent.prototype, "isInline");
 AppsappInputDateComponent = __decorate([
     core_1.Component({
         selector: 'appsapp-input-date',
-        template: "\n        <mbsc-form #mbscInstanceForm=\"mobiscroll\">\n            <mbsc-input [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-calendar [ngModel]=\"_ngModelGettter | async\"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n        </mbsc-form>\n\n    "
+        template: "\n        <mbsc-form #mbscInstanceForm=\"mobiscroll\" [ngClass]=\"{isInline: isInline}\">\n            <mbsc-input [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-calendar [ngModel]=\"_ngModelGettter | async\"\n                        (ngModelChange)=\"modelChanges($event)\"><span *ngIf=\"!isInline\">{{_label}}</span></mbsc-input>\n        </mbsc-form>\n\n    "
     })
 ], AppsappInputDateComponent);
 exports.AppsappInputDateComponent = AppsappInputDateComponent;
