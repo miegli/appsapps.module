@@ -121,56 +121,76 @@ export class AppsappInputComponent extends AbstractComponent {
     @Output() options: any = {};
     @Output() _inputs: any = [];
     @Output() hidden: boolean = false;
+    private _model: Observable<any>;
 
     constructor(public appsappModuleProvider: AppsappModuleProvider) {
         super(appsappModuleProvider);
     }
 
+    ngOnInitExecute(model) {
+
+        let self = this;
+
+        this._inputs = [];
+
+        if (this.property) {
+
+            this._inputs.push({
+                type: model.getType(this.property),
+                property: this.property,
+                parentPropertyMetadata: this.parentPropertyMetadata,
+                parentProperty: this.parentProperty,
+                label: this.label,
+                hidden: new Observable((observer) => {
+                    model.getCondition(self.property).subscribe((c) => {
+                        observer.next(self.isHidden(c));
+                    });
+                })
+            });
+
+        } else {
+
+            Object.keys(model).forEach((property) => {
+
+                if (property.substr(0, 1) !== "_") {
+                    this._inputs.push({
+                        type: model.getType(property),
+                        property: property,
+                        parentPropertyMetadata: this.parentPropertyMetadata,
+                        parentProperty: this.parentProperty,
+                        hidden: new Observable((observer) => {
+                            model.getCondition(property).subscribe((c) => {
+                                observer.next(self.isHidden(c));
+                            });
+                        })
+                    });
+
+
+                }
+            });
+        }
+
+    }
 
     ngOnInit() {
 
 
         let self = this;
 
+
         if (this.model) {
 
-            if (this.property) {
 
-                this._inputs.push({
-                    type: this.model.getType(this.property),
-                    property: this.property,
-                    parentPropertyMetadata: this.parentPropertyMetadata,
-                    parentProperty: this.parentProperty,
-                    label: this.label,
-                    hidden: new Observable((observer) => {
-                        self.model.getCondition(self.property).subscribe((c) => {
-                            observer.next(self.isHidden(c));
-                        });
+                if (this.model instanceof Observable) {
+                    this._model = this.model;
+                    this._model.subscribe((model) => {
+                        self.model = model;
+                        self.ngOnInitExecute(model);
                     })
-                });
 
-            } else {
-
-                Object.keys(this.model).forEach((property) => {
-
-                    if (property.substr(0, 1) !== "_") {
-                        this._inputs.push({
-                            type: this.model.getType(property),
-                            property: property,
-                            parentPropertyMetadata: this.parentPropertyMetadata,
-                            parentProperty: this.parentProperty,
-                            hidden: new Observable((observer) => {
-                                self.model.getCondition(property).subscribe((c) => {
-                                    observer.next(self.isHidden(c));
-                                });
-                            })
-                        });
-
-
-                    }
-                });
-            }
-
+                } else {
+                    self.ngOnInitExecute(this.model);
+                }
 
         }
 

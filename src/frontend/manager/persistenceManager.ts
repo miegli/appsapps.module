@@ -496,6 +496,8 @@ export class PersistenceManager {
                     }).catch((error) => {
                         reject(error);
                     });
+                }).catch((e) => {
+                    reject(e);
                 });
             } else {
 
