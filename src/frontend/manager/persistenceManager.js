@@ -15,6 +15,7 @@ var PersistenceManager = (function () {
     function PersistenceManager() {
         var _this = this;
         this._pendingChangesModels = {};
+        this._isConnected = false;
         var self = this;
         var storage = new angular_2_local_storage_1.LocalStorageService({ storageType: 'localStorage', prefix: 'appsapps-' });
         this.storageWrapper = {
@@ -59,22 +60,38 @@ var PersistenceManager = (function () {
         return this.observer;
     };
     /**
+     * if is connected
+     * @returns boolean
+     */
+    PersistenceManager.prototype.isConnected = function () {
+        return this._isConnected;
+    };
+    /**
+     * set is connected
+     */
+    PersistenceManager.prototype.setIsConnected = function () {
+        this._isConnected = true;
+        return this;
+    };
+    /**
      * connect with firebaseModel
      * @param {FirebaseModel} firebaseModel
      */
     PersistenceManager.prototype.setFirebase = function (firebaseModel) {
         var self = this;
-        firebaseModel.getDatabase().then(function (database) {
-            self.firebaseDatabase = database;
-        });
-        firebaseModel.getAuth().then(function (auth) {
-            auth.authState.subscribe(function (user) {
-                if (self.observer) {
-                    self.observer.next({ action: 'initFirebaseDatabase' });
-                }
+        if (!this.firebaseModel) {
+            firebaseModel.getDatabase().then(function (database) {
+                self.firebaseDatabase = database;
             });
-        });
-        this.firebaseModel = firebaseModel;
+            firebaseModel.getAuth().then(function (auth) {
+                auth.authState.subscribe(function (user) {
+                    if (self.observer) {
+                        self.observer.next({ action: 'initFirebaseDatabase' });
+                    }
+                });
+            });
+            this.firebaseModel = firebaseModel;
+        }
         return this;
     };
     /**
@@ -111,8 +128,8 @@ var PersistenceManager = (function () {
     PersistenceManager.prototype.initModelForFirebaseDatabase = function (model) {
         var self = this;
         return new Promise(function (resolve, reject) {
+            model.setPersistenceManager(self);
             if (!model.getPersistenceManager() || !model.getFirebaseDatabasePath()) {
-                model.setPersistenceManager(this);
                 self.observable.subscribe(function (data) {
                     if (data.action == 'connected' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
                         self.workOnPendingChanges(model);
@@ -129,7 +146,7 @@ var PersistenceManager = (function () {
                                     self.workOnPendingChanges(model).then(function () {
                                         model.setHasPendingChanges(false).emit();
                                     })["catch"]();
-                                }, 2000);
+                                }, 1000);
                             }
                             else {
                                 model.loadJson(action.payload.val()).then(function (m) {
@@ -180,33 +197,20 @@ var PersistenceManager = (function () {
      * @returns void
      */
     PersistenceManager.prototype.callAction = function (model, observer, action, resolve, reject) {
-        var self = this, c = self.getActionDataWithIdentifier(action, model);
+        var self = this, c = self.getActionDataWithIdentifier(action, model), emit = function (model) {
+            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').query.once('value', function (event) {
+                self.storageWrapper.set(self.getPersistanceIdentifier(model), event.val()).then(function (m) {
+                    observer.complete();
+                });
+            });
+        };
         observer.next(model.getMessage('processing'));
-        self.observable.subscribe(function (data) {
-            var timeout = null;
-            if (data.action == 'disconnected') {
-                observer.next(model.getMessage('disconnected'));
-                timeout = window.setTimeout(function () {
-                    if (!model.isOnline()) {
-                        observer.next(model.getMessage('submittedInBackground'));
-                        window.setTimeout(function () {
-                            observer.complete();
-                        }, 5000);
-                    }
-                }, 15000);
-            }
-            if (data.action == 'connected') {
-                window.clearTimeout(timeout);
-                observer.next(model.getMessage('connected'));
-                window.setTimeout(function () {
-                    observer.next(model.getMessage('processing'));
-                }, 3000);
-            }
-        });
         model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action').set(c).then(function (data) {
-            model.setHasPendingChanges(false);
-            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action/' + Object.keys(c)[0]).snapshotChanges().subscribe(function (action) {
+            model.setHasPendingChanges(false).getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action/' + Object.keys(c)[0]).snapshotChanges().subscribe(function (action) {
                 var p = action.payload.val();
+                if (p === null) {
+                    emit(model);
+                }
                 if (p && p.state && p.state !== 'requested') {
                     if (p.message && p.message !== 'done' && p.state !== 'done' && p.state !== 'error') {
                         observer.next(model.getMessage(p.message));
@@ -217,10 +221,10 @@ var PersistenceManager = (function () {
                     if (p.state == 'done') {
                         if (p.message && p.message !== 'done') {
                             observer.next(model.getMessage(p.message));
-                            observer.complete();
+                            emit(model);
                         }
                         else {
-                            observer.complete();
+                            emit(model);
                         }
                     }
                 }
@@ -300,22 +304,28 @@ var PersistenceManager = (function () {
     PersistenceManager.prototype.initAndload = function (model, data) {
         var self = this;
         return new Promise(function (resolve, reject) {
-            self.initModelForFirebaseDatabase(model).then(function (model) {
-                self.load(model).then(function (m) {
-                    // set default data
-                    if (data) {
-                        Object.keys(data).forEach(function (property) {
-                            model[property] = data[property];
-                        });
-                    }
-                    // loaded and update bindings
-                    Object.keys(model.__bindingsObserver).forEach(function (property) {
-                        model.__bindingsObserver[property].next(model[property]);
+            self.load(model, data).then(function (model) {
+                // set default data
+                if (data) {
+                    Object.keys(data).forEach(function (property) {
+                        model[property] = data[property];
+                        if (model.__bindingsObserver[property] !== undefined) {
+                            model.__bindingsObserver[property].next(model[property]);
+                        }
                     });
+                }
+                // load and update bindings
+                // Object.keys(model.__bindingsObserver).forEach((property) => {
+                //     model.__bindingsObserver[property].next(model[property]);
+                // });
+                // init remote firebase connection
+                self.initModelForFirebaseDatabase(model).then(function (model) {
                     resolve(model);
-                })["catch"](function () {
-                    resolve(model);
+                })["catch"](function (err) {
+                    reject(err);
                 });
+            })["catch"](function (err) {
+                reject(err);
             });
         });
     };

@@ -1,6 +1,9 @@
 import {Component, Output} from '@angular/core';
 import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 import {PersistableModel} from "appsapp-cli";
+import {AppsappModuleProvider} from "../../../providers/appsapp-module-provider";
+import {Observer} from "rxjs/Observer";
+import {Observable} from "rxjs/Observable";
 
 /**
  * Generated class for the AppsappInputSelectComponent component.
@@ -25,6 +28,14 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
     @Output() options: any = [];
     @Output() parentPropertyMetadata: any = null;
     @Output() parentProperty: any = null;
+
+    constructor(public appsappModuleProvider: AppsappModuleProvider) {
+
+        super(appsappModuleProvider);
+        this.init();
+
+    }
+
 
     afterInit(config) {
 

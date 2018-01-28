@@ -76,7 +76,6 @@ var AppsappModuleProvider = (function () {
                     //
                 })["catch"](function (error) {
                     console.log(error);
-                    config.setIs;
                 });
             }
         });

@@ -278,8 +278,11 @@ export class PersistenceManager {
 
         let self = this, c = self.getActionDataWithIdentifier(action, model), emit = (model) => {
 
-            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').query.once('value',(event) => {
-                self.storageWrapper.set(self.getPersistanceIdentifier(model), event.val()).then((m) => {
+            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').query.once('value', (event) => {
+
+                let next = event.val();
+
+                self.storageWrapper.set(self.getPersistanceIdentifier(model), next).then((m) => {
                     observer.complete();
                 });
             });

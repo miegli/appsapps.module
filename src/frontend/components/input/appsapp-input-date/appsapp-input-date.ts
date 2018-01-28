@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Output} from '@angular/core';
 import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 
 
@@ -11,21 +11,22 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 @Component({
   selector: 'appsapp-input-date',
     template: `
-        <mbsc-form #mbscInstanceForm="mobiscroll">
+        <mbsc-form #mbscInstanceForm="mobiscroll" [ngClass]="{isInline: isInline}">
             <mbsc-input [error]="validator | async"  #mbscInstance="mobiscroll" mbsc-calendar [ngModel]="_ngModelGettter | async"
-                        (ngModelChange)="modelChanges($event)">{{_label}}</mbsc-input>
+                        (ngModelChange)="modelChanges($event)"><span *ngIf="!isInline">{{_label}}</span></mbsc-input>
         </mbsc-form>
 
     `
 })
 export class AppsappInputDateComponent extends AppsappInputAbstractComponent {
 
+    @Output() isInline: boolean = false;
+
 
   beforeModelChanges(model, property, value) {
     // create iso date
     let date = Date.parse(value);
     value = !isNaN(date) ? new Date(date) : null;
-    console.log(property, value);
     model.setProperty(property, value);
 
     return false;
@@ -52,7 +53,7 @@ export class AppsappInputDateComponent extends AppsappInputAbstractComponent {
     }
 
 
-    const options = this.model.getMetadataValue(this.property, 'calendar');
+    const options = this.model.getMetadataValue(this.property, 'isCalendar');
 
     if (options) {
 
@@ -74,6 +75,14 @@ export class AppsappInputDateComponent extends AppsappInputAbstractComponent {
 
       if (options.steps) {
         this.setMbscOption({steps: options.steps});
+      }
+
+      if (options.weeks) {
+          this.setMbscOption({weeks: options.weeks});
+      }
+
+      if (options.display == 'inline') {
+          this.isInline = true;
       }
 
     }
