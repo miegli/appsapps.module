@@ -38,40 +38,54 @@ var AppsappInputComponent = (function (_super) {
         _this.hidden = false;
         return _this;
     }
-    AppsappInputComponent.prototype.ngOnInit = function () {
+    AppsappInputComponent.prototype.ngOnInitExecute = function (model) {
         var _this = this;
         var self = this;
+        this._inputs = [];
+        if (this.property) {
+            this._inputs.push({
+                type: model.getType(this.property),
+                property: this.property,
+                parentPropertyMetadata: this.parentPropertyMetadata,
+                parentProperty: this.parentProperty,
+                label: this.label,
+                hidden: new Observable_1.Observable(function (observer) {
+                    model.getCondition(self.property).subscribe(function (c) {
+                        observer.next(self.isHidden(c));
+                    });
+                })
+            });
+        }
+        else {
+            Object.keys(model).forEach(function (property) {
+                if (property.substr(0, 1) !== "_") {
+                    _this._inputs.push({
+                        type: model.getType(property),
+                        property: property,
+                        parentPropertyMetadata: _this.parentPropertyMetadata,
+                        parentProperty: _this.parentProperty,
+                        hidden: new Observable_1.Observable(function (observer) {
+                            model.getCondition(property).subscribe(function (c) {
+                                observer.next(self.isHidden(c));
+                            });
+                        })
+                    });
+                }
+            });
+        }
+    };
+    AppsappInputComponent.prototype.ngOnInit = function () {
+        var self = this;
         if (this.model) {
-            if (this.property) {
-                this._inputs.push({
-                    type: this.model.getType(this.property),
-                    property: this.property,
-                    parentPropertyMetadata: this.parentPropertyMetadata,
-                    parentProperty: this.parentProperty,
-                    label: this.label,
-                    hidden: new Observable_1.Observable(function (observer) {
-                        self.model.getCondition(self.property).subscribe(function (c) {
-                            observer.next(self.isHidden(c));
-                        });
-                    })
+            if (this.model instanceof Observable_1.Observable) {
+                this._model = this.model;
+                this._model.subscribe(function (model) {
+                    self.model = model;
+                    self.ngOnInitExecute(model);
                 });
             }
             else {
-                Object.keys(this.model).forEach(function (property) {
-                    if (property.substr(0, 1) !== "_") {
-                        _this._inputs.push({
-                            type: _this.model.getType(property),
-                            property: property,
-                            parentPropertyMetadata: _this.parentPropertyMetadata,
-                            parentProperty: _this.parentProperty,
-                            hidden: new Observable_1.Observable(function (observer) {
-                                self.model.getCondition(property).subscribe(function (c) {
-                                    observer.next(self.isHidden(c));
-                                });
-                            })
-                        });
-                    }
-                });
+                self.ngOnInitExecute(this.model);
             }
         }
     };

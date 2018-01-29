@@ -18,8 +18,10 @@ export class PersistenceManager {
     private firebaseModel: FirebaseModel;
     private observer: Observer<any>;
     private observable: Observable<any>;
+    private _observerIsReadyCallbacks: any = [];
     private _pendingChangesModels: any = {};
     private _isConnected: boolean = false;
+
 
     constructor() {
 
@@ -59,15 +61,36 @@ export class PersistenceManager {
         };
 
 
-        this.observable = new Observable<any>((observer: Observer<any>) => {
-            self.observer = observer;
-        });
+
 
 
         self.storageWrapper.get('_pendingChanges').then((data) => {
             this._pendingChangesModels = data && Object.keys(data).length ? data : {};
         });
 
+
+    }
+
+
+    /**
+     * init persistance manager instance
+     * @returns {Promise<any>}
+     */
+    public init() {
+
+        let self = this;
+
+        return new Promise(function (resolve, reject) {
+
+            self.observable = new Observable<any>((observer: Observer<any>) => {
+                self.observer = observer;
+                resolve(self);
+            });
+
+            self.observable.subscribe();
+            self.observable.share();
+
+        });
 
     }
 
@@ -104,20 +127,24 @@ export class PersistenceManager {
     public setFirebase(firebaseModel) {
 
 
+
         let self = this;
 
+
         if (!this.firebaseModel) {
+
             firebaseModel.getDatabase().then((database) => {
                 self.firebaseDatabase = database;
+
+                firebaseModel.getAuth().then((auth: AngularFireAuth) => {
+
+                    auth.authState.subscribe((user) => {
+                        self.getObserver().next({action: 'initFirebaseDatabase'});
+                    });
+                });
+
             });
 
-            firebaseModel.getAuth().then((auth: AngularFireAuth) => {
-                auth.authState.subscribe((user) => {
-                    if (self.observer) {
-                        self.observer.next({action: 'initFirebaseDatabase'});
-                    }
-                });
-            });
 
             this.firebaseModel = firebaseModel;
 
@@ -179,9 +206,11 @@ export class PersistenceManager {
 
             model.setPersistenceManager(self);
 
+
             if (!model.getPersistenceManager() || !model.getFirebaseDatabasePath()) {
 
                 self.observable.subscribe((data) => {
+
 
                     if (data.action == 'connected' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
                         self.workOnPendingChanges(model);
@@ -429,6 +458,7 @@ export class PersistenceManager {
         let self = this;
 
         return new Promise(function (resolve, reject) {
+
 
             self.load(model, data).then((model: any) => {
 

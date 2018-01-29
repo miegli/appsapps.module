@@ -39,7 +39,7 @@ export class AppsappModuleProvider {
         let self = this;
 
 
-       this.persistenceManager = new PersistenceManager();
+       //this.persistenceManager = new PersistenceManager();
 
         // init configuration instance
         this.config = new ConfigModel();
@@ -108,17 +108,6 @@ export class AppsappModuleProvider {
 
         });
 
-        // connect persistence manager to projects firebase instance
-        this.firebaseProject.getAuth().then((auth: AngularFireAuth) => {
-            auth.authState.subscribe(
-                (user) => {
-                    if (user) {
-                        self.persistenceManager.setFirebase(self.firebaseProject);
-                    }
-                });
-        });
-
-
     }
 
 
@@ -149,13 +138,26 @@ export class AppsappModuleProvider {
         }
 
 
+
         let p = new Promise(function (resolve, reject) {
-            model.setHttpClient(self.http).setNotificationProvider(self.notificationProvider).setMessages(self.providerMessages).setPersistenceManager(pm.setFirebase(self.firebaseProject)).getPersistenceManager().initAndload(model, data).then((model) => {
-                resolve(model);
-            }).catch(() => {
-                resolve(model);
+
+            pm.init().then((persistenceManager: PersistenceManager) => {
+                self.persistenceManager = persistenceManager;
+                persistenceManager.setFirebase(self.firebaseProject);
+                model.setHttpClient(self.http).setNotificationProvider(self.notificationProvider).setMessages(self.providerMessages);
+                persistenceManager.initAndload(model, data).then((model:any) => {
+                    model.setPersistenceManager(persistenceManager);
+                    resolve(model);
+                }).catch(() => {
+                    resolve(model);
+                });
+
             });
-        })
+
+
+
+           });
+
 
         model.setIsLoadedPromise(p);
         model.setAppsAppModuleProvider(this);

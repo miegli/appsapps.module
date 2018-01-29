@@ -355,6 +355,8 @@ var PersistenceManager = (function () {
                     })["catch"](function (error) {
                         reject(error);
                     });
+                })["catch"](function (e) {
+                    reject(e);
                 });
             }
             else {
