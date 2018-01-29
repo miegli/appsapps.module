@@ -143,12 +143,14 @@ export class AppsappModuleProvider {
 
             pm.init().then((persistenceManager: PersistenceManager) => {
                 self.persistenceManager = persistenceManager;
-                persistenceManager.setFirebase(self.firebaseProject);
+
                 model.setHttpClient(self.http).setNotificationProvider(self.notificationProvider).setMessages(self.providerMessages);
                 persistenceManager.initAndload(model, data).then((model:any) => {
+                    persistenceManager.setFirebase(self.firebaseProject);
                     model.setPersistenceManager(persistenceManager);
-                    resolve(model);
-                }).catch(() => {
+                    persistenceManager._loadedResolver = resolve;
+                }).catch((e) => {
+                    console.log(e);
                     resolve(model);
                 });
 

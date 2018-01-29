@@ -21,6 +21,7 @@ export class PersistenceManager {
     private _observerIsReadyCallbacks: any = [];
     private _pendingChangesModels: any = {};
     private _isConnected: boolean = false;
+    public _loadedResolver: any;
 
 
     constructor() {
@@ -130,7 +131,6 @@ export class PersistenceManager {
 
         let self = this;
 
-
         if (!this.firebaseModel) {
 
             firebaseModel.getDatabase().then((database) => {
@@ -206,8 +206,7 @@ export class PersistenceManager {
 
             model.setPersistenceManager(self);
 
-
-            if (!model.getPersistenceManager() || !model.getFirebaseDatabasePath()) {
+          //  if (!model.getPersistenceManager() || !model.getFirebaseDatabasePath()) {
 
                 self.observable.subscribe((data) => {
 
@@ -219,7 +218,7 @@ export class PersistenceManager {
                     if (data.action == 'initFirebaseDatabase' && self.getFirebasePath(model)) {
                         model.setFirebaseDatabase(self.getFirebaseDatabase());
                         model.setFirebaseDatabasePath(self.getFirebasePath(model));
-                        resolve(model);
+
                     }
 
                     if (data.action == 'initFirebaseDatabase' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
@@ -247,12 +246,18 @@ export class PersistenceManager {
                         }, (error) => {
                             // skip access denied
                         });
+
+                        self._loadedResolver(model);
+
                     }
 
+
+
+
                 });
+            resolve(model);
 
-
-            }
+           // }
 
         });
 
