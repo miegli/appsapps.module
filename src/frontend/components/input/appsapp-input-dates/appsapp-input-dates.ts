@@ -61,7 +61,7 @@ export class AppsappInputDatesComponent extends AppsappInputAbstractComponent {
     })
 
 
-    const options = this.model.getMetadataValue(this.property, 'dateRange');
+    const options = this.model.getMetadataValue(this.property, 'IsDateRange');
 
     if (options) {
       if (options.maxDate) {

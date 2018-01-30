@@ -14,6 +14,7 @@ var objectHash = require("object-hash");
 var PersistenceManager = (function () {
     function PersistenceManager() {
         var _this = this;
+        this._observerIsReadyCallbacks = [];
         this._pendingChangesModels = {};
         this._isConnected = false;
         var self = this;
@@ -45,13 +46,25 @@ var PersistenceManager = (function () {
                 });
             }
         };
-        this.observable = new Observable_1.Observable(function (observer) {
-            self.observer = observer;
-        });
         self.storageWrapper.get('_pendingChanges').then(function (data) {
             _this._pendingChangesModels = data && Object.keys(data).length ? data : {};
         });
     }
+    /**
+     * init persistance manager instance
+     * @returns {Promise<any>}
+     */
+    PersistenceManager.prototype.init = function () {
+        var self = this;
+        return new Promise(function (resolve, reject) {
+            self.observable = new Observable_1.Observable(function (observer) {
+                self.observer = observer;
+                resolve(self);
+            });
+            self.observable.subscribe();
+            self.observable.share();
+        });
+    };
     /**
      * get persistence managers oberserver
      * @returns {Observer<any>}
@@ -82,12 +95,10 @@ var PersistenceManager = (function () {
         if (!this.firebaseModel) {
             firebaseModel.getDatabase().then(function (database) {
                 self.firebaseDatabase = database;
-            });
-            firebaseModel.getAuth().then(function (auth) {
-                auth.authState.subscribe(function (user) {
-                    if (self.observer) {
-                        self.observer.next({ action: 'initFirebaseDatabase' });
-                    }
+                firebaseModel.getAuth().then(function (auth) {
+                    auth.authState.subscribe(function (user) {
+                        self.getObserver().next({ action: 'initFirebaseDatabase' });
+                    });
                 });
             });
             this.firebaseModel = firebaseModel;
@@ -129,39 +140,40 @@ var PersistenceManager = (function () {
         var self = this;
         return new Promise(function (resolve, reject) {
             model.setPersistenceManager(self);
-            if (!model.getPersistenceManager() || !model.getFirebaseDatabasePath()) {
-                self.observable.subscribe(function (data) {
-                    if (data.action == 'connected' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
-                        self.workOnPendingChanges(model);
-                    }
-                    if (data.action == 'initFirebaseDatabase' && self.getFirebasePath(model)) {
-                        model.setFirebaseDatabase(self.getFirebaseDatabase());
-                        model.setFirebaseDatabasePath(self.getFirebasePath(model));
-                        resolve(model);
-                    }
-                    if (data.action == 'initFirebaseDatabase' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
-                        model.setFirebaseDatabaseObject(model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + "/data")).getFirebaseDatabaseObject().snapshotChanges().subscribe(function (action) {
-                            if (model.hasPendingChanges()) {
-                                window.setTimeout(function () {
-                                    self.workOnPendingChanges(model).then(function () {
-                                        model.setHasPendingChanges(false).emit();
-                                    })["catch"]();
-                                }, 1000);
-                            }
-                            else {
-                                model.loadJson(action.payload.val()).then(function (m) {
-                                    m.emit();
-                                })["catch"](function (error) {
-                                    //
-                                    console.log('error', error);
-                                });
-                            }
-                        }, function (error) {
-                            // skip access denied
-                        });
-                    }
-                });
-            }
+            //  if (!model.getPersistenceManager() || !model.getFirebaseDatabasePath()) {
+            self.observable.subscribe(function (data) {
+                if (data.action == 'connected' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
+                    self.workOnPendingChanges(model);
+                }
+                if (data.action == 'initFirebaseDatabase' && self.getFirebasePath(model)) {
+                    model.setFirebaseDatabase(self.getFirebaseDatabase());
+                    model.setFirebaseDatabasePath(self.getFirebasePath(model));
+                }
+                if (data.action == 'initFirebaseDatabase' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
+                    model.setFirebaseDatabaseObject(model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + "/data")).getFirebaseDatabaseObject().snapshotChanges().subscribe(function (action) {
+                        if (model.hasPendingChanges()) {
+                            window.setTimeout(function () {
+                                self.workOnPendingChanges(model).then(function () {
+                                    model.setHasPendingChanges(false).emit();
+                                })["catch"]();
+                            }, 1000);
+                        }
+                        else {
+                            model.loadJson(action.payload.val()).then(function (m) {
+                                m.emit();
+                            })["catch"](function (error) {
+                                //
+                                console.log('error', error);
+                            });
+                        }
+                    }, function (error) {
+                        // skip access denied
+                    });
+                    self._loadedResolver(model);
+                }
+            });
+            resolve(model);
+            // }
         });
     };
     /**

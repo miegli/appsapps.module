@@ -22,7 +22,7 @@ var AppsappModuleProvider = (function () {
         this.providerMessages = providerMessages;
         this.http = http;
         var self = this;
-        this.persistenceManager = new persistenceManager_1.PersistenceManager();
+        //this.persistenceManager = new PersistenceManager();
         // init configuration instance
         this.config = new config_1.ConfigModel();
         // init projects firebase instance
@@ -79,14 +79,6 @@ var AppsappModuleProvider = (function () {
                 });
             }
         });
-        // connect persistence manager to projects firebase instance
-        this.firebaseProject.getAuth().then(function (auth) {
-            auth.authState.subscribe(function (user) {
-                if (user) {
-                    self.persistenceManager.setFirebase(self.firebaseProject);
-                }
-            });
-        });
     }
     /**
      * get http client
@@ -110,10 +102,17 @@ var AppsappModuleProvider = (function () {
             model.setUuid(uuid);
         }
         var p = new Promise(function (resolve, reject) {
-            model.setHttpClient(self.http).setNotificationProvider(self.notificationProvider).setMessages(self.providerMessages).setPersistenceManager(pm.setFirebase(self.firebaseProject)).getPersistenceManager().initAndload(model, data).then(function (model) {
-                resolve(model);
-            })["catch"](function () {
-                resolve(model);
+            pm.init().then(function (persistenceManager) {
+                self.persistenceManager = persistenceManager;
+                model.setHttpClient(self.http).setNotificationProvider(self.notificationProvider).setMessages(self.providerMessages);
+                persistenceManager.initAndload(model, data).then(function (model) {
+                    persistenceManager.setFirebase(self.firebaseProject);
+                    model.setPersistenceManager(persistenceManager);
+                    persistenceManager._loadedResolver = resolve;
+                })["catch"](function (e) {
+                    console.log(e);
+                    resolve(model);
+                });
             });
         });
         model.setIsLoadedPromise(p);

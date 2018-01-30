@@ -58,19 +58,14 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
                 this.validator = this.model.getValidation(this.property);
             }
 
-          //  if (self._ngModelGettterObserver == undefined) {
-                this._ngModelGettter = new Observable<any>((observer: Observer<any>) => {
-                    self._ngModelGettterObserver = observer;
-                    console.log(self.model);
-                    window.setTimeout(() => {
-                        self._ngModelGettterObserver.next(self.model.getPropertyValue(self.property));
-                    },2);
+            this._ngModelGettter = new Observable<any>((observer: Observer<any>) => {
+                self._ngModelGettterObserver = observer;
+                window.setTimeout(() => {
+                    self._ngModelGettterObserver.next(self.model.getPropertyValue(self.property));
+                },1);
 
-                });
-                this._ngModelGettter.share();
-          //  } else {
-           //     self._ngModelGettterObserver.next(self.model.getPropertyValue(self.property));
-          //  }
+            });
+            this._ngModelGettter.share();
 
             self.model.watch(self.property, (value) => {
                 if (self._ngModelGettterObserver !== undefined) {
