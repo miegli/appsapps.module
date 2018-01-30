@@ -57,7 +57,7 @@ var AppsappInputDatesComponent = (function (_super) {
                 self.locked = false;
             }
         });
-        var options = this.model.getMetadataValue(this.property, 'dateRange');
+        var options = this.model.getMetadataValue(this.property, 'IsDateRange');
         if (options) {
             if (options.maxDate) {
                 this.setMbscOption({ max: options.maxDate });

@@ -49,18 +49,13 @@ var AppsappInputAbstractComponent = (function (_super) {
             if (!this.validator) {
                 this.validator = this.model.getValidation(this.property);
             }
-            //  if (self._ngModelGettterObserver == undefined) {
             this._ngModelGettter = new Observable_1.Observable(function (observer) {
                 self._ngModelGettterObserver = observer;
-                console.log(self.model);
                 window.setTimeout(function () {
                     self._ngModelGettterObserver.next(self.model.getPropertyValue(self.property));
-                }, 2);
+                }, 1);
             });
             this._ngModelGettter.share();
-            //  } else {
-            //     self._ngModelGettterObserver.next(self.model.getPropertyValue(self.property));
-            //  }
             self.model.watch(self.property, function (value) {
                 if (self._ngModelGettterObserver !== undefined) {
                     self._ngModelGettterObserver.next(value);

@@ -327,10 +327,7 @@ var PersistenceManager = (function () {
                         }
                     });
                 }
-                // load and update bindings
-                // Object.keys(model.__bindingsObserver).forEach((property) => {
-                //     model.__bindingsObserver[property].next(model[property]);
-                // });
+                model.removeEditedState();
                 // init remote firebase connection
                 self.initModelForFirebaseDatabase(model).then(function (model) {
                     resolve(model);
