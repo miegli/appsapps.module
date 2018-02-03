@@ -685,6 +685,7 @@ export class PersistenceManager {
                                         self.updatePropertyFromLocalStorage('_hasPendingChanges', false, object).then((o) => {
                                             resolve(o);
                                         }).catch((error) => {
+                                            console.log(error);
                                             reject(error);
                                         });
 
@@ -791,7 +792,7 @@ export class PersistenceManager {
                     });
 
                 } else {
-                    reject(identifier);
+                    resolve(null);
                 }
 
             }).catch((error) => {
