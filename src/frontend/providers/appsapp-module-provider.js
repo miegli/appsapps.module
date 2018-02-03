@@ -101,6 +101,16 @@ var AppsappModuleProvider = (function () {
         if (uuid) {
             model.setUuid(uuid);
         }
+        if (data && typeof data == 'object') {
+            if (typeof data.serialize == 'function') {
+                data = data.serialize(true, true);
+            }
+        }
+        else {
+            if (typeof data == 'string') {
+                data = JSON.parse(data);
+            }
+        }
         var p = new Promise(function (resolve, reject) {
             pm.init().then(function (persistenceManager) {
                 self.persistenceManager = persistenceManager;

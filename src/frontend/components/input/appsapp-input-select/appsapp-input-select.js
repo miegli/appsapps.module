@@ -101,9 +101,11 @@ var AppsappInputSelectComponent = (function (_super) {
                             self.model.addHashedValue(v.value, v.hash);
                         });
                         var hashedValues = [];
-                        self.model.getPropertyValue(self.property, true).forEach(function (value) {
-                            hashedValues.push(self.model.setHashedValue(value));
-                        });
+                        if (self.model.getPropertyValue(self.property, true)) {
+                            self.model.getPropertyValue(self.property, true).forEach(function (value) {
+                                hashedValues.push(self.model.setHashedValue(value));
+                            });
+                        }
                         self.update(hashedValues);
                         self.mbsc.instance.setVal(hashedValues, false, true);
                     });

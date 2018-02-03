@@ -40,6 +40,23 @@ var ConfigModel = (function (_super) {
         return this._os;
     };
     /**
+     * get operating system
+     * @returns {string}
+     */
+    ConfigModel.prototype.getTheme = function () {
+        var theme = 'material';
+        if (this.getOs() == 'ios') {
+            theme = 'ios';
+        }
+        if (this.getOs() == 'windows') {
+            theme = 'wp';
+        }
+        if (this.getOs() == 'desktop') {
+            theme = 'material';
+        }
+        return theme;
+    };
+    /**
      * get firebase users password
      * @returns {string}
      */

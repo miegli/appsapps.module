@@ -24,14 +24,20 @@ var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputDateComponent = (function (_super) {
-    __extends(AppsappInputDateComponent, _super);
-    function AppsappInputDateComponent() {
+var AppsappInputTimeComponent = (function (_super) {
+    __extends(AppsappInputTimeComponent, _super);
+    function AppsappInputTimeComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.isInline = false;
         return _this;
     }
-    AppsappInputDateComponent.prototype.beforeModelChanges = function (model, property, value) {
+    /**
+     * trigger befor init method
+     */
+    AppsappInputTimeComponent.prototype.beforeInit = function () {
+        this.model[this.property] = typeof this.model[this.property] == 'string' ? new Date(this.model[this.property]) : this.model[this.property];
+    };
+    AppsappInputTimeComponent.prototype.beforeModelChanges = function (model, property, value) {
         // create iso date
         var date = Date.parse(value);
         value = !isNaN(date) ? new Date(date) : null;
@@ -42,34 +48,25 @@ var AppsappInputDateComponent = (function (_super) {
      *
      * @param {ConfigModel} config
      */
-    AppsappInputDateComponent.prototype.afterInit = function (config) {
-        if (this.model.getMetadataValue(this.property, 'maxDate')) {
-            var maxDate = this.model.getMetadataValue(this.property, 'maxDate');
-            this.setMbscOption({ max: maxDate });
+    AppsappInputTimeComponent.prototype.afterInit = function (config) {
+        if (this.model.getMetadataValue(this.property, 'max')) {
+            var max = this.model.getMetadataValue(this.property, 'max');
+            this.setMbscOption({ max: max });
         }
-        if (this.model.getMetadataValue(this.property, 'minDate')) {
-            var minDate = this.model.getMetadataValue(this.property, 'minDate');
-            this.setMbscOption({ min: minDate });
+        if (this.model.getMetadataValue(this.property, 'min')) {
+            var min = this.model.getMetadataValue(this.property, 'min');
+            this.setMbscOption({ min: min });
         }
-        var options = this.model.getMetadataValue(this.property, 'isCalendar');
+        var options = this.model.getMetadataValue(this.property, 'isTime');
         if (options) {
-            if (options.maxDate) {
-                this.setMbscOption({ max: options.maxDate });
-            }
-            if (options.minDate) {
-                this.setMbscOption({ min: options.minDate });
-            }
             if (options.invalid) {
                 this.setMbscOption({ invalid: options.invalid });
-            }
-            if (options.controls) {
-                this.setMbscOption({ controls: options.controls });
             }
             if (options.steps) {
                 this.setMbscOption({ steps: options.steps });
             }
-            if (options.weeks) {
-                this.setMbscOption({ weeks: options.weeks });
+            if (options.timeFormat) {
+                this.setMbscOption({ timeFormat: options.timeFormat });
             }
             if (options.display == 'inline') {
                 this.isInline = true;
@@ -79,15 +76,15 @@ var AppsappInputDateComponent = (function (_super) {
             display: options && options.display ? options.display : (config.getOs() !== 'desktop' ? 'bottom' : 'center')
         });
     };
-    return AppsappInputDateComponent;
+    return AppsappInputTimeComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
 __decorate([
     core_1.Output()
-], AppsappInputDateComponent.prototype, "isInline");
-AppsappInputDateComponent = __decorate([
+], AppsappInputTimeComponent.prototype, "isInline");
+AppsappInputTimeComponent = __decorate([
     core_1.Component({
-        selector: 'appsapp-input-date',
-        template: "\n        <mbsc-form #mbscInstanceForm=\"mobiscroll\" [ngClass]=\"{isInline: isInline}\">\n            <mbsc-input [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-calendar [ngModel]=\"_ngModelGettter | async\"\n                        (ngModelChange)=\"modelChanges($event)\"><span *ngIf=\"!isInline\">{{_label}}</span></mbsc-input>\n        </mbsc-form>\n\n    "
+        selector: 'appsapp-input-time',
+        template: "\n        <mbsc-form #mbscInstanceForm=\"mobiscroll\" [ngClass]=\"{isInline: isInline}\">\n            <mbsc-input [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-time [ngModel]=\"_ngModelGettter | async\"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n        </mbsc-form>\n\n    "
     })
-], AppsappInputDateComponent);
-exports.AppsappInputDateComponent = AppsappInputDateComponent;
+], AppsappInputTimeComponent);
+exports.AppsappInputTimeComponent = AppsappInputTimeComponent;
