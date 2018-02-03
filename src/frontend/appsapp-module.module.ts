@@ -15,6 +15,7 @@ import {AppsappInputBirthdayComponent} from "./components/input/appsapp-input-bi
 import {AppsappInputTextComponent} from "./components/input/appsapp-input-text/appsapp-input-text";
 import {AppsappInputSelectComponent} from "./components/input/appsapp-input-select/appsapp-input-select";
 import {AppsappInputListComponent} from "./components/input/appsapp-input-list/appsapp-input-list";
+import {AppsappInputTimeComponent} from "./components/input/appsapp-input-time/appsapp-input-time";
 import {AppsappInputAbstractComponent} from "./components/input/appsapp-input-abstract";
 import {MbscModule} from "@mobiscroll/angular";
 import {FormsModule} from "@angular/forms";
@@ -43,7 +44,8 @@ import {HttpClientModule, HttpClient} from "@angular/common/http";
         AppsappInputAbstractComponent,
         AppsappInputSelectComponent,
         AppsappInputListComponent,
-        AppsappInputNumberPlainComponent
+        AppsappInputNumberPlainComponent,
+        AppsappInputTimeComponent
     ],
     providers: [AppsappModuleProvider, HttpClient],
     imports: [MbscModule, CommonModule, FormsModule, HttpClientModule],

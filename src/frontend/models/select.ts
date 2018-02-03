@@ -10,7 +10,7 @@ export class SelectModel extends PersistableModel {
     private url: string = '';
     private mapping: {
         text: string|Function,
-        value: string|Function,
+        value?: string|Function,
         disabled?: boolean|Function,
         group?: string
     };
@@ -33,11 +33,28 @@ export class SelectModel extends PersistableModel {
         let self = this;
         let lastHash = null;
 
-        this.getHttpClient().get(this.url).subscribe((data) => {
-            self.update('data', data);
-        }, (error) => {
-            // skip error
-        });
+        if (this.url.substr(0,4) == 'http') {
+            this.getHttpClient().get(this.url).subscribe((data) => {
+                console.log(data);
+                self.update('data', data);
+            }, (error) => {
+                // skip error
+            });
+        }
+
+        if (this.url.substr(0,1) == '/') {
+
+            this.getFirebaseData(this.url).subscribe((event) => {
+                if (event) {
+                    let data = event.payload.val();
+                    if (data && data.length !== undefined) {
+                        self.update('data', data);
+                    }
+                }
+            })
+
+        }
+
 
 
         return new Observable<any>((observer: Observer<any>) => {
@@ -51,7 +68,7 @@ export class SelectModel extends PersistableModel {
                     data.forEach((item) => {
 
                         options.push({
-                            value: self.setHashedValue(self._getPropertyFromObject(item, self.mapping.value)),
+                            value: self.mapping.value ? self.setHashedValue(self._getPropertyFromObject(item, self.mapping.value)) : self.setHashedValue(item),
                             text: self._getPropertyFromObject(item, self.mapping.text),
                             disabled: self.mapping.disabled !== undefined ? self._getPropertyFromObject(item, self.mapping.disabled) : false,
                         })

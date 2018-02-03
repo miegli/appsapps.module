@@ -31,6 +31,30 @@ export class ConfigModel extends PersistableModel {
     return this._os;
   }
 
+  /**
+   * get operating system
+   * @returns {string}
+   */
+  public getTheme() {
+
+      let theme = 'material';
+
+      if (this.getOs() == 'ios') {
+          theme = 'ios';
+      }
+
+      if (this.getOs() == 'windows') {
+          theme = 'wp';
+      }
+
+      if (this.getOs() == 'desktop') {
+          theme = 'material';
+      }
+
+      return theme;
+
+  }
+
 
 
   /**

@@ -84,6 +84,10 @@ export class AppsappInputDatesComponent extends AppsappInputAbstractComponent {
         this.setMbscOption({steps: options.steps});
       }
 
+      if (options.timeFormat) {
+        this.setMbscOption({timeFormat: options.timeFormat});
+      }
+
     }
 
     this.setMbscOption({

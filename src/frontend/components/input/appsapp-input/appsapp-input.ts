@@ -69,6 +69,12 @@ import {Observer} from "rxjs/Observer";
                                         [parentPropertyMetadata]="input.parentPropertyMetadata"
                                         [parentProperty]="input.parentProperty"></appsapp-input-textarea>
             </ng-container>
+            <ng-container *ngSwitchCase="'time'">
+                <appsapp-input-time [model]="model" [property]="input.property" [label]="input.label"
+                                    [hidden]="input.hidden | async"
+                                    [parentPropertyMetadata]="input.parentPropertyMetadata"
+                                    [parentProperty]="input.parentProperty"></appsapp-input-time>
+            </ng-container>    
             <ng-container *ngSwitchCase="'date'">
                 <appsapp-input-date [model]="model" [property]="input.property" [label]="input.label"
                                     [hidden]="input.hidden | async"

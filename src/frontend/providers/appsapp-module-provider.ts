@@ -138,6 +138,16 @@ export class AppsappModuleProvider {
         }
 
 
+        if (data && typeof data == 'object') {
+            if (typeof data.serialize == 'function') {
+                data = data.serialize(true, true);
+            }
+        } else {
+            if (typeof data == 'string') {
+                data = JSON.parse(data);
+            }
+        }
+
 
         let p = new Promise(function (resolve, reject) {
 

@@ -115,11 +115,12 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
                             self.model.addHashedValue(v.value, v.hash);
                         });
 
-
                         let hashedValues = [];
-                        self.model.getPropertyValue(self.property, true).forEach((value) => {
-                            hashedValues.push(self.model.setHashedValue(value));
-                        });
+                        if (self.model.getPropertyValue(self.property, true)) {
+                            self.model.getPropertyValue(self.property, true).forEach((value) => {
+                                hashedValues.push(self.model.setHashedValue(value));
+                            });
+                        }
 
                         self.update(hashedValues);
                         self.mbsc.instance.setVal(hashedValues, false, true);
