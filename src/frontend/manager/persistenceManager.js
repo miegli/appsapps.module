@@ -481,6 +481,7 @@ var PersistenceManager = (function () {
                                         self.updatePropertyFromLocalStorage('_hasPendingChanges', false, object).then(function (o) {
                                             resolve(o);
                                         })["catch"](function (error) {
+                                            console.log(error);
                                             reject(error);
                                         });
                                     }
@@ -558,7 +559,7 @@ var PersistenceManager = (function () {
                     });
                 }
                 else {
-                    reject(identifier);
+                    resolve(null);
                 }
             })["catch"](function (error) {
                 reject(error);

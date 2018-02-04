@@ -96,7 +96,8 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
 
             let option = {
                 theme: theme,
-                lang: 'de'
+                lang: 'de',
+                closeOnOverlayTap: false
             };
 
             if (this.mbsc) {
