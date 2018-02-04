@@ -18,8 +18,29 @@ var SelectModel = (function (_super) {
         var _this = _super.call(this) || this;
         _this.options = [];
         _this.data = [];
+        _this.parent = null;
         _this.url = '';
         _this.dataType = 'json';
+        /**
+         * match all in string
+         * @param string
+         * @param regexp
+         * @returns {any[]}
+         */
+        _this.matchAll = function (string, regexp) {
+            var matches = [];
+            if (typeof string !== 'string') {
+                string = '';
+            }
+            string.replace(regexp, function () {
+                var arr = ([]).slice.call(arguments, 0);
+                var extras = arr.splice(-2);
+                arr.index = extras[0];
+                arr.input = extras[1];
+                matches.push(arr);
+            });
+            return matches.length ? matches : null;
+        };
         return _this;
     }
     /**
@@ -29,23 +50,51 @@ var SelectModel = (function (_super) {
     SelectModel.prototype.getOptions = function () {
         var self = this;
         var lastHash = null;
-        if (this.url.substr(0, 4) == 'http') {
-            this.getHttpClient().get(this.url).subscribe(function (data) {
-                console.log(data);
-                self.update('data', data);
-            }, function (error) {
-                // skip error
+        var regex = /(\$\w+)[\/]*/g;
+        var fetchdata = function (url) {
+            console.log(1, url);
+            if (self.matchAll(url, regex)) {
+                self.matchAll(url, regex).forEach(function (m) {
+                    url = url.replace(m[1], self.parent.getPropertyValue(m[1].substr(1)));
+                });
+            }
+            console.log(2, url);
+            if (url.substr(0, 4) == 'http') {
+                this.getHttpClient().get(url).subscribe(function (data) {
+                    self.update('data', data);
+                }, function (error) {
+                    // skip error
+                });
+            }
+            if (url.substr(0, 1) == '/') {
+                self.getFirebaseData(url).subscribe(function (event) {
+                    if (event) {
+                        var data_1 = event.payload.val();
+                        if (data_1) {
+                            if (typeof data_1.forEach !== 'function') {
+                                var tmp = [];
+                                Object.keys(data_1).forEach(function (v) {
+                                    tmp.push(data_1[v]);
+                                });
+                                self.update('data', tmp);
+                            }
+                            else {
+                                self.update('data', data_1);
+                            }
+                        }
+                    }
+                });
+            }
+        };
+        if (self.matchAll(this.url, regex)) {
+            self.matchAll(this.url, regex).forEach(function (m) {
+                self.parent.watch(m[1].substr(1), function (data) {
+                    fetchdata(self.url);
+                });
             });
         }
-        if (this.url.substr(0, 1) == '/') {
-            this.getFirebaseData(this.url).subscribe(function (event) {
-                if (event) {
-                    var data = event.payload.val();
-                    if (data && data.length !== undefined) {
-                        self.update('data', data);
-                    }
-                }
-            });
+        else {
+            fetchdata(this.url);
         }
         return new Observable_1.Observable(function (observer) {
             var o = observer;

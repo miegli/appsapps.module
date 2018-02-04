@@ -8,6 +8,7 @@ export class SelectModel extends PersistableModel {
     private options: any = [];
     private data: any = [];
     private parent: any = null;
+    private parentProperty: string = null;
     private url: string = '';
     private mapping: {
         text: string | Function,
@@ -49,6 +50,7 @@ export class SelectModel extends PersistableModel {
     };
 
 
+
     /**
      * Get options array as promise
      * @returns Observable<any>
@@ -60,33 +62,31 @@ export class SelectModel extends PersistableModel {
         let regex = /(\$\w+)[\/]*/g;
 
 
-        var fetchdata = function (url) {
+        var fetchdata = function (url, property?, data?) {
 
-            console.log(1, url);
+            var finalurl = url;
 
-            if (self.matchAll(url, regex)) {
-                self.matchAll(url, regex).forEach((m) => {
-                    url = url.replace(m[1], self.parent.getPropertyValue(m[1].substr(1)));
-                });
-            }
+            if (self.parent && self.parent.getPropertyValue !== undefined) {
+                if (self.matchAll(url, regex)) {
+                    self.matchAll(url, regex).forEach((m) => {
+                        finalurl = finalurl.replace(m[1], property == m[1].substr(1) ? data : self.parent[m[1].substr(1)]);
+                    });
+                }
 
-            console.log(2, url);
 
-            if (url.substr(0, 4) == 'http') {
-                this.getHttpClient().get(url).subscribe((data) => {
+            if (finalurl.substr(0, 4) == 'http') {
+                this.getHttpClient().get(finalurl).subscribe((data) => {
                     self.update('data', data);
+
                 }, (error) => {
                     // skip error
                 });
             }
-            if (url.substr(0, 1) == '/') {
-                self.getFirebaseData(url).subscribe((event) => {
+            if (finalurl.substr(0, 1) == '/') {
+                self.getFirebaseData(finalurl).then((event) => {
                     if (event) {
-
-                        let data = event.payload.val();
-
+                        let data = event.val();
                         if (data) {
-
                             if (typeof data.forEach !== 'function') {
                                 var tmp = [];
                                 Object.keys(data).forEach((v) => {
@@ -94,28 +94,36 @@ export class SelectModel extends PersistableModel {
                                 });
 
                                 self.update('data', tmp);
+
                             } else {
 
                                 self.update('data', data);
+
                             }
 
-                        }
 
+
+                        }
 
                     }
 
                 });
             }
+
+            }
+
         }
 
 
         if (self.matchAll(this.url, regex)) {
-            self.matchAll(this.url, regex).forEach((m) => {
-                self.parent.watch(m[1].substr(1), (data) => {
-                    fetchdata(self.url);
+            if (self.parent && self.parent.getPropertyValue !== undefined) {
+                self.matchAll(this.url, regex).forEach((m) => {
+                    self.parent.watch(m[1].substr(1), (data) => {
+                        fetchdata(self.url,m[1].substr(1), data);
 
+                    });
                 });
-            });
+            }
         } else {
             fetchdata(this.url);
         }
@@ -127,19 +135,32 @@ export class SelectModel extends PersistableModel {
 
                 let options = [];
                 let currentHash = self.setHashedValue(data);
+                let allOptions = {};
 
                 if (currentHash !== lastHash) {
                     data.forEach((item) => {
 
+                        var v = self.mapping.value ? self.setHashedValue(self._getPropertyFromObject(item, self.mapping.value)) : self.setHashedValue(item);
+                        allOptions[v] = true;
                         options.push({
-                            value: self.mapping.value ? self.setHashedValue(self._getPropertyFromObject(item, self.mapping.value)) : self.setHashedValue(item),
+                            value: v,
                             text: self._getPropertyFromObject(item, self.mapping.text),
                             disabled: self.mapping.disabled !== undefined ? self._getPropertyFromObject(item, self.mapping.disabled) : false,
                         })
                     });
 
                     self.update('options', options).saveWithPromise().then(() => {
-                        //
+                        // remove non valid select options from current value
+
+                        var tmp = [];
+                        self.parent[self.parentProperty].forEach((v) => {
+                            if (allOptions[v] === true) {
+                                tmp.push(v);
+                            }
+                        });
+                        self.parent.setProperty(self.parentProperty,tmp);
+
+
                     }).catch((e) => {
                         console.log(e);
                     });

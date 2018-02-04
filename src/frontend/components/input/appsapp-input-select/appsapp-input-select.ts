@@ -101,7 +101,8 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
                 this.appsappModuleProvider.new(SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url), {
                     url: data.source.url,
                     mapping: data.source.mapping,
-                    parent: self.model
+                    parent: self.model,
+                    parentProperty: self.property
                 }).loaded().then((select: any) => {
 
                     select.getOptions().subscribe((options) => {

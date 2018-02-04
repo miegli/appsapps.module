@@ -263,7 +263,7 @@ var PersistenceManager = (function () {
                 self.storageWrapper.set(self.getPersistanceIdentifier(model), model.serialize(false, true)).then(function (m) {
                     if (!localStorageOnly && model.getFirebaseDatabasePath() && model.getFirebaseDatabase()) {
                         self.clone(model).then(function (c) {
-                            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(c.transformAllProperties().serialize(true, true)).then(function (data) {
+                            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(c.transformAllProperties().convertListPropertiesFromArrayToObject().serialize(true, true)).then(function (data) {
                                 if (action) {
                                     self.callAction(model, observer, action, resolve, reject);
                                 }
