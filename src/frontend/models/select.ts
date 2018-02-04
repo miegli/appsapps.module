@@ -50,7 +50,6 @@ export class SelectModel extends PersistableModel {
     };
 
 
-
     /**
      * Get options array as promise
      * @returns Observable<any>
@@ -74,42 +73,46 @@ export class SelectModel extends PersistableModel {
                 }
 
 
-            if (finalurl.substr(0, 4) == 'http') {
-                this.getHttpClient().get(finalurl).subscribe((data) => {
-                    self.update('data', data);
+                if (finalurl.substr(0, 4) == 'http') {
+                    this.getHttpClient().get(finalurl).subscribe((data) => {
+                        self.update('data', data);
 
-                }, (error) => {
-                    // skip error
-                });
-            }
-            if (finalurl.substr(0, 1) == '/') {
+                    }, (error) => {
+                        // skip error
+                    });
+                }
+                if (finalurl.substr(0, 1) == '/') {
 
-                self.getFirebaseData(finalurl).then((event) => {
-                    if (event) {
-                        let data = event.val();
-                        if (data) {
-                            if (typeof data.forEach !== 'function') {
-                                var tmp = [];
-                                Object.keys(data).forEach((v) => {
-                                    tmp.push(data[v]);
-                                });
+                    var path = self.getFirebaseDatabaseSessionPath(finalurl);
 
-                                self.update('data', tmp);
+                    self.parent.getFirebaseDatabase().object(path).query.on('value', (event) => {
+                        if (event) {
+                            let data = event.val();
 
-                            } else {
+                            if (data) {
+                                if (typeof data.forEach !== 'function') {
+                                    var tmp = [];
+                                    Object.keys(data).forEach((v) => {
+                                        tmp.push(data[v]);
+                                    });
 
-                                self.update('data', data);
+                                    self.update('data', tmp);
+
+                                } else {
+
+                                    self.update('data', data);
+
+                                }
+
 
                             }
 
-
-
                         }
 
-                    }
+                    });
 
-                });
-            }
+
+                }
 
             }
 
@@ -120,7 +123,7 @@ export class SelectModel extends PersistableModel {
             if (self.parent && self.parent.getPropertyValue !== undefined) {
                 self.matchAll(this.url, regex).forEach((m) => {
                     self.parent.watch(m[1].substr(1), (data) => {
-                        fetchdata(self.url,m[1].substr(1), data);
+                        fetchdata(self.url, m[1].substr(1), data);
 
                     });
                 });
@@ -153,14 +156,16 @@ export class SelectModel extends PersistableModel {
                     self.update('options', options).saveWithPromise().then(() => {
 
                         // remove non valid select options from current value
-                        if (Object.keys(allOptions).length) {
+                        if (Object.keys(allOptions).length && self.parent[self.parentProperty] !== undefined) {
                             var tmp = [];
                             self.parent[self.parentProperty].forEach((v) => {
                                 if (allOptions[v] === true) {
                                     tmp.push(v);
                                 }
                             });
-                            self.parent.setProperty(self.parentProperty, tmp);
+                            if (typeof self.parent.setProperty == 'function') {
+                                self.parent.setProperty(self.parentProperty, tmp);
+                            }
                         }
 
 

@@ -118,13 +118,15 @@ var SelectModel = (function (_super) {
                     });
                     self.update('options', options).saveWithPromise().then(function () {
                         // remove non valid select options from current value
-                        var tmp = [];
-                        self.parent[self.parentProperty].forEach(function (v) {
-                            if (allOptions[v] === true) {
-                                tmp.push(v);
-                            }
-                        });
-                        self.parent.setProperty(self.parentProperty, tmp);
+                        if (Object.keys(allOptions).length) {
+                            var tmp = [];
+                            self.parent[self.parentProperty].forEach(function (v) {
+                                if (allOptions[v] === true) {
+                                    tmp.push(v);
+                                }
+                            });
+                            self.parent.setProperty(self.parentProperty, tmp);
+                        }
                     })["catch"](function (e) {
                         console.log(e);
                     });

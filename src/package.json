@@ -1,6 +1,6 @@
 {
   "name": "appsapp-module",
-  "version": "0.9.65",
+  "version": "0.9.66",
   "repository": {
     "type": "git",
     "url": "https://github.com/miegli/appsapps.module"
@@ -30,7 +30,7 @@
     "@mobiscroll/angular": "^4.0.0-beta",
     "angular-2-local-storage": "^1.0.1",
     "angular2-uuid": "^1.1.1",
-    "appsapp-cli": "^1.6.122",
+    "appsapp-cli": "^1.6.126",
     "angularfire2": "=5.0.0-rc.0",
     "firebase": "4.8.0",
     "rxjs": "^5.5.4",
