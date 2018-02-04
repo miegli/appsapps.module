@@ -83,6 +83,7 @@ export class SelectModel extends PersistableModel {
                 });
             }
             if (finalurl.substr(0, 1) == '/') {
+
                 self.getFirebaseData(finalurl).then((event) => {
                     if (event) {
                         let data = event.val();
@@ -150,15 +151,17 @@ export class SelectModel extends PersistableModel {
                     });
 
                     self.update('options', options).saveWithPromise().then(() => {
-                        // remove non valid select options from current value
 
-                        var tmp = [];
-                        self.parent[self.parentProperty].forEach((v) => {
-                            if (allOptions[v] === true) {
-                                tmp.push(v);
-                            }
-                        });
-                        self.parent.setProperty(self.parentProperty,tmp);
+                        // remove non valid select options from current value
+                        if (Object.keys(allOptions).length) {
+                            var tmp = [];
+                            self.parent[self.parentProperty].forEach((v) => {
+                                if (allOptions[v] === true) {
+                                    tmp.push(v);
+                                }
+                            });
+                            self.parent.setProperty(self.parentProperty, tmp);
+                        }
 
 
                     }).catch((e) => {

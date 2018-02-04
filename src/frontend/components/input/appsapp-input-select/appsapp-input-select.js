@@ -88,7 +88,8 @@ var AppsappInputSelectComponent = (function (_super) {
                 this.appsappModuleProvider["new"](select_1.SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url), {
                     url: data.source.url,
                     mapping: data.source.mapping,
-                    parent: self.model
+                    parent: self.model,
+                    parentProperty: self.property
                 }).loaded().then(function (select) {
                     select.getOptions().subscribe(function (options) {
                         self.options = options;
