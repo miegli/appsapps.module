@@ -7,11 +7,12 @@ export class SelectModel extends PersistableModel {
 
     private options: any = [];
     private data: any = [];
+    private parent: any = null;
     private url: string = '';
     private mapping: {
-        text: string|Function,
-        value?: string|Function,
-        disabled?: boolean|Function,
+        text: string | Function,
+        value?: string | Function,
+        disabled?: boolean | Function,
         group?: string
     };
     private dataType: string = 'json';
@@ -22,6 +23,30 @@ export class SelectModel extends PersistableModel {
 
     }
 
+    /**
+     * match all in string
+     * @param string
+     * @param regexp
+     * @returns {any[]}
+     */
+    public matchAll = function (string, regexp) {
+
+        var matches = [];
+        if (typeof string !== 'string') {
+            string = '';
+        }
+
+        string.replace(regexp, function () {
+            var arr = ([]).slice.call(arguments, 0);
+            var extras = arr.splice(-2);
+            arr.index = extras[0];
+            arr.input = extras[1];
+            matches.push(arr);
+        });
+        return matches.length ? matches : null;
+
+
+    };
 
 
     /**
@@ -32,29 +57,68 @@ export class SelectModel extends PersistableModel {
 
         let self = this;
         let lastHash = null;
+        let regex = /(\$\w+)[\/]*/g;
 
-        if (this.url.substr(0,4) == 'http') {
-            this.getHttpClient().get(this.url).subscribe((data) => {
-                console.log(data);
-                self.update('data', data);
-            }, (error) => {
-                // skip error
-            });
-        }
 
-        if (this.url.substr(0,1) == '/') {
+        var fetchdata = function (url) {
 
-            this.getFirebaseData(this.url).subscribe((event) => {
-                if (event) {
-                    let data = event.payload.val();
-                    if (data && data.length !== undefined) {
-                        self.update('data', data);
+            console.log(1, url);
+
+            if (self.matchAll(url, regex)) {
+                self.matchAll(url, regex).forEach((m) => {
+                    url = url.replace(m[1], self.parent.getPropertyValue(m[1].substr(1)));
+                });
+            }
+
+            console.log(2, url);
+
+            if (url.substr(0, 4) == 'http') {
+                this.getHttpClient().get(url).subscribe((data) => {
+                    self.update('data', data);
+                }, (error) => {
+                    // skip error
+                });
+            }
+            if (url.substr(0, 1) == '/') {
+                self.getFirebaseData(url).subscribe((event) => {
+                    if (event) {
+
+                        let data = event.payload.val();
+
+                        if (data) {
+
+                            if (typeof data.forEach !== 'function') {
+                                var tmp = [];
+                                Object.keys(data).forEach((v) => {
+                                    tmp.push(data[v]);
+                                });
+
+                                self.update('data', tmp);
+                            } else {
+
+                                self.update('data', data);
+                            }
+
+                        }
+
+
                     }
-                }
-            })
 
+                });
+            }
         }
 
+
+        if (self.matchAll(this.url, regex)) {
+            self.matchAll(this.url, regex).forEach((m) => {
+                self.parent.watch(m[1].substr(1), (data) => {
+                    fetchdata(self.url);
+
+                });
+            });
+        } else {
+            fetchdata(this.url);
+        }
 
 
         return new Observable<any>((observer: Observer<any>) => {

@@ -75,7 +75,8 @@ var AppsappInputAbstractComponent = (function (_super) {
             }
             var option = {
                 theme: theme,
-                lang: 'de'
+                lang: 'de',
+                closeOnOverlayTap: false
             };
             if (this.mbsc) {
                 this.mbsc.instance.option(option);

@@ -389,7 +389,7 @@ export class PersistenceManager {
                     if (!localStorageOnly && model.getFirebaseDatabasePath() && model.getFirebaseDatabase()) {
 
                         self.clone(model).then((c: any) => {
-                            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(c.transformAllProperties().serialize(true, true)).then((data) => {
+                            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(c.transformAllProperties().convertListPropertiesFromArrayToObject().serialize(true, true)).then((data) => {
                                 if (action) {
                                     self.callAction(model, observer, action, resolve, reject);
                                 } else {
