@@ -93,7 +93,7 @@ var AppsappInputNumberPlainComponent = (function (_super) {
 AppsappInputNumberPlainComponent = __decorate([
     core_1.Component({
         selector: 'appsapp-input-number-plain',
-        template: "\n      <mbsc-form #mbscInstanceForm=\"mobiscroll\">\n        <mbsc-input [error]=\"validator | async\" [ngModel]=\"_ngModelGettter | async\" type=\"number\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n      </mbsc-form>\n    "
+        template: "\n      \n        <mbsc-input [error]=\"validator | async\" [ngModel]=\"_ngModelGettter | async\" type=\"number\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n   \n    "
     })
 ], AppsappInputNumberPlainComponent);
 exports.AppsappInputNumberPlainComponent = AppsappInputNumberPlainComponent;

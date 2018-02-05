@@ -34,7 +34,7 @@ var AppsappInputEmailComponent = (function (_super) {
 AppsappInputEmailComponent = __decorate([
     core_1.Component({
         selector: 'appsapp-input-email',
-        template: "\n        <mbsc-form #mbscInstanceForm=\"mobiscroll\">\n            <mbsc-input [error]=\"validator | async\" [error]=\"validator | async\" [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n        </mbsc-form>\n\n    "
+        template: "\n       \n            <mbsc-input [error]=\"validator | async\" [error]=\"validator | async\" [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n\n    "
     })
 ], AppsappInputEmailComponent);
 exports.AppsappInputEmailComponent = AppsappInputEmailComponent;

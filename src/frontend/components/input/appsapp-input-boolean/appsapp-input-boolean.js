@@ -34,7 +34,7 @@ var AppsappInputBooleanComponent = (function (_super) {
 AppsappInputBooleanComponent = __decorate([
     core_1.Component({
         selector: 'appsapp-input-boolean',
-        template: "\n        <mbsc-form #mbscInstanceForm=\"mobiscroll\">\n            <mbsc-switch [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n                <span class=\"mbsc-desc\">{{_description}}</span>\n            </mbsc-switch>\n        </mbsc-form>\n\n            "
+        template: "\n       \n            <mbsc-switch [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n                <span class=\"mbsc-desc\">{{_description}}</span>\n            </mbsc-switch>\n      \n\n            "
     })
 ], AppsappInputBooleanComponent);
 exports.AppsappInputBooleanComponent = AppsappInputBooleanComponent;

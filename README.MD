@@ -149,6 +149,15 @@ Add `serviceAccountKey.json` to yours project root with your google service acco
 }
 ```
 
+#### Webhook
+You can trigger any http url by calling webhook method. The triggered Url is receiving models serialized data.
+
+```typescript
+   myModel.webhook('http://your.host/api/rest').subscribe((a) => {
+      // done
+    });
+```
+
 #### Custom 
 You can define your own backend services for using as finishers, loading data or whatever you want to do with its. Just call a trigger action on your model:
 
@@ -182,7 +191,7 @@ connector.on({action: 'nameOfYourBackendFunction'}, (request, response, observer
         observer.resolve();
 
     }).catch((err) => {
-       reject(err);
+       observer.reject(err);
     })
 
 
@@ -326,7 +335,7 @@ All of the validators are also available from the `appsapp-module` for  importin
 | `@IsDateRange()`        | Set special ui for a date range view      |
 | `@IsNumpad()`        | Set special ui for a num pad view    |
 | `@IsPassword()`        | Set special ui password input element    |
-| `@IsList(itemType)`        | Adds a repeater of given itemType (reusable model or object)   |
+| `@IsList(itemType, usePropertyAsUuid?)`        | Adds a one-to-many relation of given typeOfItems (reusable model or object)   |
 | `@IsRating(length: number)`        | Set special ui long text   |
 
 

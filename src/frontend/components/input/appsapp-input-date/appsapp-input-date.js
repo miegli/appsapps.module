@@ -87,7 +87,7 @@ __decorate([
 AppsappInputDateComponent = __decorate([
     core_1.Component({
         selector: 'appsapp-input-date',
-        template: "\n        <mbsc-form #mbscInstanceForm=\"mobiscroll\" [ngClass]=\"{isInline: isInline}\">\n            <mbsc-input [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-calendar [ngModel]=\"_ngModelGettter | async\"\n                        (ngModelChange)=\"modelChanges($event)\"><span *ngIf=\"!isInline\">{{_label}}</span></mbsc-input>\n        </mbsc-form>\n\n    "
+        template: "\n        <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\" #mbscInstance=\"mobiscroll\"\n                    mbsc-calendar [ngModel]=\"_ngModelGettter | async\"\n                    (ngModelChange)=\"modelChanges($event)\"><span *ngIf=\"!isInline\">{{_label}}</span></mbsc-input>\n\n\n    "
     })
 ], AppsappInputDateComponent);
 exports.AppsappInputDateComponent = AppsappInputDateComponent;

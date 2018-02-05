@@ -93,7 +93,7 @@ __decorate([
 AppsappInputDatesComponent = __decorate([
     core_1.Component({
         selector: 'appsapp-input-dates',
-        template: "\n        <mbsc-form #mbscInstanceForm=\"mobiscroll\">\n            <mbsc-input [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-range [ngModel]=\"range\"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}\n            </mbsc-input>\n        </mbsc-form>\n\n    "
+        template: "\n       \n            <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-range [ngModel]=\"range\"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}\n            </mbsc-input>\n     \n\n    "
     })
 ], AppsappInputDatesComponent);
 exports.AppsappInputDatesComponent = AppsappInputDatesComponent;

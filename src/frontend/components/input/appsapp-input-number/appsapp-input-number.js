@@ -45,7 +45,7 @@ var AppsappInputNumberComponent = (function (_super) {
 AppsappInputNumberComponent = __decorate([
     core_1.Component({
         selector: 'appsapp-input-number',
-        template: "\n        <mbsc-form #mbscInstanceForm=\"mobiscroll\">\n            <mbsc-input [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-numpad-decimal [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n        </mbsc-form>\n\n    "
+        template: "\n        \n            <mbsc-input [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-numpad-decimal [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n\n\n    "
     })
 ], AppsappInputNumberComponent);
 exports.AppsappInputNumberComponent = AppsappInputNumberComponent;

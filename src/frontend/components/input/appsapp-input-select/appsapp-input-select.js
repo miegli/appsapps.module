@@ -149,7 +149,7 @@ __decorate([
 AppsappInputSelectComponent = __decorate([
     core_1.Component({
         selector: 'appsapp-input-select',
-        template: "\n        <mbsc-form #mbscInstanceForm=\"mobiscroll\">\n            <mbsc-input mbsc-select [error]=\"validator | async\" #mbscInstance=\"mobiscroll\"\n                        [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n            </mbsc-input>\n        </mbsc-form>\n    "
+        template: "\n    \n            <mbsc-input mbsc-select [error]=\"validator | async\" #mbscInstance=\"mobiscroll\"\n                        [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n            </mbsc-input>\n     \n    "
     })
 ], AppsappInputSelectComponent);
 exports.AppsappInputSelectComponent = AppsappInputSelectComponent;

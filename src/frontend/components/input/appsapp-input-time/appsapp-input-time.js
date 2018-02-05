@@ -84,7 +84,7 @@ __decorate([
 AppsappInputTimeComponent = __decorate([
     core_1.Component({
         selector: 'appsapp-input-time',
-        template: "\n        <mbsc-form #mbscInstanceForm=\"mobiscroll\" [ngClass]=\"{isInline: isInline}\">\n            <mbsc-input [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-time [ngModel]=\"_ngModelGettter | async\"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n        </mbsc-form>\n\n    "
+        template: "\n     \n            <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-time [ngModel]=\"_ngModelGettter | async\"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n   \n\n    "
     })
 ], AppsappInputTimeComponent);
 exports.AppsappInputTimeComponent = AppsappInputTimeComponent;
