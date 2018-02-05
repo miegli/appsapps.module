@@ -509,11 +509,10 @@ export class PersistenceManager {
 
         return new Promise(function (resolve, reject) {
 
-            if (json == undefined) {
+            if (json == undefined || json == null) {
                 self.storageWrapper.ready().then((data) => {
 
                     self.storageWrapper.get(self.getPersistanceIdentifier(model)).then((json) => {
-
                         if (json) {
                             model.loadJson(json).then((model) => {
                                 resolve(model.emit());

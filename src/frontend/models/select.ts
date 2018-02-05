@@ -7,6 +7,7 @@ export class SelectModel extends PersistableModel {
 
     private options: any = [];
     private data: any = [];
+    private dataCached: any = {};
     private parent: any = null;
     private parentProperty: string = null;
     private url: string = '';
@@ -65,17 +66,30 @@ export class SelectModel extends PersistableModel {
 
             var finalurl = url;
 
+
             if (self.parent && self.parent.getPropertyValue !== undefined) {
+
+
+
                 if (self.matchAll(url, regex)) {
                     self.matchAll(url, regex).forEach((m) => {
                         finalurl = finalurl.replace(m[1], property == m[1].substr(1) ? data : self.parent[m[1].substr(1)]);
                     });
                 }
 
+                var finalurlHash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(finalurl);
+
+
+                if (self.dataCached[finalurlHash] !== undefined && self.dataCached[finalurlHash]) {
+                    self.update('data', JSON.parse(self.dataCached[finalurlHash]));
+                }
 
                 if (finalurl.substr(0, 4) == 'http') {
                     this.getHttpClient().get(finalurl).subscribe((data) => {
+
+                        self.dataCached[finalurlHash] = JSON.stringify(data);
                         self.update('data', data);
+
 
                     }, (error) => {
                         // skip error
@@ -86,8 +100,11 @@ export class SelectModel extends PersistableModel {
                     var path = self.getFirebaseDatabaseSessionPath(finalurl);
 
                     self.parent.getFirebaseDatabase().object(path).query.on('value', (event) => {
+
                         if (event) {
                             let data = event.val();
+
+
 
                             if (data) {
                                 if (typeof data.forEach !== 'function') {
@@ -96,10 +113,13 @@ export class SelectModel extends PersistableModel {
                                         tmp.push(data[v]);
                                     });
 
+                                    self.dataCached[finalurlHash] = JSON.stringify(tmp);
                                     self.update('data', tmp);
+
 
                                 } else {
 
+                                    self.dataCached[finalurlHash] = JSON.stringify(data);
                                     self.update('data', data);
 
                                 }
@@ -108,7 +128,6 @@ export class SelectModel extends PersistableModel {
                             }
 
                         }
-
                     });
 
 
@@ -124,18 +143,18 @@ export class SelectModel extends PersistableModel {
                 self.matchAll(this.url, regex).forEach((m) => {
                     self.parent.watch(m[1].substr(1), (data) => {
                         fetchdata(self.url, m[1].substr(1), data);
-
                     });
                 });
             }
-        } else {
-            fetchdata(this.url);
         }
+
+        fetchdata(this.url);
 
 
         return new Observable<any>((observer: Observer<any>) => {
             let o = observer;
-            self.getProperty('data').subscribe((data) => {
+
+            self.watch('data', (data) => {
 
                 let options = [];
                 let currentHash = self.setHashedValue(data);
@@ -153,25 +172,21 @@ export class SelectModel extends PersistableModel {
                         })
                     });
 
-                    self.update('options', options).saveWithPromise().then(() => {
+                    self.update('options', options);
 
-                        // remove non valid select options from current value
-                        if (Object.keys(allOptions).length && self.parent[self.parentProperty] !== undefined) {
-                            var tmp = [];
-                            self.parent[self.parentProperty].forEach((v) => {
-                                if (allOptions[v] === true) {
-                                    tmp.push(v);
-                                }
-                            });
-                            if (typeof self.parent.setProperty == 'function') {
-                                self.parent.setProperty(self.parentProperty, tmp);
+                    // remove non valid select options from current value
+                    if (Object.keys(allOptions).length && self.parent[self.parentProperty] !== undefined) {
+                        var tmp = [];
+                        self.parent[self.parentProperty].forEach((v) => {
+                            if (allOptions[v] === true) {
+                                tmp.push(v);
                             }
+                        });
+                        if (typeof self.parent.setProperty == 'function') {
+                            self.parent.setProperty(self.parentProperty, tmp);
                         }
+                    }
 
-
-                    }).catch((e) => {
-                        console.log(e);
-                    });
 
                     o.next(options);
                 }

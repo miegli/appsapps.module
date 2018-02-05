@@ -98,12 +98,16 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
 
             if (data.source) {
 
-                this.appsappModuleProvider.new(SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url), {
-                    url: data.source.url,
-                    mapping: data.source.mapping,
-                    parent: self.model,
-                    parentProperty: self.property
-                }).loaded().then((select: any) => {
+               self.select = this.appsappModuleProvider.new(SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url));
+
+               self.select.autosave();
+
+                self.select.loaded().then((select: any) => {
+
+                    self.select.setProperty('url',data.source.url);
+                    self.select.setProperty('mapping',data.source.mapping);
+                    self.select.setProperty('parent',self.model);
+                    self.select.setProperty('parentProperty',self.property);
 
                     select.getOptions().subscribe((options) => {
 
