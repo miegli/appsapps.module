@@ -14,6 +14,7 @@ import {Observer} from "rxjs/Observer";
 @Component({
     selector: 'appsapp-input',
     template: `
+        <mbsc-form #mbscInstanceForm="mobiscroll">
         <ng-container [ngSwitch]="input.type" *ngFor="let input of _inputs">
             <ng-container *ngSwitchCase="'text'">
                 <appsapp-input-text [model]="model" [property]="input.property" [label]="input.label"
@@ -112,7 +113,7 @@ import {Observer} from "rxjs/Observer";
                                     [parentProperty]="input.parentProperty"></appsapp-input-list>
             </ng-container>
         </ng-container>
-
+        </mbsc-form>
     `
 })
 

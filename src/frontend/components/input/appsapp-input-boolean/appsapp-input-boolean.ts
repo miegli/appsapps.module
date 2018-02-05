@@ -10,11 +10,11 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 @Component({
   selector: 'appsapp-input-boolean',
     template: `
-        <mbsc-form #mbscInstanceForm="mobiscroll">
+       
             <mbsc-switch [ngModel]="_ngModelGettter | async" (ngModelChange)="modelChanges($event)">{{_label}}
                 <span class="mbsc-desc">{{_description}}</span>
             </mbsc-switch>
-        </mbsc-form>
+      
 
             `
 })

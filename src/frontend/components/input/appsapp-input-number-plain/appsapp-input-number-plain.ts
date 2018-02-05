@@ -10,9 +10,9 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 @Component({
     selector: 'appsapp-input-number-plain',
     template: `
-      <mbsc-form #mbscInstanceForm="mobiscroll">
+      
         <mbsc-input [error]="validator | async" [ngModel]="_ngModelGettter | async" type="number" (ngModelChange)="modelChanges($event)">{{_label}}</mbsc-input>
-      </mbsc-form>
+   
     `
 })
 export class AppsappInputNumberPlainComponent extends AppsappInputAbstractComponent {

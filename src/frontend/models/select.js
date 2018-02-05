@@ -68,7 +68,8 @@ var SelectModel = (function (_super) {
                     });
                 }
                 if (finalurl.substr(0, 1) == '/') {
-                    self.getFirebaseData(finalurl).then(function (event) {
+                    var path = self.getFirebaseDatabaseSessionPath(finalurl);
+                    self.parent.getFirebaseDatabase().object(path).query.on('value', function (event) {
                         if (event) {
                             var data_1 = event.val();
                             if (data_1) {
@@ -118,14 +119,16 @@ var SelectModel = (function (_super) {
                     });
                     self.update('options', options).saveWithPromise().then(function () {
                         // remove non valid select options from current value
-                        if (Object.keys(allOptions).length) {
+                        if (Object.keys(allOptions).length && self.parent[self.parentProperty] !== undefined) {
                             var tmp = [];
                             self.parent[self.parentProperty].forEach(function (v) {
                                 if (allOptions[v] === true) {
                                     tmp.push(v);
                                 }
                             });
-                            self.parent.setProperty(self.parentProperty, tmp);
+                            if (typeof self.parent.setProperty == 'function') {
+                                self.parent.setProperty(self.parentProperty, tmp);
+                            }
                         }
                     })["catch"](function (e) {
                         console.log(e);

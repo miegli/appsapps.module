@@ -10,9 +10,9 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 @Component({
   selector: 'appsapp-input-password',
     template: `
-        <mbsc-form #mbscInstanceForm="mobiscroll">
+        
             <mbsc-input [error]="validator | async" type="password" [password-toggle]="true" [ngModel]="_ngModelGettter | async" (ngModelChange)="modelChanges($event)">{{_label}}</mbsc-input>
-        </mbsc-form>
+     
 
     `
 })

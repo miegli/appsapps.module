@@ -11,11 +11,11 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 @Component({
   selector: 'appsapp-input-text',
   template: `
-    <mbsc-form #mbscInstanceForm="mobiscroll">
+    
       <mbsc-input [error]="validator | async" [ngModel]="_ngModelGettter | async"
                   (ngModelChange)="modelChanges($event)">{{_label}}
       </mbsc-input>
-    </mbsc-form>
+  
 
   `
 })

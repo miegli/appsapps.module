@@ -14,11 +14,11 @@ import {PersistableModel} from "appsapp-cli";
 @Component({
     selector: 'appsapp-input-select',
     template: `
-        <mbsc-form #mbscInstanceForm="mobiscroll">
+    
             <mbsc-input mbsc-select [error]="validator | async" #mbscInstance="mobiscroll"
                         [ngModel]="_ngModelGettter | async" (ngModelChange)="modelChanges($event)">{{_label}}
             </mbsc-input>
-        </mbsc-form>
+     
     `
 })
 export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
