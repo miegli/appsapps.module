@@ -23,19 +23,19 @@ import {PersistableModel} from "appsapp-cli";
 })
 export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
 
-    @Output() options: any = [];
+    selectoptions: any = [];
     select: SelectModel;
     isUnique: boolean = false;
 
     /**
-     * set options
+     * set selectoptions
      * @param values
      */
     setOptions(values?) {
 
         let self = this;
-        let optionsPreProcessed = [];
-        let currentSelectedOptions = {};
+        let selectoptionsPreProcessed = [];
+        let currentSelectedselectoptions = {};
         let value = values === undefined ? this.model.getParent().getPropertyValue(this.parentProperty) : values;
 
         if (value && value.length) {
@@ -44,7 +44,7 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
                 value.forEach((option) => {
                     if (option instanceof PersistableModel && option.getUuid() !== self.model.getUuid()) {
                         option.getPropertyValue(self.property).forEach((option) => {
-                            currentSelectedOptions[option] = true;
+                            currentSelectedselectoptions[option] = true;
                         })
                     }
 
@@ -54,19 +54,19 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
             });
         }
 
-        let clonedOptions = JSON.parse(JSON.stringify(self.options));
-        clonedOptions.forEach((option) => {
-            if (currentSelectedOptions[option.value] !== undefined) {
+        let clonedselectoptions = JSON.parse(JSON.stringify(self.selectoptions));
+        clonedselectoptions.forEach((option) => {
+            if (currentSelectedselectoptions[option.value] !== undefined) {
                 option.disabled = true;
             }
-            optionsPreProcessed.push(option);
+            selectoptionsPreProcessed.push(option);
         });
 
-        self.mbsc.instance.refresh(optionsPreProcessed);
+        self.mbsc.instance.refresh(selectoptionsPreProcessed);
 
     }
 
-    applyOptionsPostprocess() {
+    applyselectoptionsPostprocess() {
 
         let self = this;
 
@@ -88,12 +88,12 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
             this.isUnique = this.model.getMetadataValue(null, 'isList', this.parentPropertyMetadata, 'uniqueItems');
         }
 
-        self.applyOptionsPostprocess();
+        self.applyselectoptionsPostprocess();
 
         if (data) {
 
-            if (data.options && typeof data.options == 'object') {
-                this.options = data.options;
+            if (data.selectoptions && typeof data.selectoptions == 'object') {
+                this.selectoptions = data.selectoptions;
             }
 
             if (data.source) {
@@ -109,13 +109,13 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
                     self.select.setProperty('parent',self.model);
                     self.select.setProperty('parentProperty',self.property);
 
-                    select.getOptions().subscribe((options) => {
+                    select.getOptions().subscribe((selectoptions) => {
 
-                        self.options = options;
+                        self.selectoptions = selectoptions;
                         if (self.isUnique) {
                             self.setOptions();
                         } else {
-                            self.mbsc.instance.refresh(options);
+                            self.mbsc.instance.refresh(selectoptions);
                         }
                         select.getHashedValues().forEach((v) => {
                             self.model.addHashedValue(v.value, v.hash);
@@ -151,24 +151,25 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
         let self = this;
 
         let groups = {};
-        if (typeof this.options.length == 'number') {
-            this.options.forEach((item) => {
+        if (typeof this.selectoptions.length == 'number') {
+            this.selectoptions.forEach((item) => {
                 if (item.group !== undefined) {
                     groups[item.group] = true;
                 }
             });
         }
 
+        const options = this.model.getMetadataValue(this.property, 'isSelect');
 
         this.setMbscOption({
-            group: self.options.length <= 20 ? {
+            group: self.selectoptions.length <= 20 ? {
                 groupWheel: Object.keys(groups).length > 5,
                 header: Object.keys(groups).length > 0,
                 clustered: Object.keys(groups).length > 2
             } : null,
-            filter: self.options.length > 20,
-            display: 'center',
-            data: self.options,
+            filter: self.selectoptions.length > 20,
+            display: options && options.display ? options.display : (config.getOs() !== 'desktop' ? 'bottom' : 'center'),
+            data: self.selectoptions,
             select: self.model.getMetadataValue(self.property, 'arrayMaxSize') ? self.model.getMetadataValue(self.property, 'arrayMaxSize') : (self.model.isArray(self.property) ? 'multiple' : 'single')
         });
 

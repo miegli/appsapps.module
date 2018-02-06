@@ -107,7 +107,7 @@ export class myModel extends PersistableModel {
   @IsDateRange() daterange: object;
   @IsSelect({
       source: {
-        url: 'https://jsonplaceholder.typicode.com/users/',
+        url: 'https://jsonplaceholder.typicode.com/users',
         mapping: {text: 'address.city', value: 'address.geo'}
       }
     }) adressen: object = [];
@@ -150,7 +150,7 @@ Add `serviceAccountKey.json` to yours project root with your google service acco
 ```
 
 #### Webhook
-You can trigger any http url by calling webhook method. The triggered Url is receiving models serialized data.
+You can trigger any url by calling webhook method. The triggered Url is receiving full object as serialized data by default.
 
 ```typescript
    myModel.webhook('http://your.host/api/rest').subscribe((a) => {
@@ -337,6 +337,8 @@ All of the validators are also available from the `appsapp-module` for  importin
 | `@IsPassword()`        | Set special ui password input element    |
 | `@IsList(itemType, usePropertyAsUuid?)`        | Adds a one-to-many relation of given typeOfItems (reusable model or object)   |
 | `@IsRating(length: number)`        | Set special ui long text   |
+| `@IsSelect(..)`        | Set dropdown ui   |
+| `@HasPlaceholder(placeholder: string)`        | Adds a placeholder to input ui   |
 
 
 ## License

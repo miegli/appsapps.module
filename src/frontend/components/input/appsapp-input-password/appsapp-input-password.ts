@@ -11,7 +11,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
   selector: 'appsapp-input-password',
     template: `
         
-            <mbsc-input [error]="validator | async" type="password" [password-toggle]="true" [ngModel]="_ngModelGettter | async" (ngModelChange)="modelChanges($event)">{{_label}}</mbsc-input>
+            <mbsc-input [error]="validator | async" [placeholder]="placeholder" type="password" [password-toggle]="true" [ngModel]="_ngModelGettter | async" (ngModelChange)="modelChanges($event)">{{_label}}</mbsc-input>
      
 
     `

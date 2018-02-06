@@ -11,7 +11,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
   selector: 'appsapp-input-url',
     template: `
         
-            <mbsc-input [error]="validator | async" type="url" [ngModel]="_ngModelGettter | async" (ngModelChange)="modelChanges($event)">{{_label}}</mbsc-input>
+            <mbsc-input [error]="validator | async" [placeholder]="placeholder" type="url" [ngModel]="_ngModelGettter | async" (ngModelChange)="modelChanges($event)">{{_label}}</mbsc-input>
        
 
     `

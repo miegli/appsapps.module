@@ -18,6 +18,7 @@ var SelectModel = (function (_super) {
         var _this = _super.call(this) || this;
         _this.options = [];
         _this.data = [];
+        _this.dataCached = {};
         _this.parent = null;
         _this.parentProperty = null;
         _this.url = '';
@@ -60,8 +61,13 @@ var SelectModel = (function (_super) {
                         finalurl = finalurl.replace(m[1], property == m[1].substr(1) ? data : self.parent[m[1].substr(1)]);
                     });
                 }
+                var finalurlHash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(finalurl);
+                if (self.dataCached[finalurlHash] !== undefined && self.dataCached[finalurlHash]) {
+                    self.update('data', JSON.parse(self.dataCached[finalurlHash]));
+                }
                 if (finalurl.substr(0, 4) == 'http') {
                     this.getHttpClient().get(finalurl).subscribe(function (data) {
+                        self.dataCached[finalurlHash] = JSON.stringify(data);
                         self.update('data', data);
                     }, function (error) {
                         // skip error
@@ -78,9 +84,11 @@ var SelectModel = (function (_super) {
                                     Object.keys(data_1).forEach(function (v) {
                                         tmp.push(data_1[v]);
                                     });
+                                    self.dataCached[finalurlHash] = JSON.stringify(tmp);
                                     self.update('data', tmp);
                                 }
                                 else {
+                                    self.dataCached[finalurlHash] = JSON.stringify(data_1);
                                     self.update('data', data_1);
                                 }
                             }
@@ -98,12 +106,10 @@ var SelectModel = (function (_super) {
                 });
             }
         }
-        else {
-            fetchdata(this.url);
-        }
+        fetchdata(this.url);
         return new Observable_1.Observable(function (observer) {
             var o = observer;
-            self.getProperty('data').subscribe(function (data) {
+            self.watch('data', function (data) {
                 var options = [];
                 var currentHash = self.setHashedValue(data);
                 var allOptions = {};
@@ -117,22 +123,19 @@ var SelectModel = (function (_super) {
                             disabled: self.mapping.disabled !== undefined ? self._getPropertyFromObject(item, self.mapping.disabled) : false
                         });
                     });
-                    self.update('options', options).saveWithPromise().then(function () {
-                        // remove non valid select options from current value
-                        if (Object.keys(allOptions).length && self.parent[self.parentProperty] !== undefined) {
-                            var tmp = [];
-                            self.parent[self.parentProperty].forEach(function (v) {
-                                if (allOptions[v] === true) {
-                                    tmp.push(v);
-                                }
-                            });
-                            if (typeof self.parent.setProperty == 'function') {
-                                self.parent.setProperty(self.parentProperty, tmp);
+                    self.update('options', options);
+                    // remove non valid select options from current value
+                    if (Object.keys(allOptions).length && self.parent[self.parentProperty] !== undefined) {
+                        var tmp = [];
+                        self.parent[self.parentProperty].forEach(function (v) {
+                            if (allOptions[v] === true) {
+                                tmp.push(v);
                             }
+                        });
+                        if (typeof self.parent.setProperty == 'function') {
+                            self.parent.setProperty(self.parentProperty, tmp);
                         }
-                    })["catch"](function (e) {
-                        console.log(e);
-                    });
+                    }
                     o.next(options);
                 }
                 lastHash = currentHash;

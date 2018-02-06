@@ -348,7 +348,7 @@ var PersistenceManager = (function () {
     PersistenceManager.prototype.load = function (model, json) {
         var self = this;
         return new Promise(function (resolve, reject) {
-            if (json == undefined) {
+            if (json == undefined || json == null) {
                 self.storageWrapper.ready().then(function (data) {
                     self.storageWrapper.get(self.getPersistanceIdentifier(model)).then(function (json) {
                         if (json) {

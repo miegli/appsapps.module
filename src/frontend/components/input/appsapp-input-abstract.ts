@@ -28,6 +28,7 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
     @Output() validator: Observable<any>;
     @Output() hidden: boolean = false;
     @Output() errormsg: string = '';
+    @Output() placeholder: string = '';
 
 
     @ViewChild('mbscInstance') public mbsc;
@@ -37,9 +38,6 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
 
         super(appsappModuleProvider);
         this.init();
-
-
-
 
     }
 
@@ -62,6 +60,8 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
                 self._ngModelGettterObserver = observer;
                 window.setTimeout(() => {
                     self._ngModelGettterObserver.next(self.model.getPropertyValue(self.property));
+                    var p = self.model.getMetadataValue(self.property, 'hasPlaceholder')
+                    self.placeholder =  p ? p : '';
                 },1);
 
             });
@@ -72,6 +72,7 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
                     self._ngModelGettterObserver.next(value);
                 }
             });
+
 
 
         }

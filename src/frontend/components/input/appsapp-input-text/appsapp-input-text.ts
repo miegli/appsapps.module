@@ -12,7 +12,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
   selector: 'appsapp-input-text',
   template: `
     
-      <mbsc-input [error]="validator | async" [ngModel]="_ngModelGettter | async"
+      <mbsc-input [error]="validator | async" [placeholder]="placeholder" [ngModel]="_ngModelGettter | async"
                   (ngModelChange)="modelChanges($event)">{{_label}}
       </mbsc-input>
   
