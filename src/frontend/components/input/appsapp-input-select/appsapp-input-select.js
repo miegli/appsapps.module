@@ -30,40 +30,40 @@ var AppsappInputSelectComponent = (function (_super) {
     __extends(AppsappInputSelectComponent, _super);
     function AppsappInputSelectComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.options = [];
+        _this.selectoptions = [];
         _this.isUnique = false;
         return _this;
     }
     /**
-     * set options
+     * set selectoptions
      * @param values
      */
     AppsappInputSelectComponent.prototype.setOptions = function (values) {
         var self = this;
-        var optionsPreProcessed = [];
-        var currentSelectedOptions = {};
+        var selectoptionsPreProcessed = [];
+        var currentSelectedselectoptions = {};
         var value = values === undefined ? this.model.getParent().getPropertyValue(this.parentProperty) : values;
         if (value && value.length) {
             value.forEach(function () {
                 value.forEach(function (option) {
                     if (option instanceof appsapp_cli_1.PersistableModel && option.getUuid() !== self.model.getUuid()) {
                         option.getPropertyValue(self.property).forEach(function (option) {
-                            currentSelectedOptions[option] = true;
+                            currentSelectedselectoptions[option] = true;
                         });
                     }
                 });
             });
         }
-        var clonedOptions = JSON.parse(JSON.stringify(self.options));
-        clonedOptions.forEach(function (option) {
-            if (currentSelectedOptions[option.value] !== undefined) {
+        var clonedselectoptions = JSON.parse(JSON.stringify(self.selectoptions));
+        clonedselectoptions.forEach(function (option) {
+            if (currentSelectedselectoptions[option.value] !== undefined) {
                 option.disabled = true;
             }
-            optionsPreProcessed.push(option);
+            selectoptionsPreProcessed.push(option);
         });
-        self.mbsc.instance.refresh(optionsPreProcessed);
+        self.mbsc.instance.refresh(selectoptionsPreProcessed);
     };
-    AppsappInputSelectComponent.prototype.applyOptionsPostprocess = function () {
+    AppsappInputSelectComponent.prototype.applyselectoptionsPostprocess = function () {
         var self = this;
         if (this.isUnique) {
             this.model.getParent().getChangesWithCallback(function (event) {
@@ -79,10 +79,10 @@ var AppsappInputSelectComponent = (function (_super) {
         if (this.parentPropertyMetadata) {
             this.isUnique = this.model.getMetadataValue(null, 'isList', this.parentPropertyMetadata, 'uniqueItems');
         }
-        self.applyOptionsPostprocess();
+        self.applyselectoptionsPostprocess();
         if (data) {
-            if (data.options && typeof data.options == 'object') {
-                this.options = data.options;
+            if (data.selectoptions && typeof data.selectoptions == 'object') {
+                this.selectoptions = data.selectoptions;
             }
             if (data.source) {
                 self.select = this.appsappModuleProvider["new"](select_1.SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url));
@@ -92,13 +92,13 @@ var AppsappInputSelectComponent = (function (_super) {
                     self.select.setProperty('mapping', data.source.mapping);
                     self.select.setProperty('parent', self.model);
                     self.select.setProperty('parentProperty', self.property);
-                    select.getOptions().subscribe(function (options) {
-                        self.options = options;
+                    select.getOptions().subscribe(function (selectoptions) {
+                        self.selectoptions = selectoptions;
                         if (self.isUnique) {
                             self.setOptions();
                         }
                         else {
-                            self.mbsc.instance.refresh(options);
+                            self.mbsc.instance.refresh(selectoptions);
                         }
                         select.getHashedValues().forEach(function (v) {
                             self.model.addHashedValue(v.value, v.hash);
@@ -123,30 +123,28 @@ var AppsappInputSelectComponent = (function (_super) {
     AppsappInputSelectComponent.prototype.afterInit = function (config) {
         var self = this;
         var groups = {};
-        if (typeof this.options.length == 'number') {
-            this.options.forEach(function (item) {
+        if (typeof this.selectoptions.length == 'number') {
+            this.selectoptions.forEach(function (item) {
                 if (item.group !== undefined) {
                     groups[item.group] = true;
                 }
             });
         }
+        var options = this.model.getMetadataValue(this.property, 'isSelect');
         this.setMbscOption({
-            group: self.options.length <= 20 ? {
+            group: self.selectoptions.length <= 20 ? {
                 groupWheel: Object.keys(groups).length > 5,
                 header: Object.keys(groups).length > 0,
                 clustered: Object.keys(groups).length > 2
             } : null,
-            filter: self.options.length > 20,
-            display: 'center',
-            data: self.options,
+            filter: self.selectoptions.length > 20,
+            display: options && options.display ? options.display : (config.getOs() !== 'desktop' ? 'bottom' : 'center'),
+            data: self.selectoptions,
             select: self.model.getMetadataValue(self.property, 'arrayMaxSize') ? self.model.getMetadataValue(self.property, 'arrayMaxSize') : (self.model.isArray(self.property) ? 'multiple' : 'single')
         });
     };
     return AppsappInputSelectComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
-__decorate([
-    core_1.Output()
-], AppsappInputSelectComponent.prototype, "options");
 AppsappInputSelectComponent = __decorate([
     core_1.Component({
         selector: 'appsapp-input-select',

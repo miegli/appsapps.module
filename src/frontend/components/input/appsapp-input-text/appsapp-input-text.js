@@ -71,7 +71,7 @@ var AppsappInputTextComponent = (function (_super) {
 AppsappInputTextComponent = __decorate([
     core_1.Component({
         selector: 'appsapp-input-text',
-        template: "\n    \n      <mbsc-input [error]=\"validator | async\" [ngModel]=\"_ngModelGettter | async\"\n                  (ngModelChange)=\"modelChanges($event)\">{{_label}}\n      </mbsc-input>\n  \n\n  "
+        template: "\n    \n      <mbsc-input [error]=\"validator | async\" [placeholder]=\"placeholder\" [ngModel]=\"_ngModelGettter | async\"\n                  (ngModelChange)=\"modelChanges($event)\">{{_label}}\n      </mbsc-input>\n  \n\n  "
     })
 ], AppsappInputTextComponent);
 exports.AppsappInputTextComponent = AppsappInputTextComponent;

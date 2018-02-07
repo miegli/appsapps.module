@@ -91,7 +91,7 @@
                                     <a href="../components/AppsappInputBooleanComponent.html" >AppsappInputBooleanComponent</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../components/AppsappInputComponent.html"  data-type="entity-link" class="active" >AppsappInputComponent</a>
+                                    <a href="../components/AppsappInputComponent.html" >AppsappInputComponent</a>
                                 </li>
                                 <li class="link">
                                     <a href="../components/AppsappInputDateComponent.html" >AppsappInputDateComponent</a>
@@ -118,7 +118,7 @@
                                     <a href="../components/AppsappInputPasswordComponent.html" >AppsappInputPasswordComponent</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../components/AppsappInputSelectComponent.html" >AppsappInputSelectComponent</a>
+                                    <a href="../components/AppsappInputSelectComponent.html"  data-type="entity-link" class="active" >AppsappInputSelectComponent</a>
                                 </li>
                                 <li class="link">
                                     <a href="../components/AppsappInputTelComponent.html" >AppsappInputTelComponent</a>
@@ -308,7 +308,7 @@
                                            <a href="../components/AppsappInputBooleanComponent.html" >AppsappInputBooleanComponent</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../components/AppsappInputComponent.html"  data-type="entity-link" class="active" >AppsappInputComponent</a>
+                                           <a href="../components/AppsappInputComponent.html" >AppsappInputComponent</a>
                                        </li>
                                        <li class="link">
                                            <a href="../components/AppsappInputDateComponent.html" >AppsappInputDateComponent</a>
@@ -335,7 +335,7 @@
                                            <a href="../components/AppsappInputPasswordComponent.html" >AppsappInputPasswordComponent</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../components/AppsappInputSelectComponent.html" >AppsappInputSelectComponent</a>
+                                           <a href="../components/AppsappInputSelectComponent.html"  data-type="entity-link" class="active" >AppsappInputSelectComponent</a>
                                        </li>
                                        <li class="link">
                                            <a href="../components/AppsappInputTelComponent.html" >AppsappInputTelComponent</a>
@@ -456,7 +456,7 @@
 
 <ol class="breadcrumb">
   <li>Components</li>
-  <li>AppsappInputComponent</li>
+  <li>AppsappInputSelectComponent</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -478,14 +478,14 @@
     <h3>File</h3>
 </p>
 <p class="comment">
-    <code>src/frontend/components/input/appsapp-input/appsapp-input.ts</code>
+    <code>src/frontend/components/input/appsapp-input-select/appsapp-input-select.ts</code>
 </p>
 
     <p class="comment">
         <h3>Description</h3>
     </p>
     <p class="comment">
-        <p>Generate d class for the AppsappInputComponent component.</p>
+        <p>Generated class for the AppsappInputSelectComponent component.</p>
 <p>See <a href="https://angular.io/api/core/Component">https://angular.io/api/core/Component</a> for more info on Angular
 Components.</p>
 
@@ -495,7 +495,7 @@ Components.</p>
         <h3>Extends</h3>
     </p>
     <p class="comment">
-            <code><a href="../classes/AbstractComponent.html" target="_self" >AbstractComponent</a></code>
+            <code><a href="../classes/AbstractComponent.html" target="_self" >AppsappInputAbstractComponent</a></code>
     </p>
 
 
@@ -518,7 +518,7 @@ Components.</p>
 
             <tr>
                 <td class="col-md-3">selector</td>
-                <td class="col-md-9"><code>appsapp-input</code></td>
+                <td class="col-md-9"><code>appsapp-input-select</code></td>
             </tr>
 
 
@@ -543,10 +543,13 @@ Components.</p>
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                <span class="modifier">Private</span> <a href="#_model">_model</a>
+                                 <a href="#isUnique">isUnique</a>
                             </li>
                             <li>
-                                <span class="modifier">Public</span> <a href="#appsappModuleProvider">appsappModuleProvider</a>
+                                 <a href="#select">select</a>
+                            </li>
+                            <li>
+                                 <a href="#selectoptions">selectoptions</a>
                             </li>
                         </ul>
                     </td>
@@ -560,59 +563,16 @@ Components.</p>
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                 <a href="#isHidden">isHidden</a>
+                                 <a href="#afterInit">afterInit</a>
                             </li>
                             <li>
-                                 <a href="#ngOnInit">ngOnInit</a>
+                                 <a href="#applyselectoptionsPostprocess">applyselectoptionsPostprocess</a>
                             </li>
                             <li>
-                                 <a href="#ngOnInitExecute">ngOnInitExecute</a>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <h6><b>Inputs</b></h6>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <ul class="index-list">
-                            <li>
-                                <a href="#label">label</a>
+                                 <a href="#ngAfterContentInit">ngAfterContentInit</a>
                             </li>
                             <li>
-                                <a href="#model">model</a>
-                            </li>
-                            <li>
-                                <a href="#parentProperty">parentProperty</a>
-                            </li>
-                            <li>
-                                <a href="#parentPropertyMetadata">parentPropertyMetadata</a>
-                            </li>
-                            <li>
-                                <a href="#property">property</a>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <h6><b>Outputs</b></h6>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <ul class="index-list">
-                            <li>
-                                <a href="#_inputs">_inputs</a>
-                            </li>
-                            <li>
-                                <a href="#hidden">hidden</a>
-                            </li>
-                            <li>
-                                <a href="#options">options</a>
+                                 <a href="#setOptions">setOptions</a>
                             </li>
                         </ul>
                     </td>
@@ -621,222 +581,8 @@ Components.</p>
         </table>
     </section>
 
-    <section>
-        <h3 id="constructor">Constructor</h3>
-            <table class="table table-sm table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="col-md-4">
-                            <code>constructor(appsappModuleProvider: <a href="../classes/AppsappModuleProvider.html">AppsappModuleProvider</a>)</code>
-                        </td>
-                    </tr>
-                            <tr>
-                                <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="131" class="link-to-prism">src/frontend/components/input/appsapp-input/appsapp-input.ts:131</a></div>
-                                </td>
-                            </tr>
-    
-                    <tr>
-                        <td class="col-md-4">
-                                <div>
-                                        <b>Parameters :</b>
-                                        <table class="params">
-                                            <thead>
-                                                <tr>
-                                                    <td>Name</td>
-                                                    <td>Type</td>
-                                                    <td>Optional</td>
-                                                    <td>Description</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                    <tr>
-                                                      <td>appsappModuleProvider</td>
-                                                      <td>
-                                                                <code><a href="../classes/AppsappModuleProvider.html" target="_self" >AppsappModuleProvider</a></code>
-                                                      </td>
-                                                      <td>
-                                                      </td>
-                                                      <td></td>
-                                                    </tr>
-                                            </tbody>
-                                        </table>
-                                </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-    </section>
 
-    <section>
-        <h3 id="inputs">Inputs</h3>
-            <table class="table table-sm table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="col-md-2">
-                            <a name="label"></a>
-                            <code>label</code>
-                        </td>
-                        <td class="col-md-10">
-                              <p>
-                                <em>Type:</em>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
 
-                              </p>
-                        </td>
-                    </tr>
-                            <tr>
-                                <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="127" class="link-to-prism">src/frontend/components/input/appsapp-input/appsapp-input.ts:127</a></div>
-                                </td>
-                            </tr>
-                </tbody>
-            </table>
-            <table class="table table-sm table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="col-md-2">
-                            <a name="model"></a>
-                            <code>model</code>
-                        </td>
-                        <td class="col-md-10">
-                              <p>
-                                <em>Type:</em>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-
-                              </p>
-                        </td>
-                    </tr>
-                            <tr>
-                                <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="126" class="link-to-prism">src/frontend/components/input/appsapp-input/appsapp-input.ts:126</a></div>
-                                </td>
-                            </tr>
-                </tbody>
-            </table>
-            <table class="table table-sm table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="col-md-2">
-                            <a name="parentProperty"></a>
-                            <code>parentProperty</code>
-                        </td>
-                        <td class="col-md-10">
-                              <p>
-                                <em>Type:</em>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-
-                              </p>
-                        </td>
-                    </tr>
-                            <tr>
-                                <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="125" class="link-to-prism">src/frontend/components/input/appsapp-input/appsapp-input.ts:125</a></div>
-                                </td>
-                            </tr>
-                </tbody>
-            </table>
-            <table class="table table-sm table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="col-md-2">
-                            <a name="parentPropertyMetadata"></a>
-                            <code>parentPropertyMetadata</code>
-                        </td>
-                        <td class="col-md-10">
-                              <p>
-                                <em>Type:</em>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-
-                              </p>
-                        </td>
-                    </tr>
-                            <tr>
-                                <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="124" class="link-to-prism">src/frontend/components/input/appsapp-input/appsapp-input.ts:124</a></div>
-                                </td>
-                            </tr>
-                </tbody>
-            </table>
-            <table class="table table-sm table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="col-md-2">
-                            <a name="property"></a>
-                            <code>property</code>
-                        </td>
-                        <td class="col-md-10">
-                              <p>
-                                <em>Type:</em>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-
-                              </p>
-                        </td>
-                    </tr>
-                            <tr>
-                                <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="123" class="link-to-prism">src/frontend/components/input/appsapp-input/appsapp-input.ts:123</a></div>
-                                </td>
-                            </tr>
-                </tbody>
-            </table>
-    </section>
-
-    <section>
-        <h3 id="outputs">Outputs</h3>
-            <table class="table table-sm table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="col-md-2">
-                            <a name="_inputs"></a>
-                            <code>_inputs</code>
-                        </td>
-                        <td class="col-md-10">
-                            <em><code>$event</code> type:</em>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-
-                        </td>
-                    </tr>
-                            <tr>
-                                <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="129" class="link-to-prism">src/frontend/components/input/appsapp-input/appsapp-input.ts:129</a></div>
-                                </td>
-                            </tr>
-                </tbody>
-            </table>
-            <table class="table table-sm table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="col-md-2">
-                            <a name="hidden"></a>
-                            <code>hidden</code>
-                        </td>
-                        <td class="col-md-10">
-                            <em><code>$event</code> type:</em>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
-
-                        </td>
-                    </tr>
-                            <tr>
-                                <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="130" class="link-to-prism">src/frontend/components/input/appsapp-input/appsapp-input.ts:130</a></div>
-                                </td>
-                            </tr>
-                </tbody>
-            </table>
-            <table class="table table-sm table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="col-md-2">
-                            <a name="options"></a>
-                            <code>options</code>
-                        </td>
-                        <td class="col-md-10">
-                            <em><code>$event</code> type:</em>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-
-                        </td>
-                    </tr>
-                            <tr>
-                                <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="128" class="link-to-prism">src/frontend/components/input/appsapp-input/appsapp-input.ts:128</a></div>
-                                </td>
-                            </tr>
-                </tbody>
-            </table>
-    </section>
 
 
 
@@ -849,27 +595,25 @@ Components.</p>
                 <tbody>
                     <tr>
                         <td class="col-md-4">
-                            <a name="isHidden"></a>
-                            <span class="name"><b> isHidden</b><a href="#isHidden"><span class="fa fa-link"></span></a></span>
+                            <a name="afterInit"></a>
+                            <span class="name"><b> afterInit</b><a href="#afterInit"><span class="fa fa-link"></span></a></span>
                         </td>
                     </tr>
                     <tr>
                         <td class="col-md-4">
-    <code>isHidden(condition: )</code>
+    <code>afterInit(config: )</code>
                         </td>
                     </tr>
     
     
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="213" class="link-to-prism">src/frontend/components/input/appsapp-input/appsapp-input.ts:213</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="149" class="link-to-prism">src/frontend/components/input/appsapp-input-select/appsapp-input-select.ts:149</a></div>
                                 </td>
                             </tr>
     
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-description"><p>get is hidden from condition action</p>
-    </div>
     
                                 <div class="io-description">
                                         <b>Parameters :</b>
@@ -884,7 +628,7 @@ Components.</p>
                                             </thead>
                                             <tbody>
                                                     <tr>
-                                                      <td>condition</td>
+                                                      <td>config</td>
                                                       <td>
                                                       </td>
                                                       <td>
@@ -897,7 +641,7 @@ Components.</p>
                                 <div>
                                 </div>
                                 <div class="io-description">
-                                    <b>Returns : </b>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
     
                                 </div>
                                     <div class="io-description">
@@ -911,20 +655,20 @@ Components.</p>
                 <tbody>
                     <tr>
                         <td class="col-md-4">
-                            <a name="ngOnInit"></a>
-                            <span class="name"><b> ngOnInit</b><a href="#ngOnInit"><span class="fa fa-link"></span></a></span>
+                            <a name="applyselectoptionsPostprocess"></a>
+                            <span class="name"><b> applyselectoptionsPostprocess</b><a href="#applyselectoptionsPostprocess"><span class="fa fa-link"></span></a></span>
                         </td>
                     </tr>
                     <tr>
                         <td class="col-md-4">
-    <code>ngOnInit()</code>
+    <code>applyselectoptionsPostprocess()</code>
                         </td>
                     </tr>
     
     
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="182" class="link-to-prism">src/frontend/components/input/appsapp-input/appsapp-input.ts:182</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="69" class="link-to-prism">src/frontend/components/input/appsapp-input-select/appsapp-input-select.ts:69</a></div>
                                 </td>
                             </tr>
     
@@ -943,25 +687,59 @@ Components.</p>
                 <tbody>
                     <tr>
                         <td class="col-md-4">
-                            <a name="ngOnInitExecute"></a>
-                            <span class="name"><b> ngOnInitExecute</b><a href="#ngOnInitExecute"><span class="fa fa-link"></span></a></span>
+                            <a name="ngAfterContentInit"></a>
+                            <span class="name"><b> ngAfterContentInit</b><a href="#ngAfterContentInit"><span class="fa fa-link"></span></a></span>
                         </td>
                     </tr>
                     <tr>
                         <td class="col-md-4">
-    <code>ngOnInitExecute(model: )</code>
+    <code>ngAfterContentInit()</code>
                         </td>
                     </tr>
     
     
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="137" class="link-to-prism">src/frontend/components/input/appsapp-input/appsapp-input.ts:137</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="82" class="link-to-prism">src/frontend/components/input/appsapp-input-select/appsapp-input-select.ts:82</a></div>
                                 </td>
                             </tr>
     
                     <tr>
                         <td class="col-md-4">
+    
+                                <div class="io-description">
+                                    <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+    
+                                </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="setOptions"></a>
+                            <span class="name"><b> setOptions</b><a href="#setOptions"><span class="fa fa-link"></span></a></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+    <code>setOptions(values?: )</code>
+                        </td>
+                    </tr>
+    
+    
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/frontend/components/input/appsapp-input-select/appsapp-input-select.ts:34</a></div>
+                                </td>
+                            </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-description"><p>set selectoptions</p>
+    </div>
     
                                 <div class="io-description">
                                         <b>Parameters :</b>
@@ -976,10 +754,11 @@ Components.</p>
                                             </thead>
                                             <tbody>
                                                     <tr>
-                                                      <td>model</td>
+                                                      <td>values</td>
                                                       <td>
                                                       </td>
                                                       <td>
+                                                          true
                                                       </td>
                                                       <td></td>
                                                     </tr>
@@ -1010,25 +789,30 @@ Components.</p>
                 <tbody>
                     <tr>
                         <td class="col-md-4">
-                            <a name="_model"></a>
-                            <span class="name"><b><span class="modifier">Private</span> _model</b><a href="#_model"><span class="fa fa-link"></span></a></span>
+                            <a name="isUnique"></a>
+                            <span class="name"><b> isUnique</b><a href="#isUnique"><span class="fa fa-link"></span></a></span>
                         </td>
                     </tr>
                     <tr>
                         <td class="col-md-4">
-                            <span class="modifier-icon fa fa-lock"></span><code>_model:     <code>Observable&lt;any&gt;</code>
+                            <code>isUnique:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
     </code>
                         </td>
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                <i>Type : </i>    <code>Observable&lt;any&gt;</code>
+                                <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
     
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Default value : </i><code>false</code>
                             </td>
                         </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="131" class="link-to-prism">src/frontend/components/input/appsapp-input/appsapp-input.ts:131</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/frontend/components/input/appsapp-input-select/appsapp-input-select.ts:28</a></div>
                                 </td>
                             </tr>
     
@@ -1039,25 +823,54 @@ Components.</p>
                 <tbody>
                     <tr>
                         <td class="col-md-4">
-                            <a name="appsappModuleProvider"></a>
-                            <span class="name"><b><span class="modifier">Public</span> appsappModuleProvider</b><a href="#appsappModuleProvider"><span class="fa fa-link"></span></a></span>
+                            <a name="select"></a>
+                            <span class="name"><b> select</b><a href="#select"><span class="fa fa-link"></span></a></span>
                         </td>
                     </tr>
                     <tr>
                         <td class="col-md-4">
-                            <span class="modifier-icon fa fa-reset"></span><code>appsappModuleProvider:     <code><a href="../classes/AppsappModuleProvider.html" target="_self" >AppsappModuleProvider</a></code>
+                            <code>select:     <code><a href="../classes/SelectModel.html" target="_self" >SelectModel</a></code>
     </code>
                         </td>
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                <i>Type : </i>    <code><a href="../classes/AppsappModuleProvider.html" target="_self" >AppsappModuleProvider</a></code>
+                                <i>Type : </i>    <code><a href="../classes/SelectModel.html" target="_self" >SelectModel</a></code>
     
                             </td>
                         </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="133" class="link-to-prism">src/frontend/components/input/appsapp-input/appsapp-input.ts:133</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/frontend/components/input/appsapp-input-select/appsapp-input-select.ts:27</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="selectoptions"></a>
+                            <span class="name"><b> selectoptions</b><a href="#selectoptions"><span class="fa fa-link"></span></a></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>selectoptions:     <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Type : </i>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+    
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/frontend/components/input/appsapp-input-select/appsapp-input-select.ts:26</a></div>
                                 </td>
                             </tr>
     
@@ -1070,243 +883,185 @@ Components.</p>
 
 
     <div class="tab-pane fade tab-source-code" id="source">
-        <pre class="line-numbers"><code class="language-typescript">import {Component, Input} from &#x27;@angular/core&#x27;;
-import {AbstractComponent} from &quot;../../abstractComponent&quot;;
-import {AppsappModuleProvider} from &quot;../../../providers/appsapp-module-provider&quot;;
-import {Output} from &quot;@angular/core&quot;;
-import {Observable} from &quot;rxjs/Observable&quot;;
-import {Observer} from &quot;rxjs/Observer&quot;;
+        <pre class="line-numbers"><code class="language-typescript">import {Component, Output} from &#x27;@angular/core&#x27;;
+import {AppsappInputAbstractComponent} from &quot;../appsapp-input-abstract&quot;;
+import {SelectModel} from &quot;../../../models/select&quot;;
+import * as objectHash from &#x27;object-hash&#x27;;
+import {PersistableModel} from &quot;appsapp-cli&quot;;
+
 
 /**
- * Generate d class for the AppsappInputComponent component.
+ * Generated class for the AppsappInputSelectComponent component.
  *
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
 @Component({
-    selector: &#x27;appsapp-input&#x27;,
+    selector: &#x27;appsapp-input-select&#x27;,
     template: &#x60;
-        &lt;mbsc-form #mbscInstanceForm&#x3D;&quot;mobiscroll&quot;&gt;
-        &lt;ng-container [ngSwitch]&#x3D;&quot;input.type&quot; *ngFor&#x3D;&quot;let input of _inputs&quot;&gt;
-            &lt;ng-container *ngSwitchCase&#x3D;&quot;&#x27;text&#x27;&quot;&gt;
-                &lt;appsapp-input-text [model]&#x3D;&quot;model&quot; [property]&#x3D;&quot;input.property&quot; [label]&#x3D;&quot;input.label&quot;
-                                    [hidden]&#x3D;&quot;input.hidden | async&quot;
-                                    [parentPropertyMetadata]&#x3D;&quot;input.parentPropertyMetadata&quot;
-                                    [parentProperty]&#x3D;&quot;input.parentProperty&quot;&gt;&lt;/appsapp-input-text&gt;
-            &lt;/ng-container&gt;
-            &lt;ng-container *ngSwitchCase&#x3D;&quot;&#x27;number&#x27;&quot;&gt;
-                &lt;appsapp-input-number [model]&#x3D;&quot;model&quot; [property]&#x3D;&quot;input.property&quot; [label]&#x3D;&quot;input.label&quot;
-                                      [hidden]&#x3D;&quot;input.hidden | async&quot;
-                                      [parentPropertyMetadata]&#x3D;&quot;input.parentPropertyMetadata&quot;
-                                      [parentProperty]&#x3D;&quot;input.parentProperty&quot;&gt;&lt;/appsapp-input-number&gt;
-            &lt;/ng-container&gt;
-            &lt;ng-container *ngSwitchCase&#x3D;&quot;&#x27;numberplain&#x27;&quot;&gt;
-                &lt;appsapp-input-number-plain [model]&#x3D;&quot;model&quot; [property]&#x3D;&quot;input.property&quot; [label]&#x3D;&quot;input.label&quot;
-                                            [hidden]&#x3D;&quot;input.hidden | async&quot;
-                                            [parentPropertyMetadata]&#x3D;&quot;input.parentPropertyMetadata&quot;
-                                            [parentProperty]&#x3D;&quot;input.parentProperty&quot;&gt;&lt;/appsapp-input-number-plain&gt;
-            &lt;/ng-container&gt;
-            &lt;ng-container *ngSwitchCase&#x3D;&quot;&#x27;integer&#x27;&quot;&gt;
-                &lt;appsapp-input-integer [model]&#x3D;&quot;model&quot; [property]&#x3D;&quot;input.property&quot; [label]&#x3D;&quot;input.label&quot;
-                                       [hidden]&#x3D;&quot;input.hidden | async&quot;
-                                       [parentPropertyMetadata]&#x3D;&quot;input.parentPropertyMetadata&quot;
-                                       [parentProperty]&#x3D;&quot;input.parentProperty&quot;&gt;&lt;/appsapp-input-integer&gt;
-            &lt;/ng-container&gt;
-            &lt;ng-container *ngSwitchCase&#x3D;&quot;&#x27;tel&#x27;&quot;&gt;
-                &lt;appsapp-input-tel [model]&#x3D;&quot;model&quot; [property]&#x3D;&quot;input.property&quot; [label]&#x3D;&quot;input.label&quot;
-                                   [hidden]&#x3D;&quot;input.hidden | async&quot;
-                                   [parentPropertyMetadata]&#x3D;&quot;input.parentPropertyMetadata&quot;
-                                   [parentProperty]&#x3D;&quot;input.parentProperty&quot;&gt;&lt;/appsapp-input-tel&gt;
-            &lt;/ng-container&gt;
-            &lt;ng-container *ngSwitchCase&#x3D;&quot;&#x27;password&#x27;&quot;&gt;
-                &lt;appsapp-input-password [model]&#x3D;&quot;model&quot; [property]&#x3D;&quot;input.property&quot; [label]&#x3D;&quot;input.label&quot;
-                                        [hidden]&#x3D;&quot;input.hidden | async&quot;
-                                        [parentPropertyMetadata]&#x3D;&quot;input.parentPropertyMetadata&quot;
-                                        [parentProperty]&#x3D;&quot;input.parentProperty&quot;&gt;&lt;/appsapp-input-password&gt;
-            &lt;/ng-container&gt;
-            &lt;ng-container *ngSwitchCase&#x3D;&quot;&#x27;email&#x27;&quot;&gt;
-                &lt;appsapp-input-email [model]&#x3D;&quot;model&quot; [property]&#x3D;&quot;input.property&quot; [label]&#x3D;&quot;input.label&quot;
-                                     [hidden]&#x3D;&quot;input.hidden | async&quot;
-                                     [parentPropertyMetadata]&#x3D;&quot;input.parentPropertyMetadata&quot;
-                                     [parentProperty]&#x3D;&quot;input.parentProperty&quot;&gt;&lt;/appsapp-input-email&gt;
-            &lt;/ng-container&gt;
-            &lt;ng-container *ngSwitchCase&#x3D;&quot;&#x27;url&#x27;&quot;&gt;
-                &lt;appsapp-input-url [model]&#x3D;&quot;model&quot; [property]&#x3D;&quot;input.property&quot; [label]&#x3D;&quot;input.label&quot;
-                                   [hidden]&#x3D;&quot;input.hidden | async&quot;
-                                   [parentPropertyMetadata]&#x3D;&quot;input.parentPropertyMetadata&quot;
-                                   [parentProperty]&#x3D;&quot;input.parentProperty&quot;&gt;&lt;/appsapp-input-url&gt;
-            &lt;/ng-container&gt;
-            &lt;ng-container *ngSwitchCase&#x3D;&quot;&#x27;textarea&#x27;&quot;&gt;
-                &lt;appsapp-input-textarea [model]&#x3D;&quot;model&quot; [property]&#x3D;&quot;input.property&quot; [label]&#x3D;&quot;input.label&quot;
-                                        [hidden]&#x3D;&quot;input.hidden | async&quot;
-                                        [parentPropertyMetadata]&#x3D;&quot;input.parentPropertyMetadata&quot;
-                                        [parentProperty]&#x3D;&quot;input.parentProperty&quot;&gt;&lt;/appsapp-input-textarea&gt;
-            &lt;/ng-container&gt;
-            &lt;ng-container *ngSwitchCase&#x3D;&quot;&#x27;time&#x27;&quot;&gt;
-                &lt;appsapp-input-time [model]&#x3D;&quot;model&quot; [property]&#x3D;&quot;input.property&quot; [label]&#x3D;&quot;input.label&quot;
-                                    [hidden]&#x3D;&quot;input.hidden | async&quot;
-                                    [parentPropertyMetadata]&#x3D;&quot;input.parentPropertyMetadata&quot;
-                                    [parentProperty]&#x3D;&quot;input.parentProperty&quot;&gt;&lt;/appsapp-input-time&gt;
-            &lt;/ng-container&gt;    
-            &lt;ng-container *ngSwitchCase&#x3D;&quot;&#x27;date&#x27;&quot;&gt;
-                &lt;appsapp-input-date [model]&#x3D;&quot;model&quot; [property]&#x3D;&quot;input.property&quot; [label]&#x3D;&quot;input.label&quot;
-                                    [hidden]&#x3D;&quot;input.hidden | async&quot;
-                                    [parentPropertyMetadata]&#x3D;&quot;input.parentPropertyMetadata&quot;
-                                    [parentProperty]&#x3D;&quot;input.parentProperty&quot;&gt;&lt;/appsapp-input-date&gt;
-            &lt;/ng-container&gt;
-            &lt;ng-container *ngSwitchCase&#x3D;&quot;&#x27;dates&#x27;&quot;&gt;
-                &lt;appsapp-input-dates [model]&#x3D;&quot;model&quot; [property]&#x3D;&quot;input.property&quot; [label]&#x3D;&quot;input.label&quot;
-                                     [hidden]&#x3D;&quot;input.hidden | async&quot;
-                                     [parentPropertyMetadata]&#x3D;&quot;input.parentPropertyMetadata&quot;
-                                     [parentProperty]&#x3D;&quot;input.parentProperty&quot;&gt;&lt;/appsapp-input-dates&gt;
-            &lt;/ng-container&gt;
-            &lt;ng-container *ngSwitchCase&#x3D;&quot;&#x27;boolean&#x27;&quot;&gt;
-                &lt;appsapp-input-boolean [model]&#x3D;&quot;model&quot; [property]&#x3D;&quot;input.property&quot; [label]&#x3D;&quot;input.label&quot;
-                                       [hidden]&#x3D;&quot;input.hidden | async&quot;
-                                       [parentPropertyMetadata]&#x3D;&quot;input.parentPropertyMetadata&quot;
-                                       [parentProperty]&#x3D;&quot;input.parentProperty&quot;&gt;&lt;/appsapp-input-boolean&gt;
-            &lt;/ng-container&gt;
-            &lt;ng-container *ngSwitchCase&#x3D;&quot;&#x27;birthday&#x27;&quot;&gt;
-                &lt;appsapp-input-birthday [model]&#x3D;&quot;model&quot; [property]&#x3D;&quot;input.property&quot; [label]&#x3D;&quot;input.label&quot;
-                                        [hidden]&#x3D;&quot;input.hidden | async&quot;
-                                        [parentPropertyMetadata]&#x3D;&quot;input.parentPropertyMetadata&quot;
-                                        [parentProperty]&#x3D;&quot;input.parentProperty&quot;&gt;&lt;/appsapp-input-birthday&gt;
-            &lt;/ng-container&gt;
-            &lt;ng-container *ngSwitchCase&#x3D;&quot;&#x27;select&#x27;&quot;&gt;
-                &lt;appsapp-input-select [model]&#x3D;&quot;model&quot; [property]&#x3D;&quot;input.property&quot; [label]&#x3D;&quot;input.label&quot;
-                                      [hidden]&#x3D;&quot;input.hidden | async&quot;
-                                      [parentPropertyMetadata]&#x3D;&quot;input.parentPropertyMetadata&quot;
-                                      [parentProperty]&#x3D;&quot;input.parentProperty&quot;&gt;&lt;/appsapp-input-select&gt;
-            &lt;/ng-container&gt;
-            &lt;ng-container *ngSwitchCase&#x3D;&quot;&#x27;list&#x27;&quot;&gt;
-                &lt;appsapp-input-list [model]&#x3D;&quot;model&quot; [property]&#x3D;&quot;input.property&quot; [label]&#x3D;&quot;input.label&quot;
-                                    [hidden]&#x3D;&quot;input.hidden | async&quot;
-                                    [parentPropertyMetadata]&#x3D;&quot;input.parentPropertyMetadata&quot;
-                                    [parentProperty]&#x3D;&quot;input.parentProperty&quot;&gt;&lt;/appsapp-input-list&gt;
-            &lt;/ng-container&gt;
-        &lt;/ng-container&gt;
-        &lt;/mbsc-form&gt;
+    
+            &lt;mbsc-input mbsc-select [error]&#x3D;&quot;validator | async&quot; #mbscInstance&#x3D;&quot;mobiscroll&quot;
+                        [ngModel]&#x3D;&quot;_ngModelGettter | async&quot; (ngModelChange)&#x3D;&quot;modelChanges($event)&quot;&gt;{{_label}}
+            &lt;/mbsc-input&gt;
+     
     &#x60;
 })
+export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
 
-export class AppsappInputComponent extends AbstractComponent {
-
-
-    @Input() property: any;
-    @Input() parentPropertyMetadata: any &#x3D; null;
-    @Input() parentProperty: any &#x3D; null;
-    @Input() model: any;
-    @Input() label: string;
-    @Output() options: any &#x3D; {};
-    @Output() _inputs: any &#x3D; [];
-    @Output() hidden: boolean &#x3D; false;
-    private _model: Observable&lt;any&gt;;
-
-    constructor(public appsappModuleProvider: AppsappModuleProvider) {
-        super(appsappModuleProvider);
-    }
-
-    ngOnInitExecute(model) {
-
-        let self &#x3D; this;
-
-        this._inputs &#x3D; [];
-
-        if (this.property) {
-
-            this._inputs.push({
-                type: model.getType(this.property),
-                property: this.property,
-                parentPropertyMetadata: this.parentPropertyMetadata,
-                parentProperty: this.parentProperty,
-                label: this.label,
-                hidden: new Observable((observer) &#x3D;&gt; {
-                    model.getCondition(self.property).subscribe((c) &#x3D;&gt; {
-                        observer.next(self.isHidden(c));
-                    });
-                })
-            });
-
-        } else {
-
-            Object.keys(model).forEach((property) &#x3D;&gt; {
-
-                if (property.substr(0, 1) !&#x3D;&#x3D; &quot;_&quot;) {
-                    this._inputs.push({
-                        type: model.getType(property),
-                        property: property,
-                        parentPropertyMetadata: this.parentPropertyMetadata,
-                        parentProperty: this.parentProperty,
-                        hidden: new Observable((observer) &#x3D;&gt; {
-                            model.getCondition(property).subscribe((c) &#x3D;&gt; {
-                                observer.next(self.isHidden(c));
-                            });
-                        })
-                    });
-
-
-                }
-            });
-        }
-
-    }
-
-    ngOnInit() {
-
-
-        let self &#x3D; this;
-
-
-        if (this.model) {
-
-
-                if (this.model instanceof Observable) {
-                    this._model &#x3D; this.model;
-                    this._model.subscribe((model) &#x3D;&gt; {
-                        self.model &#x3D; model;
-                        self.ngOnInitExecute(model);
-                    })
-
-                } else {
-                    self.ngOnInitExecute(this.model);
-                }
-
-        }
-
-
-    }
-
+    selectoptions: any &#x3D; [];
+    select: SelectModel;
+    isUnique: boolean &#x3D; false;
 
     /**
-     * get is hidden from condition action
-     * @param condition
-     * @returns {boolean}
+     * set selectoptions
+     * @param values
      */
-    isHidden(condition) {
+    setOptions(values?) {
 
-        let hidden &#x3D; false, self &#x3D; this;
+        let self &#x3D; this;
+        let selectoptionsPreProcessed &#x3D; [];
+        let currentSelectedselectoptions &#x3D; {};
+        let value &#x3D; values &#x3D;&#x3D;&#x3D; undefined ? this.model.getParent().getPropertyValue(this.parentProperty) : values;
 
-        switch (condition.action) {
+        if (value &amp;&amp; value.length) {
+            value.forEach(() &#x3D;&gt; {
 
-            case &#x27;hide&#x27;:
-                hidden &#x3D; !condition.state;
-                break;
+                value.forEach((option) &#x3D;&gt; {
+                    if (option instanceof PersistableModel &amp;&amp; option.getUuid() !&#x3D;&#x3D; self.model.getUuid()) {
+                        option.getPropertyValue(self.property).forEach((option) &#x3D;&gt; {
+                            currentSelectedselectoptions[option] &#x3D; true;
+                        })
+                    }
 
-            case &#x27;show&#x27;:
-                hidden &#x3D; condition.state;
-                break;
+                });
 
-            default:
-                hidden &#x3D; condition.state;
+
+            });
         }
 
-        return hidden;
+        let clonedselectoptions &#x3D; JSON.parse(JSON.stringify(self.selectoptions));
+        clonedselectoptions.forEach((option) &#x3D;&gt; {
+            if (currentSelectedselectoptions[option.value] !&#x3D;&#x3D; undefined) {
+                option.disabled &#x3D; true;
+            }
+            selectoptionsPreProcessed.push(option);
+        });
+
+        self.mbsc.instance.refresh(selectoptionsPreProcessed);
+
+    }
+
+    applyselectoptionsPostprocess() {
+
+        let self &#x3D; this;
+
+        if (this.isUnique) {
+            this.model.getParent().getChangesWithCallback((event) &#x3D;&gt; {
+                if (event.property &#x3D;&#x3D; self.parentProperty) {
+                    self.setOptions(event.value);
+                }
+            });
+        }
+    }
+
+    ngAfterContentInit() {
+
+        let self &#x3D; this;
+        let data &#x3D; this.model.getMetadataValue(this.property, &#x27;isSelect&#x27;);
+
+        if (this.parentPropertyMetadata) {
+            this.isUnique &#x3D; this.model.getMetadataValue(null, &#x27;isList&#x27;, this.parentPropertyMetadata, &#x27;uniqueItems&#x27;);
+        }
+
+        self.applyselectoptionsPostprocess();
+
+        if (data) {
+
+            if (data.selectoptions &amp;&amp; typeof data.selectoptions &#x3D;&#x3D; &#x27;object&#x27;) {
+                this.selectoptions &#x3D; data.selectoptions;
+            }
+
+            if (data.source) {
+
+               self.select &#x3D; this.appsappModuleProvider.new(SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url));
+
+               self.select.autosave();
+
+                self.select.loaded().then((select: any) &#x3D;&gt; {
+
+                    self.select.setProperty(&#x27;url&#x27;,data.source.url);
+                    self.select.setProperty(&#x27;mapping&#x27;,data.source.mapping);
+                    self.select.setProperty(&#x27;parent&#x27;,self.model);
+                    self.select.setProperty(&#x27;parentProperty&#x27;,self.property);
+
+                    select.getOptions().subscribe((selectoptions) &#x3D;&gt; {
+
+                        self.selectoptions &#x3D; selectoptions;
+                        if (self.isUnique) {
+                            self.setOptions();
+                        } else {
+                            self.mbsc.instance.refresh(selectoptions);
+                        }
+                        select.getHashedValues().forEach((v) &#x3D;&gt; {
+                            self.model.addHashedValue(v.value, v.hash);
+                        });
+
+                        let hashedValues &#x3D; [];
+                        if (self.model.getPropertyValue(self.property, true)) {
+                            self.model.getPropertyValue(self.property, true).forEach((value) &#x3D;&gt; {
+                                hashedValues.push(self.model.setHashedValue(value));
+                            });
+                        }
+
+                        self.update(hashedValues);
+                        self.mbsc.instance.setVal(hashedValues, false, true);
+
+
+
+                    });
+                });
+
+            }
+
+        }
+
+    }
+
+    /**
+     *
+     * @param {ConfigModel} config
+     */
+    afterInit(config) {
+
+        let self &#x3D; this;
+
+        let groups &#x3D; {};
+        if (typeof this.selectoptions.length &#x3D;&#x3D; &#x27;number&#x27;) {
+            this.selectoptions.forEach((item) &#x3D;&gt; {
+                if (item.group !&#x3D;&#x3D; undefined) {
+                    groups[item.group] &#x3D; true;
+                }
+            });
+        }
+
+        const options &#x3D; this.model.getMetadataValue(this.property, &#x27;isSelect&#x27;);
+
+        this.setMbscOption({
+            group: self.selectoptions.length &lt;&#x3D; 20 ? {
+                groupWheel: Object.keys(groups).length &gt; 5,
+                header: Object.keys(groups).length &gt; 0,
+                clustered: Object.keys(groups).length &gt; 2
+            } : null,
+            filter: self.selectoptions.length &gt; 20,
+            display: options &amp;&amp; options.display ? options.display : (config.getOs() !&#x3D;&#x3D; &#x27;desktop&#x27; ? &#x27;bottom&#x27; : &#x27;center&#x27;),
+            data: self.selectoptions,
+            select: self.model.getMetadataValue(self.property, &#x27;arrayMaxSize&#x27;) ? self.model.getMetadataValue(self.property, &#x27;arrayMaxSize&#x27;) : (self.model.isArray(self.property) ? &#x27;multiple&#x27; : &#x27;single&#x27;)
+        });
 
     }
 
 
 }
-
 </code></pre>
     </div>
 
@@ -1337,7 +1092,7 @@ export class AppsappInputComponent extends AbstractComponent {
         var COMPONENT_TEMPLATE = '<div></div>'
     var COMPONENTS = [{'name': 'AppsappInputAbstractComponent', 'selector': ''},{'name': 'AppsappInputBirthdayComponent', 'selector': 'appsapp-input-birthday'},{'name': 'AppsappInputBooleanComponent', 'selector': 'appsapp-input-boolean'},{'name': 'AppsappInputComponent', 'selector': 'appsapp-input'},{'name': 'AppsappInputDateComponent', 'selector': 'appsapp-input-date'},{'name': 'AppsappInputDatesComponent', 'selector': 'appsapp-input-dates'},{'name': 'AppsappInputEmailComponent', 'selector': 'appsapp-input-email'},{'name': 'AppsappInputIntegerComponent', 'selector': 'appsapp-input-integer'},{'name': 'AppsappInputListComponent', 'selector': 'appsapp-input-list'},{'name': 'AppsappInputNumberComponent', 'selector': 'appsapp-input-number'},{'name': 'AppsappInputNumberPlainComponent', 'selector': 'appsapp-input-number-plain'},{'name': 'AppsappInputPasswordComponent', 'selector': 'appsapp-input-password'},{'name': 'AppsappInputSelectComponent', 'selector': 'appsapp-input-select'},{'name': 'AppsappInputTelComponent', 'selector': 'appsapp-input-tel'},{'name': 'AppsappInputTextComponent', 'selector': 'appsapp-input-text'},{'name': 'AppsappInputTextareaComponent', 'selector': 'appsapp-input-textarea'},{'name': 'AppsappInputTimeComponent', 'selector': 'appsapp-input-time'},{'name': 'AppsappInputUrlComponent', 'selector': 'appsapp-input-url'}];
     var DIRECTIVES = [];
-    var ACTUAL_COMPONENT = {'name': 'AppsappInputComponent'};
+    var ACTUAL_COMPONENT = {'name': 'AppsappInputSelectComponent'};
 </script>
 <script src="../js/tree.js"></script>
 

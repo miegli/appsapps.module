@@ -140,7 +140,7 @@ __decorate([
 AppsappInputTelComponent = __decorate([
     core_1.Component({
         selector: 'appsapp-input-tel',
-        template: "\n       \n            <mbsc-input [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-numpad type=\"tel\" [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}} {{prefix}}</mbsc-input>\n    \n\n    "
+        template: "\n       \n            <mbsc-input [error]=\"validator | async\"  [placeholder]=\"placeholder\" #mbscInstance=\"mobiscroll\" mbsc-numpad type=\"tel\" [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}} {{prefix}}</mbsc-input>\n    \n\n    "
     })
 ], AppsappInputTelComponent);
 exports.AppsappInputTelComponent = AppsappInputTelComponent;

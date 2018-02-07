@@ -36,6 +36,7 @@ var AppsappInputAbstractComponent = (function (_super) {
         _this._validationMetadata = {};
         _this.hidden = false;
         _this.errormsg = '';
+        _this.placeholder = '';
         _this.init();
         return _this;
     }
@@ -53,6 +54,8 @@ var AppsappInputAbstractComponent = (function (_super) {
                 self._ngModelGettterObserver = observer;
                 window.setTimeout(function () {
                     self._ngModelGettterObserver.next(self.model.getPropertyValue(self.property));
+                    var p = self.model.getMetadataValue(self.property, 'hasPlaceholder');
+                    self.placeholder = p ? p : '';
                 }, 1);
             });
             this._ngModelGettter.share();
@@ -190,6 +193,9 @@ __decorate([
 __decorate([
     core_1.Output()
 ], AppsappInputAbstractComponent.prototype, "errormsg");
+__decorate([
+    core_1.Output()
+], AppsappInputAbstractComponent.prototype, "placeholder");
 __decorate([
     core_1.ViewChild('mbscInstance')
 ], AppsappInputAbstractComponent.prototype, "mbsc");
