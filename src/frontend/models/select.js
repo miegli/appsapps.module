@@ -12,7 +12,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 var appsapp_cli_1 = require("appsapp-cli");
 var Observable_1 = require("rxjs/Observable");
-var SelectModel = (function (_super) {
+var SelectModel = /** @class */ (function (_super) {
     __extends(SelectModel, _super);
     function SelectModel() {
         var _this = _super.call(this) || this;

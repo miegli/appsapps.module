@@ -24,7 +24,7 @@ var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputTelComponent = (function (_super) {
+var AppsappInputTelComponent = /** @class */ (function (_super) {
     __extends(AppsappInputTelComponent, _super);
     function AppsappInputTelComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -132,15 +132,15 @@ var AppsappInputTelComponent = (function (_super) {
         }
         return false;
     };
+    __decorate([
+        core_1.Output()
+    ], AppsappInputTelComponent.prototype, "prefix");
+    AppsappInputTelComponent = __decorate([
+        core_1.Component({
+            selector: 'appsapp-input-tel',
+            template: "\n       \n            <mbsc-input [error]=\"validator | async\"  [placeholder]=\"placeholder\" #mbscInstance=\"mobiscroll\" mbsc-numpad type=\"tel\" [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}} {{prefix}}</mbsc-input>\n    \n\n    "
+        })
+    ], AppsappInputTelComponent);
     return AppsappInputTelComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
-__decorate([
-    core_1.Output()
-], AppsappInputTelComponent.prototype, "prefix");
-AppsappInputTelComponent = __decorate([
-    core_1.Component({
-        selector: 'appsapp-input-tel',
-        template: "\n       \n            <mbsc-input [error]=\"validator | async\"  [placeholder]=\"placeholder\" #mbscInstance=\"mobiscroll\" mbsc-numpad type=\"tel\" [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}} {{prefix}}</mbsc-input>\n    \n\n    "
-    })
-], AppsappInputTelComponent);
 exports.AppsappInputTelComponent = AppsappInputTelComponent;

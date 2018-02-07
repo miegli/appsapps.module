@@ -24,7 +24,7 @@ var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputTimeComponent = (function (_super) {
+var AppsappInputTimeComponent = /** @class */ (function (_super) {
     __extends(AppsappInputTimeComponent, _super);
     function AppsappInputTimeComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -76,15 +76,15 @@ var AppsappInputTimeComponent = (function (_super) {
             display: options && options.display ? options.display : (config.getOs() !== 'desktop' ? 'bottom' : 'center')
         });
     };
+    __decorate([
+        core_1.Output()
+    ], AppsappInputTimeComponent.prototype, "isInline");
+    AppsappInputTimeComponent = __decorate([
+        core_1.Component({
+            selector: 'appsapp-input-time',
+            template: "\n     \n            <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-time [ngModel]=\"_ngModelGettter | async\"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n   \n\n    "
+        })
+    ], AppsappInputTimeComponent);
     return AppsappInputTimeComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
-__decorate([
-    core_1.Output()
-], AppsappInputTimeComponent.prototype, "isInline");
-AppsappInputTimeComponent = __decorate([
-    core_1.Component({
-        selector: 'appsapp-input-time',
-        template: "\n     \n            <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-time [ngModel]=\"_ngModelGettter | async\"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n   \n\n    "
-    })
-], AppsappInputTimeComponent);
 exports.AppsappInputTimeComponent = AppsappInputTimeComponent;

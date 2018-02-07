@@ -25,7 +25,7 @@ var appsapp_cli_1 = require("appsapp-cli");
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputListComponent = (function (_super) {
+var AppsappInputListComponent = /** @class */ (function (_super) {
     __extends(AppsappInputListComponent, _super);
     function AppsappInputListComponent(appsappModuleProvider) {
         var _this = _super.call(this, appsappModuleProvider) || this;
@@ -164,21 +164,21 @@ var AppsappInputListComponent = (function (_super) {
         this.model.setProperty(this.property, this.model.getPropertyValue(this.property, true));
         this.updateConfig();
     };
+    __decorate([
+        core_1.Output()
+    ], AppsappInputListComponent.prototype, "options");
+    __decorate([
+        core_1.Output()
+    ], AppsappInputListComponent.prototype, "parentPropertyMetadata");
+    __decorate([
+        core_1.Output()
+    ], AppsappInputListComponent.prototype, "parentProperty");
+    AppsappInputListComponent = __decorate([
+        core_1.Component({
+            selector: 'appsapp-input-list',
+            template: "\n\n        <mbsc-listview #mbscInstance=\"mobiscroll\">\n            <mbsc-listview-item *ngFor=\"let item of _ngModelGettter | async\" [id]=\"item.__uuid\">\n                <appsapp-input [model]=\"item\" [parentPropertyMetadata]=\"parentPropertyMetadata\" [parentProperty]=\"parentProperty\"></appsapp-input>\n            </mbsc-listview-item>\n        </mbsc-listview>\n\n    "
+        })
+    ], AppsappInputListComponent);
     return AppsappInputListComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
-__decorate([
-    core_1.Output()
-], AppsappInputListComponent.prototype, "options");
-__decorate([
-    core_1.Output()
-], AppsappInputListComponent.prototype, "parentPropertyMetadata");
-__decorate([
-    core_1.Output()
-], AppsappInputListComponent.prototype, "parentProperty");
-AppsappInputListComponent = __decorate([
-    core_1.Component({
-        selector: 'appsapp-input-list',
-        template: "\n\n        <mbsc-listview #mbscInstance=\"mobiscroll\">\n            <mbsc-listview-item *ngFor=\"let item of _ngModelGettter | async\" [id]=\"item.__uuid\">\n                <appsapp-input [model]=\"item\" [parentPropertyMetadata]=\"parentPropertyMetadata\" [parentProperty]=\"parentProperty\"></appsapp-input>\n            </mbsc-listview-item>\n        </mbsc-listview>\n\n    "
-    })
-], AppsappInputListComponent);
 exports.AppsappInputListComponent = AppsappInputListComponent;

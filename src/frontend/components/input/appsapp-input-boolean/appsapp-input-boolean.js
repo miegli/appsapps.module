@@ -24,17 +24,17 @@ var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputBooleanComponent = (function (_super) {
+var AppsappInputBooleanComponent = /** @class */ (function (_super) {
     __extends(AppsappInputBooleanComponent, _super);
     function AppsappInputBooleanComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    AppsappInputBooleanComponent = __decorate([
+        core_1.Component({
+            selector: 'appsapp-input-boolean',
+            template: "\n       \n            <mbsc-switch [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n                <span class=\"mbsc-desc\">{{_description}}</span>\n            </mbsc-switch>\n      \n\n            "
+        })
+    ], AppsappInputBooleanComponent);
     return AppsappInputBooleanComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
-AppsappInputBooleanComponent = __decorate([
-    core_1.Component({
-        selector: 'appsapp-input-boolean',
-        template: "\n       \n            <mbsc-switch [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n                <span class=\"mbsc-desc\">{{_description}}</span>\n            </mbsc-switch>\n      \n\n            "
-    })
-], AppsappInputBooleanComponent);
 exports.AppsappInputBooleanComponent = AppsappInputBooleanComponent;

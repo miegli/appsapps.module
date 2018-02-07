@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var Observable_1 = require("rxjs/Observable");
-var AbstractComponent = (function () {
+var AbstractComponent = /** @class */ (function () {
     function AbstractComponent(appFrameworkProvider) {
         this.appFrameworkProvider = appFrameworkProvider;
         if (appFrameworkProvider) {

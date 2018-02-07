@@ -11,7 +11,7 @@ var core_1 = require("@angular/core");
 var angular_2_local_storage_1 = require("angular-2-local-storage");
 var Observable_1 = require("rxjs/Observable");
 var objectHash = require("object-hash");
-var PersistenceManager = (function () {
+var PersistenceManager = /** @class */ (function () {
     function PersistenceManager() {
         var _this = this;
         this._observerIsReadyCallbacks = [];
@@ -611,9 +611,9 @@ var PersistenceManager = (function () {
             return null;
         }
     };
+    PersistenceManager = __decorate([
+        core_1.Injectable()
+    ], PersistenceManager);
     return PersistenceManager;
 }());
-PersistenceManager = __decorate([
-    core_1.Injectable()
-], PersistenceManager);
 exports.PersistenceManager = PersistenceManager;

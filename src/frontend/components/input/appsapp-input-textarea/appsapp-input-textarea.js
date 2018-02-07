@@ -24,7 +24,7 @@ var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputTextareaComponent = (function (_super) {
+var AppsappInputTextareaComponent = /** @class */ (function (_super) {
     __extends(AppsappInputTextareaComponent, _super);
     function AppsappInputTextareaComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -64,12 +64,12 @@ var AppsappInputTextareaComponent = (function (_super) {
             return true;
         }
     };
+    AppsappInputTextareaComponent = __decorate([
+        core_1.Component({
+            selector: 'appsapp-input-textarea',
+            template: "\n       \n            <mbsc-textarea [error]=\"validator | async\" [ngModel]=\"_ngModelGettter | async\" [placeholder]=\"placeholder\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-textarea>\n   \n\n    "
+        })
+    ], AppsappInputTextareaComponent);
     return AppsappInputTextareaComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
-AppsappInputTextareaComponent = __decorate([
-    core_1.Component({
-        selector: 'appsapp-input-textarea',
-        template: "\n       \n            <mbsc-textarea [error]=\"validator | async\" [ngModel]=\"_ngModelGettter | async\" [placeholder]=\"placeholder\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-textarea>\n   \n\n    "
-    })
-], AppsappInputTextareaComponent);
 exports.AppsappInputTextareaComponent = AppsappInputTextareaComponent;

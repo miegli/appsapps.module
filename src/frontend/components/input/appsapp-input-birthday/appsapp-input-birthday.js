@@ -24,7 +24,7 @@ var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputBirthdayComponent = (function (_super) {
+var AppsappInputBirthdayComponent = /** @class */ (function (_super) {
     __extends(AppsappInputBirthdayComponent, _super);
     function AppsappInputBirthdayComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -57,12 +57,12 @@ var AppsappInputBirthdayComponent = (function (_super) {
             display: config.getOs() !== 'desktop' ? 'bottom' : 'center'
         });
     };
+    AppsappInputBirthdayComponent = __decorate([
+        core_1.Component({
+            selector: 'appsapp-input-birthday',
+            template: "\n        \n            <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\" #mbscInstance=\"mobiscroll\" mbsc-date [ngModel]=\"_ngModelGettter | async\"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n\n\n    "
+        })
+    ], AppsappInputBirthdayComponent);
     return AppsappInputBirthdayComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
-AppsappInputBirthdayComponent = __decorate([
-    core_1.Component({
-        selector: 'appsapp-input-birthday',
-        template: "\n        \n            <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\" #mbscInstance=\"mobiscroll\" mbsc-date [ngModel]=\"_ngModelGettter | async\"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n\n\n    "
-    })
-], AppsappInputBirthdayComponent);
 exports.AppsappInputBirthdayComponent = AppsappInputBirthdayComponent;

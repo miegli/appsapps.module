@@ -24,17 +24,17 @@ var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputUrlComponent = (function (_super) {
+var AppsappInputUrlComponent = /** @class */ (function (_super) {
     __extends(AppsappInputUrlComponent, _super);
     function AppsappInputUrlComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    AppsappInputUrlComponent = __decorate([
+        core_1.Component({
+            selector: 'appsapp-input-url',
+            template: "\n        \n            <mbsc-input [error]=\"validator | async\" [placeholder]=\"placeholder\" type=\"url\" [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n       \n\n    "
+        })
+    ], AppsappInputUrlComponent);
     return AppsappInputUrlComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
-AppsappInputUrlComponent = __decorate([
-    core_1.Component({
-        selector: 'appsapp-input-url',
-        template: "\n        \n            <mbsc-input [error]=\"validator | async\" [placeholder]=\"placeholder\" type=\"url\" [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n       \n\n    "
-    })
-], AppsappInputUrlComponent);
 exports.AppsappInputUrlComponent = AppsappInputUrlComponent;

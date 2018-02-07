@@ -24,7 +24,7 @@ var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputNumberPlainComponent = (function (_super) {
+var AppsappInputNumberPlainComponent = /** @class */ (function (_super) {
     __extends(AppsappInputNumberPlainComponent, _super);
     function AppsappInputNumberPlainComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -88,12 +88,12 @@ var AppsappInputNumberPlainComponent = (function (_super) {
             return true;
         }
     };
+    AppsappInputNumberPlainComponent = __decorate([
+        core_1.Component({
+            selector: 'appsapp-input-number-plain',
+            template: "\n      \n        <mbsc-input [error]=\"validator | async\" [ngModel]=\"_ngModelGettter | async\" type=\"number\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n   \n    "
+        })
+    ], AppsappInputNumberPlainComponent);
     return AppsappInputNumberPlainComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
-AppsappInputNumberPlainComponent = __decorate([
-    core_1.Component({
-        selector: 'appsapp-input-number-plain',
-        template: "\n      \n        <mbsc-input [error]=\"validator | async\" [ngModel]=\"_ngModelGettter | async\" type=\"number\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n   \n    "
-    })
-], AppsappInputNumberPlainComponent);
 exports.AppsappInputNumberPlainComponent = AppsappInputNumberPlainComponent;

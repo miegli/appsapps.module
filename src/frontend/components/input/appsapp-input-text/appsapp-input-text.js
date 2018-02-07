@@ -24,7 +24,7 @@ var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputTextComponent = (function (_super) {
+var AppsappInputTextComponent = /** @class */ (function (_super) {
     __extends(AppsappInputTextComponent, _super);
     function AppsappInputTextComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -66,12 +66,12 @@ var AppsappInputTextComponent = (function (_super) {
             return true;
         }
     };
+    AppsappInputTextComponent = __decorate([
+        core_1.Component({
+            selector: 'appsapp-input-text',
+            template: "\n    \n      <mbsc-input [error]=\"validator | async\" [placeholder]=\"placeholder\" [ngModel]=\"_ngModelGettter | async\"\n                  (ngModelChange)=\"modelChanges($event)\">{{_label}}\n      </mbsc-input>\n  \n\n  "
+        })
+    ], AppsappInputTextComponent);
     return AppsappInputTextComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
-AppsappInputTextComponent = __decorate([
-    core_1.Component({
-        selector: 'appsapp-input-text',
-        template: "\n    \n      <mbsc-input [error]=\"validator | async\" [placeholder]=\"placeholder\" [ngModel]=\"_ngModelGettter | async\"\n                  (ngModelChange)=\"modelChanges($event)\">{{_label}}\n      </mbsc-input>\n  \n\n  "
-    })
-], AppsappInputTextComponent);
 exports.AppsappInputTextComponent = AppsappInputTextComponent;

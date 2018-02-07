@@ -25,7 +25,7 @@ var Observable_1 = require("rxjs/Observable");
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputAbstractComponent = (function (_super) {
+var AppsappInputAbstractComponent = /** @class */ (function (_super) {
     __extends(AppsappInputAbstractComponent, _super);
     function AppsappInputAbstractComponent(appsappModuleProvider) {
         var _this = _super.call(this, appsappModuleProvider) || this;
@@ -182,29 +182,29 @@ var AppsappInputAbstractComponent = (function (_super) {
             return null;
         }
     };
+    __decorate([
+        core_1.Output()
+    ], AppsappInputAbstractComponent.prototype, "validator");
+    __decorate([
+        core_1.Output()
+    ], AppsappInputAbstractComponent.prototype, "hidden");
+    __decorate([
+        core_1.Output()
+    ], AppsappInputAbstractComponent.prototype, "errormsg");
+    __decorate([
+        core_1.Output()
+    ], AppsappInputAbstractComponent.prototype, "placeholder");
+    __decorate([
+        core_1.ViewChild('mbscInstance')
+    ], AppsappInputAbstractComponent.prototype, "mbsc");
+    __decorate([
+        core_1.ViewChild('mbscInstanceForm')
+    ], AppsappInputAbstractComponent.prototype, "mbscForm");
+    AppsappInputAbstractComponent = __decorate([
+        core_1.Component({
+            template: ''
+        })
+    ], AppsappInputAbstractComponent);
     return AppsappInputAbstractComponent;
 }(appsapp_input_1.AppsappInputComponent));
-__decorate([
-    core_1.Output()
-], AppsappInputAbstractComponent.prototype, "validator");
-__decorate([
-    core_1.Output()
-], AppsappInputAbstractComponent.prototype, "hidden");
-__decorate([
-    core_1.Output()
-], AppsappInputAbstractComponent.prototype, "errormsg");
-__decorate([
-    core_1.Output()
-], AppsappInputAbstractComponent.prototype, "placeholder");
-__decorate([
-    core_1.ViewChild('mbscInstance')
-], AppsappInputAbstractComponent.prototype, "mbsc");
-__decorate([
-    core_1.ViewChild('mbscInstanceForm')
-], AppsappInputAbstractComponent.prototype, "mbscForm");
-AppsappInputAbstractComponent = __decorate([
-    core_1.Component({
-        template: ''
-    })
-], AppsappInputAbstractComponent);
 exports.AppsappInputAbstractComponent = AppsappInputAbstractComponent;

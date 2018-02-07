@@ -24,17 +24,17 @@ var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputEmailComponent = (function (_super) {
+var AppsappInputEmailComponent = /** @class */ (function (_super) {
     __extends(AppsappInputEmailComponent, _super);
     function AppsappInputEmailComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    AppsappInputEmailComponent = __decorate([
+        core_1.Component({
+            selector: 'appsapp-input-email',
+            template: "\n       \n            <mbsc-input [error]=\"validator | async\" [placeholder]=\"placeholder\" [error]=\"validator | async\" [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n\n    "
+        })
+    ], AppsappInputEmailComponent);
     return AppsappInputEmailComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
-AppsappInputEmailComponent = __decorate([
-    core_1.Component({
-        selector: 'appsapp-input-email',
-        template: "\n       \n            <mbsc-input [error]=\"validator | async\" [placeholder]=\"placeholder\" [error]=\"validator | async\" [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n\n    "
-    })
-], AppsappInputEmailComponent);
 exports.AppsappInputEmailComponent = AppsappInputEmailComponent;

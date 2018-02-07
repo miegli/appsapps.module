@@ -24,7 +24,7 @@ var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputDateComponent = (function (_super) {
+var AppsappInputDateComponent = /** @class */ (function (_super) {
     __extends(AppsappInputDateComponent, _super);
     function AppsappInputDateComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -79,15 +79,15 @@ var AppsappInputDateComponent = (function (_super) {
             display: options && options.display ? options.display : (config.getOs() !== 'desktop' ? 'bottom' : 'center')
         });
     };
+    __decorate([
+        core_1.Output()
+    ], AppsappInputDateComponent.prototype, "isInline");
+    AppsappInputDateComponent = __decorate([
+        core_1.Component({
+            selector: 'appsapp-input-date',
+            template: "\n        <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\" #mbscInstance=\"mobiscroll\"\n                    mbsc-calendar [ngModel]=\"_ngModelGettter | async\"\n                    (ngModelChange)=\"modelChanges($event)\"><span *ngIf=\"!isInline\">{{_label}}</span></mbsc-input>\n\n\n    "
+        })
+    ], AppsappInputDateComponent);
     return AppsappInputDateComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
-__decorate([
-    core_1.Output()
-], AppsappInputDateComponent.prototype, "isInline");
-AppsappInputDateComponent = __decorate([
-    core_1.Component({
-        selector: 'appsapp-input-date',
-        template: "\n        <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\" #mbscInstance=\"mobiscroll\"\n                    mbsc-calendar [ngModel]=\"_ngModelGettter | async\"\n                    (ngModelChange)=\"modelChanges($event)\"><span *ngIf=\"!isInline\">{{_label}}</span></mbsc-input>\n\n\n    "
-    })
-], AppsappInputDateComponent);
 exports.AppsappInputDateComponent = AppsappInputDateComponent;

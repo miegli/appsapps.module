@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var appsapp_cli_1 = require("appsapp-cli");
-var ConfigModel = (function (_super) {
+var ConfigModel = /** @class */ (function (_super) {
     __extends(ConfigModel, _super);
     function ConfigModel() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

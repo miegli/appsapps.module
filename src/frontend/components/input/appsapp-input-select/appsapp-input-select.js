@@ -26,7 +26,7 @@ var appsapp_cli_1 = require("appsapp-cli");
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputSelectComponent = (function (_super) {
+var AppsappInputSelectComponent = /** @class */ (function (_super) {
     __extends(AppsappInputSelectComponent, _super);
     function AppsappInputSelectComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -143,12 +143,12 @@ var AppsappInputSelectComponent = (function (_super) {
             select: self.model.getMetadataValue(self.property, 'arrayMaxSize') ? self.model.getMetadataValue(self.property, 'arrayMaxSize') : (self.model.isArray(self.property) ? 'multiple' : 'single')
         });
     };
+    AppsappInputSelectComponent = __decorate([
+        core_1.Component({
+            selector: 'appsapp-input-select',
+            template: "\n    \n            <mbsc-input mbsc-select [error]=\"validator | async\" #mbscInstance=\"mobiscroll\"\n                        [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n            </mbsc-input>\n     \n    "
+        })
+    ], AppsappInputSelectComponent);
     return AppsappInputSelectComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
-AppsappInputSelectComponent = __decorate([
-    core_1.Component({
-        selector: 'appsapp-input-select',
-        template: "\n    \n            <mbsc-input mbsc-select [error]=\"validator | async\" #mbscInstance=\"mobiscroll\"\n                        [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n            </mbsc-input>\n     \n    "
-    })
-], AppsappInputSelectComponent);
 exports.AppsappInputSelectComponent = AppsappInputSelectComponent;

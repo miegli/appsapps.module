@@ -30,9 +30,10 @@ var forms_1 = require("@angular/forms");
 var appsapp_module_provider_1 = require("./providers/appsapp-module-provider");
 var appsapp_input_number_plain_1 = require("./components/input/appsapp-input-number-plain/appsapp-input-number-plain");
 var http_1 = require("@angular/common/http");
-var AppsappModule = AppsappModule_1 = (function () {
+var AppsappModule = /** @class */ (function () {
     function AppsappModule() {
     }
+    AppsappModule_1 = AppsappModule;
     AppsappModule.initializeApp = function (config, messages) {
         return {
             ngModule: AppsappModule_1,
@@ -42,41 +43,41 @@ var AppsappModule = AppsappModule_1 = (function () {
                 }]
         };
     };
+    AppsappModule = AppsappModule_1 = __decorate([
+        core_1.NgModule({
+            declarations: [
+                // declare all components that your module uses
+                appsapp_input_1.AppsappInputComponent,
+                appsapp_input_url_1.AppsappInputUrlComponent,
+                appsapp_input_number_1.AppsappInputNumberComponent,
+                appsapp_input_textarea_1.AppsappInputTextareaComponent,
+                appsapp_input_tel_1.AppsappInputTelComponent,
+                appsapp_input_email_1.AppsappInputEmailComponent,
+                appsapp_input_dates_1.AppsappInputDatesComponent,
+                appsapp_input_date_1.AppsappInputDateComponent,
+                appsapp_input_password_1.AppsappInputPasswordComponent,
+                appsapp_input_integer_1.AppsappInputIntegerComponent,
+                appsapp_input_boolean_1.AppsappInputBooleanComponent,
+                appsapp_input_birthday_1.AppsappInputBirthdayComponent,
+                appsapp_input_text_1.AppsappInputTextComponent,
+                appsapp_input_abstract_1.AppsappInputAbstractComponent,
+                appsapp_input_select_1.AppsappInputSelectComponent,
+                appsapp_input_list_1.AppsappInputListComponent,
+                appsapp_input_number_plain_1.AppsappInputNumberPlainComponent,
+                appsapp_input_time_1.AppsappInputTimeComponent
+            ],
+            providers: [appsapp_module_provider_1.AppsappModuleProvider, http_1.HttpClient],
+            imports: [angular_1.MbscModule, common_1.CommonModule, forms_1.FormsModule, http_1.HttpClientModule],
+            exports: [
+                // export the component(s) that you want others to be able to use
+                appsapp_input_1.AppsappInputComponent
+            ],
+            entryComponents: [
+                appsapp_input_integer_1.AppsappInputIntegerComponent
+            ]
+        })
+    ], AppsappModule);
     return AppsappModule;
+    var AppsappModule_1;
 }());
-AppsappModule = AppsappModule_1 = __decorate([
-    core_1.NgModule({
-        declarations: [
-            // declare all components that your module uses
-            appsapp_input_1.AppsappInputComponent,
-            appsapp_input_url_1.AppsappInputUrlComponent,
-            appsapp_input_number_1.AppsappInputNumberComponent,
-            appsapp_input_textarea_1.AppsappInputTextareaComponent,
-            appsapp_input_tel_1.AppsappInputTelComponent,
-            appsapp_input_email_1.AppsappInputEmailComponent,
-            appsapp_input_dates_1.AppsappInputDatesComponent,
-            appsapp_input_date_1.AppsappInputDateComponent,
-            appsapp_input_password_1.AppsappInputPasswordComponent,
-            appsapp_input_integer_1.AppsappInputIntegerComponent,
-            appsapp_input_boolean_1.AppsappInputBooleanComponent,
-            appsapp_input_birthday_1.AppsappInputBirthdayComponent,
-            appsapp_input_text_1.AppsappInputTextComponent,
-            appsapp_input_abstract_1.AppsappInputAbstractComponent,
-            appsapp_input_select_1.AppsappInputSelectComponent,
-            appsapp_input_list_1.AppsappInputListComponent,
-            appsapp_input_number_plain_1.AppsappInputNumberPlainComponent,
-            appsapp_input_time_1.AppsappInputTimeComponent
-        ],
-        providers: [appsapp_module_provider_1.AppsappModuleProvider, http_1.HttpClient],
-        imports: [angular_1.MbscModule, common_1.CommonModule, forms_1.FormsModule, http_1.HttpClientModule],
-        exports: [
-            // export the component(s) that you want others to be able to use
-            appsapp_input_1.AppsappInputComponent
-        ],
-        entryComponents: [
-            appsapp_input_integer_1.AppsappInputIntegerComponent
-        ]
-    })
-], AppsappModule);
 exports.AppsappModule = AppsappModule;
-var AppsappModule_1;

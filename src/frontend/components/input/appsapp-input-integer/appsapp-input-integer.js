@@ -24,7 +24,7 @@ var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputIntegerComponent = (function (_super) {
+var AppsappInputIntegerComponent = /** @class */ (function (_super) {
     __extends(AppsappInputIntegerComponent, _super);
     function AppsappInputIntegerComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -59,21 +59,21 @@ var AppsappInputIntegerComponent = (function (_super) {
      */
     AppsappInputIntegerComponent.prototype.afterInit = function (config) {
     };
+    __decorate([
+        core_1.Output()
+    ], AppsappInputIntegerComponent.prototype, "__type");
+    __decorate([
+        core_1.Output()
+    ], AppsappInputIntegerComponent.prototype, "__min");
+    __decorate([
+        core_1.Output()
+    ], AppsappInputIntegerComponent.prototype, "__max");
+    AppsappInputIntegerComponent = __decorate([
+        core_1.Component({
+            selector: 'appsapp-input-integer',
+            template: "\n        \n            <ng-container [ngSwitch]=\"__type\">\n                <mbsc-input [error]=\"validator | async\"  *ngSwitchCase=\"'default'\" #mbscInstance=\"mobiscroll\" mbsc-numpad-decimal [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n                <mbsc-stepper *ngSwitchCase=\"'stepper'\" #mbscInstance=\"mobiscroll\" [min]=\"__min\" [max]=\"__max\" [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n                    <span class=\"mbsc-desc\">{{_description}}</span>\n                </mbsc-stepper>\n            </ng-container>\n   \n\n    "
+        })
+    ], AppsappInputIntegerComponent);
     return AppsappInputIntegerComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
-__decorate([
-    core_1.Output()
-], AppsappInputIntegerComponent.prototype, "__type");
-__decorate([
-    core_1.Output()
-], AppsappInputIntegerComponent.prototype, "__min");
-__decorate([
-    core_1.Output()
-], AppsappInputIntegerComponent.prototype, "__max");
-AppsappInputIntegerComponent = __decorate([
-    core_1.Component({
-        selector: 'appsapp-input-integer',
-        template: "\n        \n            <ng-container [ngSwitch]=\"__type\">\n                <mbsc-input [error]=\"validator | async\"  *ngSwitchCase=\"'default'\" #mbscInstance=\"mobiscroll\" mbsc-numpad-decimal [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n                <mbsc-stepper *ngSwitchCase=\"'stepper'\" #mbscInstance=\"mobiscroll\" [min]=\"__min\" [max]=\"__max\" [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n                    <span class=\"mbsc-desc\">{{_description}}</span>\n                </mbsc-stepper>\n            </ng-container>\n   \n\n    "
-    })
-], AppsappInputIntegerComponent);
 exports.AppsappInputIntegerComponent = AppsappInputIntegerComponent;

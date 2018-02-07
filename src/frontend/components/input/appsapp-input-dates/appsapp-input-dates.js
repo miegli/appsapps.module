@@ -24,7 +24,7 @@ var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputDatesComponent = (function (_super) {
+var AppsappInputDatesComponent = /** @class */ (function (_super) {
     __extends(AppsappInputDatesComponent, _super);
     function AppsappInputDatesComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -85,15 +85,15 @@ var AppsappInputDatesComponent = (function (_super) {
     AppsappInputDatesComponent.prototype.beforeModelChanges = function (model, property, value) {
         return false;
     };
+    __decorate([
+        core_1.Input()
+    ], AppsappInputDatesComponent.prototype, "range");
+    AppsappInputDatesComponent = __decorate([
+        core_1.Component({
+            selector: 'appsapp-input-dates',
+            template: "\n       \n            <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-range [ngModel]=\"range\"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}\n            </mbsc-input>\n     \n\n    "
+        })
+    ], AppsappInputDatesComponent);
     return AppsappInputDatesComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
-__decorate([
-    core_1.Input()
-], AppsappInputDatesComponent.prototype, "range");
-AppsappInputDatesComponent = __decorate([
-    core_1.Component({
-        selector: 'appsapp-input-dates',
-        template: "\n       \n            <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-range [ngModel]=\"range\"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}\n            </mbsc-input>\n     \n\n    "
-    })
-], AppsappInputDatesComponent);
 exports.AppsappInputDatesComponent = AppsappInputDatesComponent;

@@ -24,7 +24,7 @@ var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-var AppsappInputNumberComponent = (function (_super) {
+var AppsappInputNumberComponent = /** @class */ (function (_super) {
     __extends(AppsappInputNumberComponent, _super);
     function AppsappInputNumberComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -40,12 +40,12 @@ var AppsappInputNumberComponent = (function (_super) {
             min: this.model.getMetadataValue(this.property, 'min') ? this.model.getMetadataValue(this.property, 'min') : 0
         });
     };
+    AppsappInputNumberComponent = __decorate([
+        core_1.Component({
+            selector: 'appsapp-input-number',
+            template: "\n        \n            <mbsc-input [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-numpad-decimal [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n\n\n    "
+        })
+    ], AppsappInputNumberComponent);
     return AppsappInputNumberComponent;
 }(appsapp_input_abstract_1.AppsappInputAbstractComponent));
-AppsappInputNumberComponent = __decorate([
-    core_1.Component({
-        selector: 'appsapp-input-number',
-        template: "\n        \n            <mbsc-input [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-numpad-decimal [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n\n\n    "
-    })
-], AppsappInputNumberComponent);
 exports.AppsappInputNumberComponent = AppsappInputNumberComponent;

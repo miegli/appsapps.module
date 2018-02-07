@@ -15,7 +15,7 @@ var database_1 = require("angularfire2/database");
 var firestore_1 = require("angularfire2/firestore");
 var auth_1 = require("angularfire2/auth");
 var app_1 = require("@firebase/app");
-var FirebaseModel = (function (_super) {
+var FirebaseModel = /** @class */ (function (_super) {
     __extends(FirebaseModel, _super);
     function FirebaseModel() {
         var _this = _super.call(this) || this;

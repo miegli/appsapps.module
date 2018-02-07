@@ -16,7 +16,7 @@ var firebase_1 = require("../models/firebase");
 var persistenceManager_1 = require("../manager/persistenceManager");
 var angular_1 = require("@mobiscroll/angular");
 ;
-var AppsappModuleProvider = (function () {
+var AppsappModuleProvider = /** @class */ (function () {
     function AppsappModuleProvider(providerConfig, providerMessages, http) {
         this.providerConfig = providerConfig;
         this.providerMessages = providerMessages;
@@ -239,9 +239,9 @@ var AppsappModuleProvider = (function () {
     AppsappModuleProvider.prototype.appsAppEncrypt = function (data) {
         return data;
     };
+    AppsappModuleProvider = __decorate([
+        __param(0, core_1.Inject('config')), __param(1, core_1.Inject('messages'))
+    ], AppsappModuleProvider);
     return AppsappModuleProvider;
 }());
-AppsappModuleProvider = __decorate([
-    __param(0, core_1.Inject('config')), __param(1, core_1.Inject('messages'))
-], AppsappModuleProvider);
 exports.AppsappModuleProvider = AppsappModuleProvider;
