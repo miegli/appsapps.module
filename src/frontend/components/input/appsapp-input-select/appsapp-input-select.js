@@ -146,7 +146,7 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
     AppsappInputSelectComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-select',
-            template: "\n    \n            <mbsc-input mbsc-select [error]=\"validator | async\" #mbscInstance=\"mobiscroll\"\n                        [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n            </mbsc-input>\n     \n    "
+            template: "\n            <mbsc-input [hidden]=\"selectoptions.length == 0\" mbsc-select [error]=\"validator | async\" #mbscInstance=\"mobiscroll\"\n                        [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n            </mbsc-input>\n     \n    "
         })
     ], AppsappInputSelectComponent);
     return AppsappInputSelectComponent;
