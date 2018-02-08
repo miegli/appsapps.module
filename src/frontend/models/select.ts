@@ -142,6 +142,8 @@ export class SelectModel extends PersistableModel {
             if (self.parent && self.parent.getPropertyValue !== undefined) {
                 self.matchAll(this.url, regex).forEach((m) => {
                     self.parent.watch(m[1].substr(1), (data) => {
+                        self.options = [];
+                        self.data = [];
                         fetchdata(self.url, m[1].substr(1), data);
                     });
                 });
