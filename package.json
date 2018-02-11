@@ -1,6 +1,6 @@
 {
   "name": "appsapp-module",
-  "version": "0.9.81",
+  "version": "0.9.82",
   "scripts": {
     "build": "gulp build",
     "build:watch": "gulp",
