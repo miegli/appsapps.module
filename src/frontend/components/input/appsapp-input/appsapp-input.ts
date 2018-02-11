@@ -157,11 +157,8 @@ export class AppsappInputComponent extends AbstractComponent {
 
                                 if (isConditionValue && !c.state) {
                                     observer.next(isConditionValue);
-
-                                    console.log(property,1,isConditionValue);
                                 } else {
                                     observer.next(!c.state);
-                                    console.log(property,2,!c.state);
                                 }
 
                             });

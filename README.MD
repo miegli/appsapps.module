@@ -324,7 +324,8 @@ All of the validators are also available from the `appsapp-module` for  importin
 | Decorator                                       | Description                                                                                                                      |
 |-------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
 | **General ui decorators**                                                                                                                                                |
-| `@HasConditions([...])`                        | Show/hide ui for this property by conditions      |
+| `@HasConditions([...])`                        | Add/Remove property by conditions      |
+| `@IsHidden([...]?)`                        | Show/hide ui for this property by conditions      |
 | `@HasLabel(label: string)`        | Set the ui label for this property      |
 | `@HasDescriptions(description: string)`        | Adds a short decriptions to the ui for this property      |
 | `@HasPrecision(precision: number)`        | Defines precision like number of decimals     |

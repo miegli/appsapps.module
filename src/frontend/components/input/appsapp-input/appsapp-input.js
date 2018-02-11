@@ -38,8 +38,42 @@ var AppsappInputComponent = /** @class */ (function (_super) {
         _this.hidden = false;
         return _this;
     }
+    AppsappInputComponent.prototype.registerConditions = function (property, model) {
+        var self = this;
+        if (property.substr(0, 1) !== "_") {
+            this._inputs.push({
+                type: model.getType(property),
+                property: property,
+                parentPropertyMetadata: this.parentPropertyMetadata,
+                parentProperty: this.parentProperty,
+                hidden: new Observable_1.Observable(function (observer) {
+                    var isConditionValue = false;
+                    if (model.getMetadataValue(property, 'isHidden') === true) {
+                        observer.next(true);
+                    }
+                    else {
+                        if (typeof model.getMetadataValue(property, 'isHidden') == 'object') {
+                            model.getCondition('__isHidden__' + property).subscribe(function (c) {
+                                if (isConditionValue && !c.state) {
+                                    observer.next(isConditionValue);
+                                    console.log(property, 1, isConditionValue);
+                                }
+                                else {
+                                    observer.next(!c.state);
+                                    console.log(property, 2, !c.state);
+                                }
+                            });
+                        }
+                        model.getCondition(property).subscribe(function (c) {
+                            observer.next(self.isHidden(c));
+                            isConditionValue = self.isHidden(c);
+                        });
+                    }
+                })
+            });
+        }
+    };
     AppsappInputComponent.prototype.ngOnInitExecute = function (model) {
-        var _this = this;
         var self = this;
         this._inputs = [];
         if (this.property) {
@@ -50,37 +84,13 @@ var AppsappInputComponent = /** @class */ (function (_super) {
                 parentProperty: this.parentProperty,
                 label: this.label,
                 hidden: new Observable_1.Observable(function (observer) {
-                    if (model.getMetadataValue(self.property, 'isHidden')) {
-                        observer.next(self.isHidden(true));
-                    }
-                    else {
-                        model.getCondition(self.property).subscribe(function (c) {
-                            observer.next(self.isHidden(c));
-                        });
-                    }
+                    self.registerConditions(self.property, model);
                 })
             });
         }
         else {
             Object.keys(model).forEach(function (property) {
-                if (property.substr(0, 1) !== "_") {
-                    _this._inputs.push({
-                        type: model.getType(property),
-                        property: property,
-                        parentPropertyMetadata: _this.parentPropertyMetadata,
-                        parentProperty: _this.parentProperty,
-                        hidden: new Observable_1.Observable(function (observer) {
-                            model.getCondition(property).subscribe(function (c) {
-                                if (model.getMetadataValue(property, 'isHidden')) {
-                                    observer.next(self.isHidden(true));
-                                }
-                                else {
-                                    observer.next(self.isHidden(c));
-                                }
-                            });
-                        })
-                    });
-                }
+                self.registerConditions(property, model);
             });
         }
     };
