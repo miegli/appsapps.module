@@ -134,11 +134,61 @@ export class AppsappInputComponent extends AbstractComponent {
         super(appsappModuleProvider);
     }
 
+    registerConditions(property, model) {
+        let self = this;
+        if (property.substr(0, 1) !== "_") {
+            this._inputs.push({
+                type: model.getType(property),
+                property: property,
+                parentPropertyMetadata: this.parentPropertyMetadata,
+                parentProperty: this.parentProperty,
+                hidden: new Observable((observer) => {
+
+                    var isConditionValue = false;
+
+
+                    if (model.getMetadataValue(property, 'isHidden') === true) {
+                        observer.next(true);
+                    } else {
+
+                        if (typeof model.getMetadataValue(property, 'isHidden') == 'object') {
+
+                            model.getCondition('__isHidden__'+property).subscribe((c) => {
+
+                                if (isConditionValue && !c.state) {
+                                    observer.next(isConditionValue);
+
+                                    console.log(property,1,isConditionValue);
+                                } else {
+                                    observer.next(!c.state);
+                                    console.log(property,2,!c.state);
+                                }
+
+                            });
+                        }
+
+                        model.getCondition(property).subscribe((c) => {
+                            observer.next(self.isHidden(c));
+                            isConditionValue = self.isHidden(c);
+                        });
+                    }
+
+
+
+                })
+            });
+
+
+        }
+    }
+
     ngOnInitExecute(model) {
 
         let self = this;
 
         this._inputs = [];
+
+
 
         if (this.property) {
 
@@ -149,39 +199,16 @@ export class AppsappInputComponent extends AbstractComponent {
                 parentProperty: this.parentProperty,
                 label: this.label,
                 hidden: new Observable((observer) => {
-                    if (model.getMetadataValue(self.property, 'isHidden')) {
-                        observer.next(self.isHidden(true));
-                    } else {
-                        model.getCondition(self.property).subscribe((c) => {
-                            observer.next(self.isHidden(c));
-                        });
-                    }
+
+                    self.registerConditions(self.property, model);
+
                 })
             });
 
         } else {
 
             Object.keys(model).forEach((property) => {
-
-                if (property.substr(0, 1) !== "_") {
-                    this._inputs.push({
-                        type: model.getType(property),
-                        property: property,
-                        parentPropertyMetadata: this.parentPropertyMetadata,
-                        parentProperty: this.parentProperty,
-                        hidden: new Observable((observer) => {
-                            model.getCondition(property).subscribe((c) => {
-                                if (model.getMetadataValue(property, 'isHidden')) {
-                                    observer.next(self.isHidden(true));
-                                } else {
-                                    observer.next(self.isHidden(c));
-                                }
-                            });
-                        })
-                    });
-
-
-                }
+              self.registerConditions(property,model);
             });
         }
 

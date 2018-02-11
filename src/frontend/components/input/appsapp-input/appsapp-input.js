@@ -50,9 +50,14 @@ var AppsappInputComponent = /** @class */ (function (_super) {
                 parentProperty: this.parentProperty,
                 label: this.label,
                 hidden: new Observable_1.Observable(function (observer) {
-                    model.getCondition(self.property).subscribe(function (c) {
-                        observer.next(self.isHidden(c));
-                    });
+                    if (model.getMetadataValue(self.property, 'isHidden')) {
+                        observer.next(self.isHidden(true));
+                    }
+                    else {
+                        model.getCondition(self.property).subscribe(function (c) {
+                            observer.next(self.isHidden(c));
+                        });
+                    }
                 })
             });
         }
@@ -66,7 +71,12 @@ var AppsappInputComponent = /** @class */ (function (_super) {
                         parentProperty: _this.parentProperty,
                         hidden: new Observable_1.Observable(function (observer) {
                             model.getCondition(property).subscribe(function (c) {
-                                observer.next(self.isHidden(c));
+                                if (model.getMetadataValue(property, 'isHidden')) {
+                                    observer.next(self.isHidden(true));
+                                }
+                                else {
+                                    observer.next(self.isHidden(c));
+                                }
                             });
                         })
                     });
