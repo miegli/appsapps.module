@@ -149,9 +149,13 @@ export class AppsappInputComponent extends AbstractComponent {
                 parentProperty: this.parentProperty,
                 label: this.label,
                 hidden: new Observable((observer) => {
-                    model.getCondition(self.property).subscribe((c) => {
-                        observer.next(self.isHidden(c));
-                    });
+                    if (model.getMetadataValue(self.property, 'isHidden')) {
+                        observer.next(self.isHidden(true));
+                    } else {
+                        model.getCondition(self.property).subscribe((c) => {
+                            observer.next(self.isHidden(c));
+                        });
+                    }
                 })
             });
 
@@ -167,7 +171,11 @@ export class AppsappInputComponent extends AbstractComponent {
                         parentProperty: this.parentProperty,
                         hidden: new Observable((observer) => {
                             model.getCondition(property).subscribe((c) => {
-                                observer.next(self.isHidden(c));
+                                if (model.getMetadataValue(property, 'isHidden')) {
+                                    observer.next(self.isHidden(true));
+                                } else {
+                                    observer.next(self.isHidden(c));
+                                }
                             });
                         })
                     });
