@@ -21,6 +21,7 @@ var AppsappModuleProvider = /** @class */ (function () {
         this.providerConfig = providerConfig;
         this.providerMessages = providerMessages;
         this.http = http;
+        this.platform = null;
         var self = this;
         //this.persistenceManager = new PersistenceManager();
         // init configuration instance
@@ -164,6 +165,10 @@ var AppsappModuleProvider = /** @class */ (function () {
         else {
             this.config.setOs('browser');
         }
+        this.platform = platform;
+    };
+    AppsappModuleProvider.prototype.getLang = function () {
+        return this.platform && this.platform.lang !== undefined ? this.platform.lang() : 'de';
     };
     /**
      * get persitence manager

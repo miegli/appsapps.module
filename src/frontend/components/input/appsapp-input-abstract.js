@@ -34,6 +34,8 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
         _this._label = '';
         _this._description = '';
         _this._validationMetadata = {};
+        _this._options = {};
+        _this._optionsTimeout = null;
         _this.hidden = false;
         _this.errormsg = '';
         _this.placeholder = '';
@@ -46,6 +48,7 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
      */
     AppsappInputAbstractComponent.prototype.init = function (config) {
         var self = this;
+        this._options['lang'] = this.appsappModuleProvider.getLang();
         if (this.property) {
             if (!this.validator) {
                 this.validator = this.model.getValidation(this.property);
@@ -80,12 +83,7 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
                 theme: theme,
                 closeOnOverlayTap: false
             };
-            if (this.mbsc) {
-                this.mbsc.instance.option(option);
-            }
-            if (this.mbscForm) {
-                this.mbscForm.instance.option(option);
-            }
+            this.setMbscOption(option);
             this.afterInit(config);
             this._config = config;
         }
@@ -112,9 +110,18 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
      * set Mbsc Option
      * @param {Object} options
      */
-    AppsappInputAbstractComponent.prototype.setMbscOption = function (option) {
+    AppsappInputAbstractComponent.prototype.setMbscOption = function (options) {
+        var _this = this;
+        Object.keys(options).forEach(function (v) {
+            _this._options[v] = options[v];
+        });
         if (this.mbsc !== undefined && this.mbsc.instance) {
-            this.mbsc.instance.option(option);
+            if (this._optionsTimeout) {
+                window.clearTimeout(this._optionsTimeout);
+            }
+            this._optionsTimeout = window.setTimeout(function () {
+                _this.mbsc.instance.option(_this._options);
+            }, 2);
         }
     };
     /**

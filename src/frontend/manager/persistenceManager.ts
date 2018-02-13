@@ -62,9 +62,6 @@ export class PersistenceManager {
         };
 
 
-
-
-
         self.storageWrapper.get('_pendingChanges').then((data) => {
             this._pendingChangesModels = data && Object.keys(data).length ? data : {};
         });
@@ -126,7 +123,6 @@ export class PersistenceManager {
      * @param {FirebaseModel} firebaseModel
      */
     public setFirebase(firebaseModel) {
-
 
 
         let self = this;
@@ -206,58 +202,56 @@ export class PersistenceManager {
 
             model.setPersistenceManager(self);
 
-          //  if (!model.getPersistenceManager() || !model.getFirebaseDatabasePath()) {
+            //  if (!model.getPersistenceManager() || !model.getFirebaseDatabasePath()) {
 
-                self.observable.subscribe((data) => {
-
-
-                    if (data.action == 'connected' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
-                        self.workOnPendingChanges(model);
-                    }
-
-                    if (data.action == 'initFirebaseDatabase' && self.getFirebasePath(model)) {
-                        model.setFirebaseDatabase(self.getFirebaseDatabase());
-                        model.setFirebaseDatabasePath(self.getFirebasePath(model));
-
-                    }
-
-                    if (data.action == 'initFirebaseDatabase' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
-
-                        model.setFirebaseDatabaseObject(model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + "/data")).getFirebaseDatabaseObject().snapshotChanges().subscribe((action) => {
-
-                            if (model.hasPendingChanges()) {
-
-                                window.setTimeout(function () {
-                                    self.workOnPendingChanges(model).then(() => {
-                                        model.setHasPendingChanges(false).emit();
-                                    }).catch();
-                                }, 1000);
-
-                            } else {
-
-                                model.loadJson(action.payload.val()).then((m) => {
-                                    m.emit();
-                                }).catch((error) => {
-                                    //
-                                    console.log('error', error);
-                                });
-                            }
-
-                        }, (error) => {
-                            // skip access denied
-                        });
-
-                        self._loadedResolver(model);
-
-                    }
+            self.observable.subscribe((data) => {
 
 
+                if (data.action == 'connected' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
+                    self.workOnPendingChanges(model);
+                }
+
+                if (data.action == 'initFirebaseDatabase' && self.getFirebasePath(model)) {
+                    model.setFirebaseDatabase(self.getFirebaseDatabase());
+                    model.setFirebaseDatabasePath(self.getFirebasePath(model));
+
+                }
+
+                if (data.action == 'initFirebaseDatabase' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
+
+                    model.setFirebaseDatabaseObject(model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + "/data")).getFirebaseDatabaseObject().snapshotChanges().subscribe((action) => {
+
+                        if (model.hasPendingChanges()) {
+
+                            window.setTimeout(function () {
+                                self.workOnPendingChanges(model).then(() => {
+                                    model.setHasPendingChanges(false).emit();
+                                }).catch();
+                            }, 1000);
+
+                        } else {
+
+                            model.loadJson(action.payload.val()).then((m) => {
+                                m.emit();
+                            }).catch((error) => {
+                                //
+                                console.log('error', error);
+                            });
+                        }
+
+                    }, (error) => {
+                        // skip access denied
+                    });
+
+                    self._loadedResolver(model);
+
+                }
 
 
-                });
+            });
             resolve(model);
 
-           // }
+            // }
 
         });
 
@@ -289,11 +283,48 @@ export class PersistenceManager {
      * @param model
      * @param observer
      * @param action
+     * @param integer interval repeat this trigger every interval seconds
+     * @param integer maximal successfully execution counts
      * @returns void
      */
-    private trigger(model, observer, action) {
+    private trigger(model, observer, action, interval?, maxExecutions?) {
 
-        this.callAction(model, observer, action, null, null);
+        if (interval !== undefined) {
+
+            let executionCount = 0;
+            let invokeTrigger = (observer) => {
+
+                let observableInterval = new Observable<any>((observerInterval: Observer<any>) => {
+                    this.callAction(model, observerInterval, action, null, null);
+                });
+
+                observableInterval.subscribe((next) => {
+                    observer.next(next);
+                }, (error) => {
+                    invokeTrigger(observer);
+                    observer.next(error);
+                }, () => {
+                    if (maxExecutions === undefined || maxExecutions > executionCount) {
+                        window.setTimeout(() => {
+                            invokeTrigger(observer);
+                        },interval ? interval * 1000 : 1)
+
+                    } else {
+                        if (maxExecutions !== undefined) {
+                            observer.complete();
+                        }
+                    }
+
+                });
+            }
+
+            invokeTrigger(observer);
+
+
+        } else {
+            this.callAction(model, observer, action, null, null);
+        }
+
 
     }
 
