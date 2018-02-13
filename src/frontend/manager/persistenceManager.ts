@@ -7,6 +7,7 @@ import {Observable} from "rxjs/Observable";
 import {FirebaseModel} from "../models/firebase";
 import {AngularFireAuth} from "angularfire2/auth";
 import * as objectHash from 'object-hash';
+import {UUID} from "angular2-uuid";
 
 @Injectable()
 
@@ -289,19 +290,30 @@ export class PersistenceManager {
      */
     private trigger(model, observer, action, interval?, maxExecutions?) {
 
+        let identifier = UUID.UUID();
+
         if (interval !== undefined) {
 
             let executionCount = 0;
             let invokeTrigger = (observer) => {
 
                 let observableInterval = new Observable<any>((observerInterval: Observer<any>) => {
-                    this.callAction(model, observerInterval, action, null, null);
+                    this.callAction(model, observerInterval, action, null, null,{identifier: identifier, interval: interval, maxExecutions: maxExecutions, currentExecutions: executionCount});
                 });
 
                 observableInterval.subscribe((next) => {
                     observer.next(next);
                 }, (error) => {
-                    invokeTrigger(observer);
+                    if (maxExecutions === undefined || maxExecutions > executionCount) {
+                        window.setTimeout(() => {
+                            invokeTrigger(observer);
+                        },interval ? interval * 1000 : 1)
+
+                    } else {
+                        if (maxExecutions !== undefined) {
+                            observer.error(error);
+                        }
+                    }
                     observer.next(error);
                 }, () => {
                     if (maxExecutions === undefined || maxExecutions > executionCount) {
@@ -324,7 +336,7 @@ export class PersistenceManager {
 
 
         } else {
-            this.callAction(model, observer, action, null, null);
+            this.callAction(model, observer, action, null, null, {identifier: identifier});
         }
 
 
@@ -338,10 +350,23 @@ export class PersistenceManager {
      * @param action
      * @param resolve
      * @param reject
+     * @param any additionalRequestData
      * @returns void
      */
-    private callAction(model, observer, action: { name: string, data?: {} }, resolve, reject) {
+    private callAction(model, observer, action: { name: string, data?: {} }, resolve, reject, additionalRequestData?) {
 
+        if (additionalRequestData !== undefined) {
+
+            if (action['data'] == undefined) {
+                action['data'] = {};
+            }
+            Object.keys(additionalRequestData).forEach((k) => {
+                if (additionalRequestData[k] && additionalRequestData[k] !== undefined) {
+                    action['data'][k] = additionalRequestData[k];
+                }
+            })
+
+        }
 
         let self = this, c = self.getActionDataWithIdentifier(action, model), emit = (model) => {
 
@@ -355,6 +380,9 @@ export class PersistenceManager {
             });
 
         };
+
+
+
 
         observer.next(model.getMessage('processing'));
 

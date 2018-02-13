@@ -223,6 +223,7 @@ var PersistenceManager = /** @class */ (function () {
                         }
                     }
                 });
+                executionCount_1++;
             };
             invokeTrigger_1(observer);
         }
