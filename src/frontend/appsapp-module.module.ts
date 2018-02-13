@@ -17,7 +17,6 @@ import {AppsappInputSelectComponent} from "./components/input/appsapp-input-sele
 import {AppsappInputListComponent} from "./components/input/appsapp-input-list/appsapp-input-list";
 import {AppsappInputTimeComponent} from "./components/input/appsapp-input-time/appsapp-input-time";
 import {AppsappInputAbstractComponent} from "./components/input/appsapp-input-abstract";
-import {MbscModule} from "@mobiscroll/angular";
 import {FormsModule} from "@angular/forms";
 import {AppsappModuleProvider} from "./providers/appsapp-module-provider";
 import {AppsappModuleProviderConfig} from "./providers/appsapp-module-provider";
@@ -48,7 +47,7 @@ import {HttpClientModule, HttpClient} from "@angular/common/http";
         AppsappInputTimeComponent
     ],
     providers: [AppsappModuleProvider, HttpClient],
-    imports: [MbscModule, CommonModule, FormsModule, HttpClientModule],
+    imports: [CommonModule, FormsModule, HttpClientModule],
     exports: [
         // export the component(s) that you want others to be able to use
         AppsappInputComponent

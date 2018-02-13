@@ -14,7 +14,6 @@ require("rxjs/add/operator/map");
 var config_1 = require("../models/config");
 var firebase_1 = require("../models/firebase");
 var persistenceManager_1 = require("../manager/persistenceManager");
-var angular_1 = require("@mobiscroll/angular");
 ;
 var AppsappModuleProvider = /** @class */ (function () {
     function AppsappModuleProvider(providerConfig, providerMessages, http) {
@@ -42,23 +41,25 @@ var AppsappModuleProvider = /** @class */ (function () {
                     window.clearTimeout(timeout);
                 }
                 timeout = window.setTimeout(function () {
-                    angular_1.mobiscroll.toast({
-                        message: message
-                    }).then();
+                    console.log(message);
+                    // mobiscroll.toast({
+                    //     message: message
+                    // }).then();
                 }, timeout ? 1000 : 1);
             }
             else {
                 if (typeof message == 'string') {
-                    angular_1.mobiscroll.alert({
-                        title: providerMessages.error,
-                        message: message
-                    });
+                    console.log(message);
+                    // mobiscroll.alert({
+                    //     title: providerMessages.error,
+                    //     message: message
+                    // });
                 }
                 else {
                     console.log(message);
-                    angular_1.mobiscroll.toast({
-                        message: providerMessages.error
-                    }).then();
+                    // mobiscroll.toast({
+                    //     message: providerMessages.error
+                    // }).then();
                 }
             }
         };
