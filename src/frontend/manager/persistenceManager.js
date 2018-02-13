@@ -11,6 +11,7 @@ var core_1 = require("@angular/core");
 var angular_2_local_storage_1 = require("angular-2-local-storage");
 var Observable_1 = require("rxjs/Observable");
 var objectHash = require("object-hash");
+var angular2_uuid_1 = require("angular2-uuid");
 var PersistenceManager = /** @class */ (function () {
     function PersistenceManager() {
         var _this = this;
@@ -200,16 +201,26 @@ var PersistenceManager = /** @class */ (function () {
      */
     PersistenceManager.prototype.trigger = function (model, observer, action, interval, maxExecutions) {
         var _this = this;
+        var identifier = angular2_uuid_1.UUID.UUID();
         if (interval !== undefined) {
             var executionCount_1 = 0;
             var invokeTrigger_1 = function (observer) {
                 var observableInterval = new Observable_1.Observable(function (observerInterval) {
-                    _this.callAction(model, observerInterval, action, null, null);
+                    _this.callAction(model, observerInterval, action, null, null, { identifier: identifier, interval: interval, maxExecutions: maxExecutions, currentExecutions: executionCount_1 });
                 });
                 observableInterval.subscribe(function (next) {
                     observer.next(next);
                 }, function (error) {
-                    invokeTrigger_1(observer);
+                    if (maxExecutions === undefined || maxExecutions > executionCount_1) {
+                        window.setTimeout(function () {
+                            invokeTrigger_1(observer);
+                        }, interval ? interval * 1000 : 1);
+                    }
+                    else {
+                        if (maxExecutions !== undefined) {
+                            observer.error(error);
+                        }
+                    }
                     observer.next(error);
                 }, function () {
                     if (maxExecutions === undefined || maxExecutions > executionCount_1) {
@@ -228,7 +239,7 @@ var PersistenceManager = /** @class */ (function () {
             invokeTrigger_1(observer);
         }
         else {
-            this.callAction(model, observer, action, null, null);
+            this.callAction(model, observer, action, null, null, { identifier: identifier });
         }
     };
     /**
@@ -238,9 +249,20 @@ var PersistenceManager = /** @class */ (function () {
      * @param action
      * @param resolve
      * @param reject
+     * @param any additionalRequestData
      * @returns void
      */
-    PersistenceManager.prototype.callAction = function (model, observer, action, resolve, reject) {
+    PersistenceManager.prototype.callAction = function (model, observer, action, resolve, reject, additionalRequestData) {
+        if (additionalRequestData !== undefined) {
+            if (action['data'] == undefined) {
+                action['data'] = {};
+            }
+            Object.keys(additionalRequestData).forEach(function (k) {
+                if (additionalRequestData[k] && additionalRequestData[k] !== undefined) {
+                    action['data'][k] = additionalRequestData[k];
+                }
+            });
+        }
         var self = this, c = self.getActionDataWithIdentifier(action, model), emit = function (model) {
             model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').query.once('value', function (event) {
                 var next = event.val();
