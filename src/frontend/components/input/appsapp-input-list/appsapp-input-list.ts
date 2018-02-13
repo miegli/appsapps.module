@@ -29,13 +29,6 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
     @Output() parentPropertyMetadata: any = null;
     @Output() parentProperty: any = null;
 
-    constructor(public appsappModuleProvider: AppsappModuleProvider) {
-
-        super(appsappModuleProvider);
-        this.init();
-
-    }
-
 
     afterInit(config) {
 
