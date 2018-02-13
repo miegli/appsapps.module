@@ -194,10 +194,41 @@ var PersistenceManager = /** @class */ (function () {
      * @param model
      * @param observer
      * @param action
+     * @param integer interval repeat this trigger every interval seconds
+     * @param integer maximal successfully execution counts
      * @returns void
      */
-    PersistenceManager.prototype.trigger = function (model, observer, action) {
-        this.callAction(model, observer, action, null, null);
+    PersistenceManager.prototype.trigger = function (model, observer, action, interval, maxExecutions) {
+        var _this = this;
+        if (interval !== undefined) {
+            var executionCount_1 = 0;
+            var invokeTrigger_1 = function (observer) {
+                var observableInterval = new Observable_1.Observable(function (observerInterval) {
+                    _this.callAction(model, observerInterval, action, null, null);
+                });
+                observableInterval.subscribe(function (next) {
+                    observer.next(next);
+                }, function (error) {
+                    invokeTrigger_1(observer);
+                    observer.next(error);
+                }, function () {
+                    if (maxExecutions === undefined || maxExecutions > executionCount_1) {
+                        window.setTimeout(function () {
+                            invokeTrigger_1(observer);
+                        }, interval ? interval * 1000 : 1);
+                    }
+                    else {
+                        if (maxExecutions !== undefined) {
+                            observer.complete();
+                        }
+                    }
+                });
+            };
+            invokeTrigger_1(observer);
+        }
+        else {
+            this.callAction(model, observer, action, null, null);
+        }
     };
     /**
      *

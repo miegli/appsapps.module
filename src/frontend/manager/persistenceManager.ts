@@ -316,6 +316,8 @@ export class PersistenceManager {
                     }
 
                 });
+
+                executionCount++;
             }
 
             invokeTrigger(observer);
