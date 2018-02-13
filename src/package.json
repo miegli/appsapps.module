@@ -1,6 +1,6 @@
 {
   "name": "appsapp-module",
-  "version": "0.9.92",
+  "version": "0.9.93",
   "repository": {
     "type": "git",
     "url": "https://github.com/miegli/appsapps.module"
@@ -17,7 +17,6 @@
     "appsapp-cli": "^1.6.167",
     "angularfire2": "=5.0.0-rc.6",
     "firebase": "^4.9.1",
-    "rxjs": "^5.5.6",
     "class-transformer": "^0.1.9",
     "class-validator": "^0.8.1",
     "object-hash": "^1.2.0"
