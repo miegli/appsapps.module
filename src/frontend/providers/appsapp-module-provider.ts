@@ -24,14 +24,16 @@ export interface AppsappModuleProviderConfig {
 };
 
 
-declare var require: any
+declare var require: any;
 
 export class AppsappModuleProvider {
 
     public config: ConfigModel;
+    public platform: any = null;
     private firebaseProject: FirebaseModel;
     private persistenceManager: any;
     private notificationProvider: object;
+
 
 
     constructor(@Inject('config') private providerConfig: AppsappModuleProviderConfig, @Inject('messages') private providerMessages: AppsappModuleProviderMessages, private http: HttpClient) {
@@ -213,6 +215,13 @@ export class AppsappModuleProvider {
             this.config.setOs('browser');
         }
 
+        this.platform = platform;
+
+    }
+
+    public getLang() {
+
+        return this.platform && this.platform.lang !== undefined ? this.platform.lang() : 'de';
 
     }
 

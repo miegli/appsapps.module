@@ -27,13 +27,11 @@ var appsapp_cli_1 = require("appsapp-cli");
  */
 var AppsappInputListComponent = /** @class */ (function (_super) {
     __extends(AppsappInputListComponent, _super);
-    function AppsappInputListComponent(appsappModuleProvider) {
-        var _this = _super.call(this, appsappModuleProvider) || this;
-        _this.appsappModuleProvider = appsappModuleProvider;
+    function AppsappInputListComponent() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.options = [];
         _this.parentPropertyMetadata = null;
         _this.parentProperty = null;
-        _this.init();
         return _this;
     }
     AppsappInputListComponent.prototype.afterInit = function (config) {

@@ -25,6 +25,8 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
     _ngModelGettterObserver: Observer<any>;
     _validationMetadata: any = {};
     _config: ConfigModel;
+    _options: any = {};
+    _optionsTimeout: any = null;
     @Output() validator: Observable<any>;
     @Output() hidden: boolean = false;
     @Output() errormsg: string = '';
@@ -37,6 +39,8 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
     constructor(public appsappModuleProvider: AppsappModuleProvider) {
 
         super(appsappModuleProvider);
+
+
         this.init();
 
     }
@@ -50,6 +54,7 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
 
         let self = this;
 
+        this._options['lang'] = this.appsappModuleProvider.getLang();
 
         if (this.property) {
             if (!this.validator) {
@@ -100,13 +105,7 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
                 closeOnOverlayTap: false
             };
 
-            if (this.mbsc) {
-                this.mbsc.instance.option(option);
-            }
-            if (this.mbscForm) {
-                this.mbscForm.instance.option(option);
-            }
-
+            this.setMbscOption(option);
 
             this.afterInit(config);
             this._config = config;
@@ -146,10 +145,20 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
      * set Mbsc Option
      * @param {Object} options
      */
-    setMbscOption(option: any) {
+    setMbscOption(options: any) {
+
+        Object.keys(options).forEach((v) => {
+            this._options[v] = options[v];
+        });
 
         if (this.mbsc !== undefined && this.mbsc.instance) {
-            this.mbsc.instance.option(option);
+            if (this._optionsTimeout) {
+                window.clearTimeout(this._optionsTimeout);
+            }
+            this._optionsTimeout = window.setTimeout(() => {
+                this.mbsc.instance.option(this._options);
+            },2)
+
         }
 
     }

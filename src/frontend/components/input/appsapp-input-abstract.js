@@ -78,7 +78,6 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
             }
             var option = {
                 theme: theme,
-                lang: 'de',
                 closeOnOverlayTap: false
             };
             if (this.mbsc) {

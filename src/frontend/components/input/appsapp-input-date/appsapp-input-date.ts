@@ -86,7 +86,6 @@ export class AppsappInputDateComponent extends AppsappInputAbstractComponent {
 
         }
 
-
         this.setMbscOption({
             display: options && options.display ? options.display : (config.getOs() !== 'desktop' ? 'bottom' : 'center')
         });
