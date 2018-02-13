@@ -1,10 +1,9 @@
-import {Injectable, Inject, ModuleWithProviders} from '@angular/core';
+import {Inject} from '@angular/core';
 import 'rxjs/add/operator/map';
 import {ConfigModel} from "../models/config";
 import {FirebaseModel} from "../models/firebase";
 import {AngularFireAuth} from "angularfire2/auth";
 import {PersistenceManager} from "../manager/persistenceManager";
-import {mobiscroll} from "@mobiscroll/angular";
 import {AppsappModuleProviderMessages} from "appsapp-cli";
 import {HttpClient} from "@angular/common/http";
 
@@ -64,24 +63,33 @@ export class AppsappModuleProvider {
                     window.clearTimeout(timeout);
                 }
                 timeout = window.setTimeout(function () {
-                    mobiscroll.toast({
-                        message: message
-                    }).then();
+
+                    console.log(message);
+
+                    // mobiscroll.toast({
+                    //     message: message
+                    // }).then();
+
                 }, timeout ? 1000 : 1);
+
+
             } else {
 
                 if (typeof message == 'string') {
 
-                    mobiscroll.alert({
-                        title: providerMessages.error,
-                        message: message
-                    });
+                    console.log(message);
+
+                    // mobiscroll.alert({
+                    //     title: providerMessages.error,
+                    //     message: message
+                    // });
 
                 } else {
                     console.log(message);
-                    mobiscroll.toast({
-                        message: providerMessages.error
-                    }).then();
+
+                    // mobiscroll.toast({
+                    //     message: providerMessages.error
+                    // }).then();
                 }
 
 
