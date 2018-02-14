@@ -91,8 +91,8 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
 
         if (data) {
 
-            if (data.selectoptions && typeof data.selectoptions == 'object') {
-                this.selectoptions = data.selectoptions;
+            if (data.options && typeof data.options == 'object') {
+                this.selectoptions = data.options;
             }
 
             if (data.source) {

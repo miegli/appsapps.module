@@ -25,6 +25,7 @@ var appsapp_input_select_1 = require("./components/input/appsapp-input-select/ap
 var appsapp_input_list_1 = require("./components/input/appsapp-input-list/appsapp-input-list");
 var appsapp_input_time_1 = require("./components/input/appsapp-input-time/appsapp-input-time");
 var appsapp_input_abstract_1 = require("./components/input/appsapp-input-abstract");
+var angular_1 = require("@mobiscroll/angular");
 var forms_1 = require("@angular/forms");
 var appsapp_module_provider_1 = require("./providers/appsapp-module-provider");
 var appsapp_input_number_plain_1 = require("./components/input/appsapp-input-number-plain/appsapp-input-number-plain");
@@ -66,7 +67,7 @@ var AppsappModule = /** @class */ (function () {
                 appsapp_input_time_1.AppsappInputTimeComponent
             ],
             providers: [appsapp_module_provider_1.AppsappModuleProvider, http_1.HttpClient],
-            imports: [common_1.CommonModule, forms_1.FormsModule, http_1.HttpClientModule],
+            imports: [angular_1.MbscModule, common_1.CommonModule, forms_1.FormsModule, http_1.HttpClientModule],
             exports: [
                 // export the component(s) that you want others to be able to use
                 appsapp_input_1.AppsappInputComponent
