@@ -1,10 +1,10 @@
-# appsapp-module for Ionicframework
+# appsapp
+
+An awesome full-stack framework for creating mobile and desktop apps the easy way of development.  Now you build super sophisticated Angular2+/Ionic apps using TypeScript.
 
 **Attention: Don't use it in production environment. It's an alpha version for a concept study.** 
 
-This is an appsApp collection of high quality ui components with awesome backend and validation services full included. Now you build super sophisticated Angular/Ionic apps using TypeScript.
-
-Circular condition validators (frontend and backend all-in-one!) are the unique selling points. You gonna love it!
+Circular condition validators (frontend and backend all-in-one) and triggerin backend functions with ultra-low latency (<1ms) are the unique selling points. You gonna love it!
  
 ![Alt text](appsapp-module-screen.png?raw=true "appsApp.io")
 
@@ -74,7 +74,7 @@ import { AppsappModuleProvider, PersistableModel, HasConditions, IsInt, Min, Max
   template: ´
   <appsapp-input [model]="myModel"></appsapp-input>
   <button ion-button round outline (click)="save()" [disabled]="!myModel.hasChanges()">
-    Änderungen speichern
+    Save
   </button>
   ´
 })
@@ -83,7 +83,7 @@ export class HomePage {
 
   myModel: myModel;
 
-  constructor(public navCtrl: NavController, appsappModuleProvider: AppsappModuleProvider) {
+  constructor(appsappModuleProvider: AppsappModuleProvider) {
     this.myModel = appsappModuleProvider.new(myModel);
   }
 
@@ -171,37 +171,43 @@ You can define your own backend services for using as finishers, loading data or
 
 ###### Server
 
-Calling a trigger is invoking the backend function by adding an event queue entry named like your triggered action. Connecting to the event queues's actions is done by a simple node.js script (connectors for php and others is coming sonn):
+Calling a trigger is invoking the backend function by adding an event queue entry of your triggered action. Connecting to the event queues's actions is done by a simple node.js script:
 
-```js
-var connector = require("appsapp-cli/connector").init('https://your-project.firebaseio.com/', path.dirname(__filename) + '/serviceAccountKey.json');
-connector.on({action: 'nameOfYourBackendFunction'}, (request, response, observer) => {
-    
-    // request: object with users request data
-    // response: your triggered model
 
-    execSql('SELECT TOP 1 A, B FROM YourDatabaseTable WHERE user = '+request.id).then((result) => {
+```typescript
+import {Connector, Mssql} from "appsapp-cli/connector";
+import {appRequest} from "appsapp-cli";
+import {Observer} from 'rxjs';
+import {myModel} from "../model/myModel";
 
-        result.data.forEach((row) => {
-            response.setProperty('A', row.A);
-            response.setProperty('B', row.B);
-        });
+const app = new Connector();
+const database = new Mssql('dbo', {
+    user: 'DatabaseUser',
+    password: '***',
+    server: 'localhost',
+    database: 'DatabaseName'
+});
 
-    // observer: resolve will synchronize the updated model to the client
+app.init('https://test-**.firebaseio.com/', require(__dirname + '/serviceAccountKey.json'));
+
+app.on({
+    action: 'nameOfYourBackendFunction'
+}, (request: appRequest, response: myModel, observer: Observer) => {
+
+    database.query('select TOP 1 * from tblPerson FOR JSON PATH').subscribe((json) => {
+        response.loadJson(json);
+    }, (error) => {
+        observer.reject(error);
+    }, () => {
         observer.resolve();
+    });
 
-    }).catch((err) => {
-       observer.reject(err);
-    })
-
-
-})
+});
 
 
 ```
 
-
-More finishers and backend services are upcoming.
+You can connect to event queue by writing backend code in any others of your favorite languages. See Google Firebase SDK for more informations.
 
 ### Install
 

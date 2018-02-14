@@ -81,8 +81,8 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
         }
         self.applyselectoptionsPostprocess();
         if (data) {
-            if (data.selectoptions && typeof data.selectoptions == 'object') {
-                this.selectoptions = data.selectoptions;
+            if (data.options && typeof data.options == 'object') {
+                this.selectoptions = data.options;
             }
             if (data.source) {
                 self.select = this.appsappModuleProvider["new"](select_1.SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url));
