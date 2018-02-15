@@ -27,7 +27,9 @@ var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
 var AppsappInputBirthdayComponent = /** @class */ (function (_super) {
     __extends(AppsappInputBirthdayComponent, _super);
     function AppsappInputBirthdayComponent() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.isInline = false;
+        return _this;
     }
     AppsappInputBirthdayComponent.prototype.beforeModelChanges = function (model, property, value) {
         // create iso date
@@ -49,6 +51,12 @@ var AppsappInputBirthdayComponent = /** @class */ (function (_super) {
             var maxDate = new Date();
             this.setMbscOption({ max: maxDate });
         }
+        var options = this.model.getMetadataValue(this.property, 'isBirthday');
+        if (options) {
+            if (options.display && options.display == 'inline') {
+                this.isInline = true;
+            }
+        }
         if (this.model.getMetadataValue(this.property, 'minDate')) {
             var minDate = this.model.getMetadataValue(this.property, 'minDate');
             this.setMbscOption({ min: minDate });
@@ -60,7 +68,7 @@ var AppsappInputBirthdayComponent = /** @class */ (function (_super) {
     AppsappInputBirthdayComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-birthday',
-            template: "\n        \n            <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\" #mbscInstance=\"mobiscroll\" mbsc-date [ngModel]=\"_ngModelGettter | async\"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n\n\n    "
+            template: "\n\n        <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\" #mbscInstance=\"mobiscroll\" mbsc-date\n                    [ngModel]=\"_ngModelGettter | async\"\n                    (ngModelChange)=\"modelChanges($event)\">{{_label}}\n        </mbsc-input>\n\n\n    "
         })
     ], AppsappInputBirthdayComponent);
     return AppsappInputBirthdayComponent;

@@ -30,6 +30,7 @@ var AppsappInputDatesComponent = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.range = [];
         _this.locked = false;
+        _this.isInline = false;
         return _this;
     }
     /**
@@ -76,6 +77,9 @@ var AppsappInputDatesComponent = /** @class */ (function (_super) {
             }
             if (options.timeFormat) {
                 this.setMbscOption({ timeFormat: options.timeFormat });
+            }
+            if (options.display && options.display == 'inline') {
+                this.isInline = true;
             }
         }
         this.setMbscOption({

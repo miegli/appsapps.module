@@ -140,25 +140,22 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
      */
     removeItem(uuidOrIndex) {
 
-        let value = this.model.getPropertyValue(this.property, true);
+        let self = this, value = this.model.getPropertyValue(this.property, true);
         if (typeof value !== 'object' && value.length == undefined) {
             value = [];
         }
 
         if (!this.model.getMetadataValue(this.property, 'arrayMinSize') || this.model.getMetadataValue(this.property, 'arrayMinSize') < value.length) {
-            let index = 0;
+                let index = 0;
             let wasdeleted = false;
             value.forEach((item) => {
                 if (!wasdeleted && (item.getUuid() == uuidOrIndex || uuidOrIndex == index)) {
-                    value.splice(index, 1);
+                    self.model.remove(this.property, item.getUuid());
                     wasdeleted = true;
                 }
                 index++;
             });
         }
-
-       this.model.setProperty(this.property,this.model.getPropertyValue(this.property, true));
-
 
         this.updateConfig();
 
@@ -167,44 +164,14 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
 
     addItem() {
 
-
-        let self = this, model = this.model.getMetadataValue(this.property, 'isList'), item = null;
-
-        try {
-            item = this.model.getAppsAppModuleProvider() ? this.model.getAppsAppModuleProvider().new(model) : new model();
-        } catch (e) {
-            item = new model.constructor();
-        }
-
         let value = this.model.getPropertyValue(this.property, true);
+
         if (typeof value !== 'object' && value.length == undefined) {
             value = [];
         }
 
-        if (item instanceof PersistableModel) {
-            item.setParent(this.model);
-
-            item.loaded().then((m) => {
-                item.getChangesObserverable().subscribe((next) => {
-                    if (next.model.getParent()) {
-                        next.model.getParent().setProperty(self.property,self.model.getPropertyValue(self.property, true));
-                    }
-
-                })
-            });
-
-
-        }
-
         if (!this.model.getMetadataValue(this.property, 'arrayMaxSize') || this.model.getMetadataValue(this.property, 'arrayMaxSize') > value.length) {
-            if (Object.keys(item).length == 0 || item instanceof PersistableModel == false) {
-                item = new PersistableModel();
-                item.importDynamicProperties(model);
-            }
-
-            item.setUuid();
-            value.push(item);
-
+            this.model.add(this.property);
         }
 
         this.model.setProperty(this.property,this.model.getPropertyValue(this.property, true));
