@@ -24,8 +24,8 @@ export class AppsappInputDatesComponent extends AppsappInputAbstractComponent {
 
 
   @Input() range: Array<Date> = [];
-  locked = false;
-
+  locked: boolean = false;
+  isInline: boolean = false;
 
   /**
    *
@@ -86,6 +86,10 @@ export class AppsappInputDatesComponent extends AppsappInputAbstractComponent {
 
       if (options.timeFormat) {
         this.setMbscOption({timeFormat: options.timeFormat});
+      }
+
+      if (options.display && options.display == 'inline') {
+        this.isInline = true;
       }
 
     }
