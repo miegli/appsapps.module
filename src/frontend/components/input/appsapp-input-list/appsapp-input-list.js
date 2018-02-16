@@ -18,7 +18,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 var core_1 = require("@angular/core");
 var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
-var appsapp_cli_1 = require("appsapp-cli");
 /**
  * Generated class for the AppsappInputSelectComponent component.
  *
@@ -111,7 +110,8 @@ var AppsappInputListComponent = /** @class */ (function (_super) {
      * @param uuid
      */
     AppsappInputListComponent.prototype.removeItem = function (uuidOrIndex) {
-        var value = this.model.getPropertyValue(this.property, true);
+        var _this = this;
+        var self = this, value = this.model.getPropertyValue(this.property, true);
         if (typeof value !== 'object' && value.length == undefined) {
             value = [];
         }
@@ -120,44 +120,21 @@ var AppsappInputListComponent = /** @class */ (function (_super) {
             var wasdeleted_1 = false;
             value.forEach(function (item) {
                 if (!wasdeleted_1 && (item.getUuid() == uuidOrIndex || uuidOrIndex == index_1)) {
-                    value.splice(index_1, 1);
+                    self.model.remove(_this.property, item.getUuid());
                     wasdeleted_1 = true;
                 }
                 index_1++;
             });
         }
-        this.model.setProperty(this.property, this.model.getPropertyValue(this.property, true));
         this.updateConfig();
     };
     AppsappInputListComponent.prototype.addItem = function () {
-        var self = this, model = this.model.getMetadataValue(this.property, 'isList'), item = null;
-        try {
-            item = this.model.getAppsAppModuleProvider() ? this.model.getAppsAppModuleProvider()["new"](model) : new model();
-        }
-        catch (e) {
-            item = new model.constructor();
-        }
         var value = this.model.getPropertyValue(this.property, true);
         if (typeof value !== 'object' && value.length == undefined) {
             value = [];
         }
-        if (item instanceof appsapp_cli_1.PersistableModel) {
-            item.setParent(this.model);
-            item.loaded().then(function (m) {
-                item.getChangesObserverable().subscribe(function (next) {
-                    if (next.model.getParent()) {
-                        next.model.getParent().setProperty(self.property, self.model.getPropertyValue(self.property, true));
-                    }
-                });
-            });
-        }
         if (!this.model.getMetadataValue(this.property, 'arrayMaxSize') || this.model.getMetadataValue(this.property, 'arrayMaxSize') > value.length) {
-            if (Object.keys(item).length == 0 || item instanceof appsapp_cli_1.PersistableModel == false) {
-                item = new appsapp_cli_1.PersistableModel();
-                item.importDynamicProperties(model);
-            }
-            item.setUuid();
-            value.push(item);
+            this.model.add(this.property);
         }
         this.model.setProperty(this.property, this.model.getPropertyValue(this.property, true));
         this.updateConfig();
