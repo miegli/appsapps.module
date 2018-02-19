@@ -375,10 +375,7 @@ var PersistenceManager = /** @class */ (function () {
                 // set default data
                 if (data) {
                     Object.keys(data).forEach(function (property) {
-                        model[property] = data[property];
-                        if (model.__bindingsObserver[property] !== undefined) {
-                            model.__bindingsObserver[property].next(model[property]);
-                        }
+                        model.setProperty(property, data[property]);
                     });
                 }
                 model.removeEditedState();
