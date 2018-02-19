@@ -151,15 +151,17 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
             this._options[v] = options[v];
         });
 
-        if (this.mbsc !== undefined && this.mbsc.instance) {
-            if (this._optionsTimeout) {
-                window.clearTimeout(this._optionsTimeout);
-            }
-            this._optionsTimeout = window.setTimeout(() => {
-                this.mbsc.instance.option(this._options);
-            },2)
+        this.mbsc.instance.option(this._options);
 
-        }
+        // if (this.mbsc !== undefined && this.mbsc.instance) {
+        //     if (this._optionsTimeout) {
+        //         window.clearTimeout(this._optionsTimeout);
+        //     }
+        //     this._optionsTimeout = window.setTimeout(() => {
+        //         this.mbsc.instance.option(this._options);
+        //     },2)
+        //
+        // }
 
     }
 
