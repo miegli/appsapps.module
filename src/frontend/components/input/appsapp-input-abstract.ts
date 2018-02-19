@@ -40,7 +40,6 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
 
         super(appsappModuleProvider);
 
-
         this.init();
 
     }
