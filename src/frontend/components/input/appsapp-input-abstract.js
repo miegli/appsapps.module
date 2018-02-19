@@ -115,14 +115,18 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
         Object.keys(options).forEach(function (v) {
             _this._options[v] = options[v];
         });
-        if (this.mbsc !== undefined && this.mbsc.instance) {
-            if (this._optionsTimeout) {
-                window.clearTimeout(this._optionsTimeout);
-            }
-            this._optionsTimeout = window.setTimeout(function () {
-                _this.mbsc.instance.option(_this._options);
-            }, 2);
+        if (this.mbsc && this.mbsc.instance) {
+            this.mbsc.instance.option(this._options);
         }
+        // if (this.mbsc !== undefined && this.mbsc.instance) {
+        //     if (this._optionsTimeout) {
+        //         window.clearTimeout(this._optionsTimeout);
+        //     }
+        //     this._optionsTimeout = window.setTimeout(() => {
+        //         this.mbsc.instance.option(this._options);
+        //     },2)
+        //
+        // }
     };
     /**
      * event before model changes
