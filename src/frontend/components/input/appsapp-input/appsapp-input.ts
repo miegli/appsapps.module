@@ -3,8 +3,6 @@ import {AbstractComponent} from "../../abstractComponent";
 import {AppsappModuleProvider} from "../../../providers/appsapp-module-provider";
 import {Output} from "@angular/core";
 import {Observable} from "rxjs/Observable";
-import {Observer} from "rxjs/Observer";
-import {instance} from "firebase-functions/lib/providers/database";
 import {PersistableModel} from "appsapp-cli";
 
 /**
