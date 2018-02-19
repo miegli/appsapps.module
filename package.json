@@ -1,6 +1,6 @@
 {
   "name": "appsapp-module",
-  "version": "0.9.110",
+  "version": "0.9.111",
   "scripts": {
     "build": "gulp build",
     "build:watch": "gulp",
@@ -79,7 +79,7 @@
     "class-transformer": "^0.1.9",
     "class-validator": "^0.8.1",
     "core-js": "^2.5.3",
-     "json-stringify-pretty-compact": "^1.1.0",
+    "json-stringify-pretty-compact": "^1.1.0",
     "object-hash": "^1.2.0"
   },
   "engines": {
