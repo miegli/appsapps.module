@@ -151,7 +151,10 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
             this._options[v] = options[v];
         });
 
-        this.mbsc.instance.option(this._options);
+        if (this.mbsc && this.mbsc.instance) {
+            this.mbsc.instance.option(this._options);
+        }
+
 
         // if (this.mbsc !== undefined && this.mbsc.instance) {
         //     if (this._optionsTimeout) {
