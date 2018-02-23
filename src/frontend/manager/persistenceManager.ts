@@ -374,6 +374,8 @@ export class PersistenceManager {
 
                 let next = event.val();
 
+                model.convertListPropertiesFromArrayToObject();
+
                 self.storageWrapper.set(self.getPersistanceIdentifier(model), next).then((m) => {
                     observer.complete();
                 });
@@ -392,6 +394,7 @@ export class PersistenceManager {
                 let p = action.payload.val();
 
                 if (p === null) {
+                    model.convertListPropertiesFromArrayToObject();
                     emit(model);
                 }
                 if (p && p.state && p.state !== 'requested') {
@@ -408,8 +411,10 @@ export class PersistenceManager {
 
                         if (p.message && p.message !== 'done') {
                             observer.next(model.getMessage(p.message));
+                            model.convertListPropertiesFromArrayToObject();
                             emit(model);
                         } else {
+                            model.convertListPropertiesFromArrayToObject();
                             emit(model);
                         }
 
