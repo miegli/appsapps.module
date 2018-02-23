@@ -4,7 +4,7 @@ An awesome full-stack framework for creating mobile and desktop apps the easy wa
 
 **Attention: Don't use it in production environment. It's an alpha version for a concept study.** 
 
-Circular condition validators (frontend and backend all-in-one) and triggerin backend functions with ultra-low latency (<1ms) are the unique selling points. You gonna love it!
+Circular condition validators (frontend and backend all-in-one) and triggering backend functions with ultra-low latency (<1ms) are the unique selling points. You gonna love it!
  
 ![Alt text](appsapp-module-screen.png?raw=true "appsApp.io")
 
@@ -23,7 +23,7 @@ You also need `apppsapp-cli`. So please install it by running:
 $ npm install -g appsapp-cli
 ```
 
-Once you have kick-started your ionic app, you have to import `appsapp-module` and append `mobiscroll`. Switch to your apps project root and run:
+Once you have kick-started your ionic or angular-cli app, you have to import `appsapp-module` and append `mobiscroll`. Switch to your apps project root and run:
 
 
 ```bash
@@ -150,7 +150,7 @@ Add `serviceAccountKey.json` to yours project root with your google service acco
 ```
 
 #### Webhook
-You can trigger any url by calling webhook method. The triggered Url is receiving full object as serialized data by default.
+You can trigger any url by calling webhook method. The triggered Url is receiving full object as serialized data by default. Triggered webhook url are fetched over a proxy method from google firebase functions service and not directly from the client for security reason.
 
 ```typescript
    myModel.webhook('http://your.host/api/rest').subscribe((a) => {
@@ -159,7 +159,7 @@ You can trigger any url by calling webhook method. The triggered Url is receivin
 ```
 
 #### Custom 
-You can define your own backend services for using as finishers, loading data or whatever you want to do with its. Just call a trigger action on your model:
+You can define your own backend services for using as finishers, loading and saving data or whatever you want to do with its. Just call a trigger action on your model:
 
 ###### Client
 
@@ -171,7 +171,7 @@ You can define your own backend services for using as finishers, loading data or
 
 ###### Server
 
-Calling a trigger is invoking the backend function by adding an event queue entry of your triggered action. Connecting to the event queues's actions is done by a simple node.js script:
+Calling a trigger is invoking the backend function by adding an event queue entry of your triggered action. Connecting to the event queues's actions is done with ultra-low latenc (<1ms) by a simple node.js script:
 
 
 ```typescript
@@ -207,7 +207,7 @@ app.on({
 
 ```
 
-You can connect to event queue by writing backend code in any others of your favorite languages. See Google Firebase SDK for more informations.
+You can connect to the event queue by writing some backend code in any others of your favorite languages. More information like samples and tutorials are coming soon.
 
 ### Install
 

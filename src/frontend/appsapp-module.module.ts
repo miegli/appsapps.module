@@ -24,6 +24,7 @@ import {AppsappModuleProviderConfig} from "./providers/appsapp-module-provider";
 import {AppsappModuleProviderMessages} from "appsapp-cli";
 import {AppsappInputNumberPlainComponent} from "./components/input/appsapp-input-number-plain/appsapp-input-number-plain";
 import {HttpClientModule, HttpClient} from "@angular/common/http";
+import {AppsappNavigationComponent} from "./components/navigation/appsapp-navigation/appsapp-navigation";
 
 @NgModule({
     declarations: [
@@ -45,16 +46,18 @@ import {HttpClientModule, HttpClient} from "@angular/common/http";
         AppsappInputSelectComponent,
         AppsappInputListComponent,
         AppsappInputNumberPlainComponent,
-        AppsappInputTimeComponent
+        AppsappInputTimeComponent,
+        AppsappNavigationComponent
     ],
     providers: [AppsappModuleProvider, HttpClient],
     imports: [MbscModule, CommonModule, FormsModule, HttpClientModule],
     exports: [
         // export the component(s) that you want others to be able to use
-        AppsappInputComponent
+        AppsappInputComponent,
+        AppsappNavigationComponent
     ],
     entryComponents: [
-        AppsappInputIntegerComponent
+
     ]
 })
 
