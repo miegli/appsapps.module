@@ -30,6 +30,7 @@ var forms_1 = require("@angular/forms");
 var appsapp_module_provider_1 = require("./providers/appsapp-module-provider");
 var appsapp_input_number_plain_1 = require("./components/input/appsapp-input-number-plain/appsapp-input-number-plain");
 var http_1 = require("@angular/common/http");
+var appsapp_navigation_1 = require("./components/navigation/appsapp-navigation/appsapp-navigation");
 var AppsappModule = /** @class */ (function () {
     function AppsappModule() {
     }
@@ -64,17 +65,17 @@ var AppsappModule = /** @class */ (function () {
                 appsapp_input_select_1.AppsappInputSelectComponent,
                 appsapp_input_list_1.AppsappInputListComponent,
                 appsapp_input_number_plain_1.AppsappInputNumberPlainComponent,
-                appsapp_input_time_1.AppsappInputTimeComponent
+                appsapp_input_time_1.AppsappInputTimeComponent,
+                appsapp_navigation_1.AppsappNavigationComponent
             ],
             providers: [appsapp_module_provider_1.AppsappModuleProvider, http_1.HttpClient],
             imports: [angular_1.MbscModule, common_1.CommonModule, forms_1.FormsModule, http_1.HttpClientModule],
             exports: [
                 // export the component(s) that you want others to be able to use
-                appsapp_input_1.AppsappInputComponent
+                appsapp_input_1.AppsappInputComponent,
+                appsapp_navigation_1.AppsappNavigationComponent
             ],
-            entryComponents: [
-                appsapp_input_integer_1.AppsappInputIntegerComponent
-            ]
+            entryComponents: []
         })
     ], AppsappModule);
     return AppsappModule;
