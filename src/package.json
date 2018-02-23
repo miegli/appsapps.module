@@ -1,6 +1,6 @@
 {
   "name": "appsapp-module",
-  "version": "0.9.117",
+  "version": "0.9.118",
   "repository": {
     "type": "git",
     "url": "https://github.com/miegli/appsapps.module"
@@ -14,7 +14,7 @@
   "jsnext:main": "appsapp-module.js",
   "typings": "appsapp-module.d.ts",
   "dependencies": {
-    "appsapp-cli": "^1.6.199",
+    "appsapp-cli": "^1.6.200",
     "angularfire2": "=5.0.0-rc.6",
     "@angular/forms": "^5.2.0",
     "@mobiscroll/angular": "^4.0.0-beta3.1",
