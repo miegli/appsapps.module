@@ -266,6 +266,7 @@ var PersistenceManager = /** @class */ (function () {
         var self = this, c = self.getActionDataWithIdentifier(action, model), emit = function (model) {
             model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').query.once('value', function (event) {
                 var next = event.val();
+                model.convertListPropertiesFromArrayToObject();
                 self.storageWrapper.set(self.getPersistanceIdentifier(model), next).then(function (m) {
                     observer.complete();
                 });
@@ -276,6 +277,7 @@ var PersistenceManager = /** @class */ (function () {
             model.setHasPendingChanges(false).getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action/' + Object.keys(c)[0]).snapshotChanges().subscribe(function (action) {
                 var p = action.payload.val();
                 if (p === null) {
+                    model.convertListPropertiesFromArrayToObject();
                     emit(model);
                 }
                 if (p && p.state && p.state !== 'requested') {
@@ -288,9 +290,11 @@ var PersistenceManager = /** @class */ (function () {
                     if (p.state == 'done') {
                         if (p.message && p.message !== 'done') {
                             observer.next(model.getMessage(p.message));
+                            model.convertListPropertiesFromArrayToObject();
                             emit(model);
                         }
                         else {
+                            model.convertListPropertiesFromArrayToObject();
                             emit(model);
                         }
                     }
