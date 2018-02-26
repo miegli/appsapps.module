@@ -144,9 +144,6 @@ export class AppsappInputComponent extends AbstractComponent {
         let self = this;
 
 
-        if (property.substr(0, 1) !== "_") {
-
-
             this._inputs.push({
                 type: model.getType(property),
                 property: property,
@@ -185,7 +182,7 @@ export class AppsappInputComponent extends AbstractComponent {
             });
 
 
-        }
+
 
 
     }
@@ -236,7 +233,7 @@ export class AppsappInputComponent extends AbstractComponent {
 
         } else {
 
-            Object.keys(model).forEach((property) => {
+            model.getPropertiesKeys().forEach((property) => {
                 self.registerConditions(property, model);
             });
         }

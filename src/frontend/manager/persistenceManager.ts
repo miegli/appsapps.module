@@ -370,6 +370,7 @@ export class PersistenceManager {
 
         let self = this, c = self.getActionDataWithIdentifier(action, model), emit = (model) => {
 
+
             model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').query.once('value', (event) => {
 
                 let next = event.val();
@@ -385,16 +386,16 @@ export class PersistenceManager {
 
 
 
-
+        console.log(2,c);
         observer.next(model.getMessage('processing'));
 
-        model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action').set(c).then((data) => {
+        model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action').update(c).then((data) => {
             model.setHasPendingChanges(false).getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action/' + Object.keys(c)[0]).snapshotChanges().subscribe((action) => {
 
                 let p = action.payload.val();
 
                 if (p === null) {
-                    model.refreshAllListArrays();
+                    //model.refreshAllListArrays();
                     emit(model);
                 }
                 if (p && p.state && p.state !== 'requested') {
@@ -411,10 +412,10 @@ export class PersistenceManager {
 
                         if (p.message && p.message !== 'done') {
                             observer.next(model.getMessage(p.message));
-                            model.refreshAllListArrays();
+                            //model.refreshAllListArrays();
                             emit(model);
                         } else {
-                            model.refreshAllListArrays();
+                            //model.refreshAllListArrays();
                             emit(model);
                         }
 
@@ -455,6 +456,9 @@ export class PersistenceManager {
                     if (!localStorageOnly && model.getFirebaseDatabasePath() && model.getFirebaseDatabase()) {
 
                         self.clone(model).then((c: any) => {
+
+                            console.log(1,c);
+
                             model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(c.transformAllProperties().convertListPropertiesFromArrayToObject().serialize(true, true)).then((data) => {
                                 if (action) {
                                     self.callAction(model, observer, action, resolve, reject);
@@ -647,7 +651,6 @@ export class PersistenceManager {
 
             let m = new model.constructor();
             m.loadJson(model.serialize(true, true)).then((m) => {
-                m['__hashedValues'] = model['__hashedValues'];
                 resolve(m);
             }).catch((error) => {
                 reject(error);

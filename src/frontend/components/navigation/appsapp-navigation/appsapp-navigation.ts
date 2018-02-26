@@ -68,8 +68,8 @@ export class AppsappNavigationComponent extends AbstractComponent {
 
 
         if (this.model) {
-            Object.keys(this.model).forEach((property) => {
-                if (property.substr(0, 1) !== "_") {
+            this.model.getPropertiesKeys().forEach((property) => {
+
 
                     if (this.model.getMetadataValue(property, 'hasIcon')) {
                         this.model.watch(property, (value) => {
@@ -94,7 +94,7 @@ export class AppsappNavigationComponent extends AbstractComponent {
                         var tempModel = new constructor();
 
                         Object.keys(tempModel).forEach((p) => {
-                            if (!hasNavigationElements && property.substr(0, 1) !== "_") {
+                            if (!hasNavigationElements) {
                                 if (tempModel.getMetadataValue(p, 'hasIcon') && tempModel.getMetadataValue(p, 'hasName') && tempModel.getMetadataValue(p, 'hasBadge')) {
                                     hasNavigationElements = true;
                                 }
@@ -109,7 +109,7 @@ export class AppsappNavigationComponent extends AbstractComponent {
                     }
 
 
-                }
+
             });
         }
 
