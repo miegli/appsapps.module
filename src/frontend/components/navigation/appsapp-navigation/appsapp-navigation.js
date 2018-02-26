@@ -48,38 +48,36 @@ var AppsappNavigationComponent = /** @class */ (function (_super) {
             menuText: this.menuText
         };
         if (this.model) {
-            Object.keys(this.model).forEach(function (property) {
-                if (property.substr(0, 1) !== "_") {
-                    if (_this.model.getMetadataValue(property, 'hasIcon')) {
-                        _this.model.watch(property, function (value) {
-                            self.icon = value;
-                        });
-                    }
-                    if (_this.model.getMetadataValue(property, 'hasName')) {
-                        _this.model.watch(property, function (value) {
-                            self.name = value;
-                        });
-                    }
-                    if (_this.model.getMetadataValue(property, 'hasBadge')) {
-                        _this.model.watch(property, function (value) {
-                            self.badge = value;
-                        });
-                    }
-                    if (_this.model.getMetadataValue(property, 'isList')) {
-                        var constructor = _this.model.getMetadataValue(property, 'isList');
-                        var hasNavigationElements = false;
-                        var tempModel = new constructor();
-                        Object.keys(tempModel).forEach(function (p) {
-                            if (!hasNavigationElements && property.substr(0, 1) !== "_") {
-                                if (tempModel.getMetadataValue(p, 'hasIcon') && tempModel.getMetadataValue(p, 'hasName') && tempModel.getMetadataValue(p, 'hasBadge')) {
-                                    hasNavigationElements = true;
-                                }
+            this.model.getPropertiesKeys().forEach(function (property) {
+                if (_this.model.getMetadataValue(property, 'hasIcon')) {
+                    _this.model.watch(property, function (value) {
+                        self.icon = value;
+                    });
+                }
+                if (_this.model.getMetadataValue(property, 'hasName')) {
+                    _this.model.watch(property, function (value) {
+                        self.name = value;
+                    });
+                }
+                if (_this.model.getMetadataValue(property, 'hasBadge')) {
+                    _this.model.watch(property, function (value) {
+                        self.badge = value;
+                    });
+                }
+                if (_this.model.getMetadataValue(property, 'isList')) {
+                    var constructor = _this.model.getMetadataValue(property, 'isList');
+                    var hasNavigationElements = false;
+                    var tempModel = new constructor();
+                    Object.keys(tempModel).forEach(function (p) {
+                        if (!hasNavigationElements) {
+                            if (tempModel.getMetadataValue(p, 'hasIcon') && tempModel.getMetadataValue(p, 'hasName') && tempModel.getMetadataValue(p, 'hasBadge')) {
+                                hasNavigationElements = true;
                             }
-                        });
-                        _this.model.watch(property, function (value) {
-                            self.children = value;
-                        });
-                    }
+                        }
+                    });
+                    _this.model.watch(property, function (value) {
+                        self.children = value;
+                    });
                 }
             });
         }

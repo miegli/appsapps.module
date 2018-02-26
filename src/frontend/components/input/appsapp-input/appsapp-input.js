@@ -42,36 +42,34 @@ var AppsappInputComponent = /** @class */ (function (_super) {
     }
     AppsappInputComponent.prototype.registerConditions = function (property, model) {
         var self = this;
-        if (property.substr(0, 1) !== "_") {
-            this._inputs.push({
-                type: model.getType(property),
-                property: property,
-                parentPropertyMetadata: this.parentPropertyMetadata,
-                parentProperty: this.parentProperty,
-                hidden: new Observable_1.Observable(function (observer) {
-                    var isConditionValue = false;
-                    if (model.getMetadataValue(property, 'isHidden') === true) {
-                        observer.next(true);
-                    }
-                    else {
-                        if (typeof model.getMetadataValue(property, 'isHidden') == 'object') {
-                            model.getCondition('__isHidden__' + property).subscribe(function (c) {
-                                if (isConditionValue && !c.state) {
-                                    observer.next(isConditionValue);
-                                }
-                                else {
-                                    observer.next(!c.state);
-                                }
-                            });
-                        }
-                        model.getCondition(property).subscribe(function (c) {
-                            observer.next(self.isHidden(c));
-                            isConditionValue = self.isHidden(c);
+        this._inputs.push({
+            type: model.getType(property),
+            property: property,
+            parentPropertyMetadata: this.parentPropertyMetadata,
+            parentProperty: this.parentProperty,
+            hidden: new Observable_1.Observable(function (observer) {
+                var isConditionValue = false;
+                if (model.getMetadataValue(property, 'isHidden') === true) {
+                    observer.next(true);
+                }
+                else {
+                    if (typeof model.getMetadataValue(property, 'isHidden') == 'object') {
+                        model.getCondition('__isHidden__' + property).subscribe(function (c) {
+                            if (isConditionValue && !c.state) {
+                                observer.next(isConditionValue);
+                            }
+                            else {
+                                observer.next(!c.state);
+                            }
                         });
                     }
-                })
-            });
-        }
+                    model.getCondition(property).subscribe(function (c) {
+                        observer.next(self.isHidden(c));
+                        isConditionValue = self.isHidden(c);
+                    });
+                }
+            })
+        });
     };
     AppsappInputComponent.prototype.ngOnInitExecute = function (model) {
         var self = this;
@@ -108,7 +106,7 @@ var AppsappInputComponent = /** @class */ (function (_super) {
             });
         }
         else {
-            Object.keys(model).forEach(function (property) {
+            model.getPropertiesKeys().forEach(function (property) {
                 self.registerConditions(property, model);
             });
         }

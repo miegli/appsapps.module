@@ -384,9 +384,6 @@ export class PersistenceManager {
 
         };
 
-
-
-        console.log(2,c);
         observer.next(model.getMessage('processing'));
 
         model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action').update(c).then((data) => {
@@ -456,8 +453,6 @@ export class PersistenceManager {
                     if (!localStorageOnly && model.getFirebaseDatabasePath() && model.getFirebaseDatabase()) {
 
                         self.clone(model).then((c: any) => {
-
-                            console.log(1,c);
 
                             model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(c.transformAllProperties().convertListPropertiesFromArrayToObject().serialize(true, true)).then((data) => {
                                 if (action) {

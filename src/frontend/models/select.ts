@@ -98,13 +98,12 @@ export class SelectModel extends PersistableModel {
                 if (finalurl.substr(0, 1) == '/') {
 
                     var path = self.getFirebaseDatabaseSessionPath(finalurl);
+                    self.update('data', []);
 
                     self.parent.getFirebaseDatabase().object(path).query.on('value', (event) => {
 
                         if (event) {
                             let data = event.val();
-
-
 
                             if (data) {
                                 if (typeof data.forEach !== 'function') {
