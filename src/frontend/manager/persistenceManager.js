@@ -206,7 +206,12 @@ var PersistenceManager = /** @class */ (function () {
             var executionCount_1 = 0;
             var invokeTrigger_1 = function (observer) {
                 var observableInterval = new Observable_1.Observable(function (observerInterval) {
-                    _this.callAction(model, observerInterval, action, null, null, { identifier: identifier, interval: interval, maxExecutions: maxExecutions, currentExecutions: executionCount_1 });
+                    _this.callAction(model, observerInterval, action, null, null, {
+                        identifier: identifier,
+                        interval: interval,
+                        maxExecutions: maxExecutions,
+                        currentExecutions: executionCount_1
+                    });
                 });
                 observableInterval.subscribe(function (next) {
                     observer.next(next);
@@ -406,16 +411,11 @@ var PersistenceManager = /** @class */ (function () {
             if (json == undefined || json == null) {
                 self.storageWrapper.ready().then(function (data) {
                     self.storageWrapper.get(self.getPersistanceIdentifier(model)).then(function (json) {
-                        if (json) {
-                            model.loadJson(json).then(function (model) {
-                                resolve(model.emit());
-                            })["catch"](function (error) {
-                                reject(error);
-                            });
-                        }
-                        else {
+                        model.loadJson(json).then(function (model) {
                             resolve(model.emit());
-                        }
+                        })["catch"](function (error) {
+                            reject(error);
+                        });
                     })["catch"](function (error) {
                         reject(error);
                     });

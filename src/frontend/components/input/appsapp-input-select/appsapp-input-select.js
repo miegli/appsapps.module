@@ -73,7 +73,8 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
             });
         }
     };
-    AppsappInputSelectComponent.prototype.ngAfterContentInit = function () {
+    AppsappInputSelectComponent.prototype.afterConstructor = function () {
+        var _this = this;
         var self = this;
         var data = this.model.getMetadataValue(this.property, 'isSelect');
         if (this.parentPropertyMetadata) {
@@ -86,13 +87,13 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
             }
             if (data.source) {
                 self.select = this.appsappModuleProvider["new"](select_1.SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url));
-                self.select.autosave();
-                self.select.loaded().then(function (select) {
-                    self.select.setProperty('url', data.source.url);
+                this.model.loaded().then(function (model) {
                     self.select.setProperty('mapping', data.source.mapping);
-                    self.select.setProperty('parent', self.model);
-                    self.select.setProperty('parentProperty', self.property);
-                    select.getOptions().subscribe(function (selectoptions) {
+                    self.select.setProperty('parent', model);
+                    self.select.setProperty('parentProperty', _this.property);
+                    self.select.setProperty('url', data.source.url);
+                    self.select.init();
+                    self.select.getOptions().subscribe(function (selectoptions) {
                         self.selectoptions = selectoptions;
                         if (self.isUnique) {
                             self.setOptions();
@@ -100,7 +101,7 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
                         else {
                             self.mbsc.instance.refresh(selectoptions);
                         }
-                        select.getHashedValues().forEach(function (v) {
+                        self.select.getHashedValues().forEach(function (v) {
                             self.model.addHashedValue(v.value, v.hash);
                         });
                         var hashedValues = [];
@@ -146,7 +147,7 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
     AppsappInputSelectComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-select',
-            template: "\n            <mbsc-input [hidden]=\"selectoptions.length == 0\" mbsc-select [error]=\"validator | async\" #mbscInstance=\"mobiscroll\"\n                        [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n            </mbsc-input>\n     \n    "
+            template: "\n        <mbsc-input [hidden]=\"selectoptions.length == 0\" mbsc-select [error]=\"validator | async\"\n                    #mbscInstance=\"mobiscroll\"\n                    [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n        </mbsc-input>\n\n    "
         })
     ], AppsappInputSelectComponent);
     return AppsappInputSelectComponent;

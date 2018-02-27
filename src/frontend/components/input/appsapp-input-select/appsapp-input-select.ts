@@ -110,9 +110,7 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
                     self.select.setProperty('url', data.source.url);
                     self.select.init();
 
-
                     self.select.getOptions().subscribe((selectoptions) => {
-
 
                         self.selectoptions = selectoptions;
                         if (self.isUnique) {
@@ -133,6 +131,7 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
 
                         self.update(hashedValues);
                         self.mbsc.instance.setVal(hashedValues, false, true);
+                        self.select.save().subscribe();
 
 
                     });
