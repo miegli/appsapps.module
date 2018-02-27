@@ -272,7 +272,6 @@ var PersistenceManager = /** @class */ (function () {
                 });
             });
         };
-        console.log(2, c);
         observer.next(model.getMessage('processing'));
         model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action').update(c).then(function (data) {
             model.setHasPendingChanges(false).getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/action/' + Object.keys(c)[0]).snapshotChanges().subscribe(function (action) {
@@ -322,7 +321,6 @@ var PersistenceManager = /** @class */ (function () {
                 self.storageWrapper.set(self.getPersistanceIdentifier(model), model.serialize(false, true)).then(function (m) {
                     if (!localStorageOnly && model.getFirebaseDatabasePath() && model.getFirebaseDatabase()) {
                         self.clone(model).then(function (c) {
-                            console.log(1, c);
                             model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(c.transformAllProperties().convertListPropertiesFromArrayToObject().serialize(true, true)).then(function (data) {
                                 if (action) {
                                     self.callAction(model, observer, action, resolve, reject);

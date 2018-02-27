@@ -18,11 +18,159 @@ export class SelectModel extends PersistableModel {
         group?: string
     };
     private dataType: string = 'json';
+    private __regex = /(\$\w+)[\/]*/g;
+    private __currentUrl: string = '';
+    private __registeredUrls: object = {};
+    private __lastHash = '';
 
     constructor() {
 
         super();
 
+
+    }
+
+    public init() {
+
+        let self = this;
+
+
+        if (self.matchAll(this.url, this.__regex)) {
+            if (self.parent && self.parent.getPropertyValue !== undefined) {
+                self.matchAll(this.url, this.__regex).forEach((m) => {
+                    self.parent.watch(m[1].substr(1), (data) => {
+                        self.options = [];
+                        self.data = [];
+                        self.fetchdata(self.url, m[1].substr(1), data);
+                    });
+                });
+            }
+        }
+
+        if (this.url.length) {
+            this.fetchdata(this.url);
+        }
+
+
+    }
+
+
+    private fetchdata = function (url, property?, data?) {
+
+        var finalurl = url, self = this;
+
+
+
+        if (finalurl !== undefined && self.parent && self.parent instanceof PersistableModel) {
+
+
+            if (this.matchAll(url, this.__regex)) {
+                this.matchAll(url, this.__regex).forEach((m) => {
+                    var d = property == m[1].substr(1) ? data : self.parent[m[1].substr(1)];
+                    d = d.toString();
+                    if (d && typeof d == 'string' && d.length) {
+                        finalurl = finalurl.replace(m[1], d);
+                    } else {
+                        finalurl = '';
+                    }
+
+                });
+            }
+
+
+            if (finalurl.length) {
+
+                this.__currentUrl = finalurl;
+
+                var finalurlHash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(finalurl);
+                if (self.dataCached[finalurlHash] !== undefined && self.dataCached[finalurlHash]) {
+                    self.update('data', JSON.parse(self.dataCached[finalurlHash]));
+                }
+                if (finalurl.substr(0, 4) == 'http') {
+                    this.getHttpClient().get(finalurl).subscribe((data) => {
+                        self.dataCached[finalurlHash] = JSON.stringify(data);
+                        self.update('data', data);
+                    }, (error) => {
+                        // skip error
+                    });
+                }
+                if (finalurl.substr(0, 1) == '/') {
+
+
+                    if (self.parent instanceof PersistableModel) {
+
+                        self.loaded().then(() => {
+
+                            var path = self.getFirebaseDatabaseSessionPath(finalurl);
+
+                            if (self.__registeredUrls[finalurl] === undefined) {
+                                self.update('data', []);
+                                self.__registeredUrls[finalurl] = path;
+                                self.parent.getFirebaseDatabase().object(path).query.on('value', (event) => {
+                                    self.updateFromFirebase(event, finalurlHash);
+                                });
+                            } else {
+                                self.parent.getFirebaseDatabase().object(path).query.once('value', (event) => {
+                                    self.updateFromFirebase(event, finalurlHash);
+                                });
+                            }
+
+                        });
+
+
+
+                    }
+
+
+                }
+            } else {
+                self.update('data', []);
+            }
+
+        }
+
+
+    }
+
+    /**
+     *
+     * @param event
+     * @param finalurlHash
+     */
+    public updateFromFirebase(event, finalurlHash) {
+        let self = this;
+
+        if (event && event.ref.path.toString().indexOf(self.__registeredUrls[self.__currentUrl]) >= 0) {
+            let data = event.val();
+
+            if (data) {
+                if (typeof data.forEach !== 'function') {
+
+                    var tmp = [];
+                    Object.keys(data).forEach((v) => {
+                        tmp.push(data[v]);
+                    });
+
+                    self.dataCached[finalurlHash] = JSON.stringify(tmp);
+                    self.setProperty('data', tmp);
+
+
+                } else {
+                    self.dataCached[finalurlHash] = JSON.stringify(data);
+                    self.setProperty('data', data);
+                }
+
+
+            } else {
+                try {
+                    delete self.dataCached[finalurlHash];
+                } catch (e) {
+                    //
+                }
+                self.setProperty('data', []);
+            }
+
+        }
     }
 
     /**
@@ -58,98 +206,6 @@ export class SelectModel extends PersistableModel {
     public getOptions() {
 
         let self = this;
-        let lastHash = null;
-        let regex = /(\$\w+)[\/]*/g;
-
-
-        var fetchdata = function (url, property?, data?) {
-
-            var finalurl = url;
-
-
-            if (self.parent && self.parent.getPropertyValue !== undefined) {
-
-
-
-                if (self.matchAll(url, regex)) {
-                    self.matchAll(url, regex).forEach((m) => {
-                        finalurl = finalurl.replace(m[1], property == m[1].substr(1) ? data : self.parent[m[1].substr(1)]);
-                    });
-                }
-
-                var finalurlHash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(finalurl);
-
-
-                if (self.dataCached[finalurlHash] !== undefined && self.dataCached[finalurlHash]) {
-                    self.update('data', JSON.parse(self.dataCached[finalurlHash]));
-                }
-
-                if (finalurl.substr(0, 4) == 'http') {
-                    this.getHttpClient().get(finalurl).subscribe((data) => {
-
-                        self.dataCached[finalurlHash] = JSON.stringify(data);
-                        self.update('data', data);
-
-
-                    }, (error) => {
-                        // skip error
-                    });
-                }
-                if (finalurl.substr(0, 1) == '/') {
-
-                    var path = self.getFirebaseDatabaseSessionPath(finalurl);
-                    self.update('data', []);
-
-                    self.parent.getFirebaseDatabase().object(path).query.on('value', (event) => {
-
-                        if (event) {
-                            let data = event.val();
-
-                            if (data) {
-                                if (typeof data.forEach !== 'function') {
-                                    var tmp = [];
-                                    Object.keys(data).forEach((v) => {
-                                        tmp.push(data[v]);
-                                    });
-
-                                    self.dataCached[finalurlHash] = JSON.stringify(tmp);
-                                    self.update('data', tmp);
-
-
-                                } else {
-
-                                    self.dataCached[finalurlHash] = JSON.stringify(data);
-                                    self.update('data', data);
-
-                                }
-
-
-                            }
-
-                        }
-                    });
-
-
-                }
-
-            }
-
-        }
-
-
-        if (self.matchAll(this.url, regex)) {
-            if (self.parent && self.parent.getPropertyValue !== undefined) {
-                self.matchAll(this.url, regex).forEach((m) => {
-                    self.parent.watch(m[1].substr(1), (data) => {
-                        self.options = [];
-                        self.data = [];
-                        fetchdata(self.url, m[1].substr(1), data);
-                    });
-                });
-            }
-        }
-
-        fetchdata(this.url);
 
 
         return new Observable<any>((observer: Observer<any>) => {
@@ -158,41 +214,39 @@ export class SelectModel extends PersistableModel {
             self.watch('data', (data) => {
 
                 let options = [];
-                let currentHash = self.setHashedValue(data);
+
                 let allOptions = {};
 
-                if (currentHash !== lastHash) {
-                    data.forEach((item) => {
 
-                        var v = self.mapping.value ? self.setHashedValue(self._getPropertyFromObject(item, self.mapping.value)) : self.setHashedValue(item);
-                        allOptions[v] = true;
-                        options.push({
-                            value: v,
-                            text: self._getPropertyFromObject(item, self.mapping.text),
-                            disabled: self.mapping.disabled !== undefined ? self._getPropertyFromObject(item, self.mapping.disabled) : false,
-                        })
-                    });
+                data.forEach((item) => {
 
-                    self.update('options', options);
+                    var v = self.mapping.value ? self.setHashedValue(self._getPropertyFromObject(item, self.mapping.value)) : self.setHashedValue(item);
+                    allOptions[v] = true;
+                    options.push({
+                        value: v,
+                        text: self._getPropertyFromObject(item, self.mapping.text),
+                        disabled: self.mapping.disabled !== undefined ? self._getPropertyFromObject(item, self.mapping.disabled) : false,
+                    })
+                });
 
-                    // remove non valid select options from current value
-                    if (Object.keys(allOptions).length && self.parent[self.parentProperty] !== undefined) {
-                        var tmp = [];
-                        self.parent[self.parentProperty].forEach((v) => {
-                            if (allOptions[v] === true) {
-                                tmp.push(v);
-                            }
-                        });
-                        if (typeof self.parent.setProperty == 'function') {
-                            self.parent.setProperty(self.parentProperty, tmp);
+                self.setProperty('options', options);
+
+                // remove non valid select options from current value
+                if (Object.keys(allOptions).length && self.parent[self.parentProperty] !== undefined) {
+                    var tmp = [];
+                    self.parent[self.parentProperty].forEach((v) => {
+                        if (allOptions[v] === true) {
+                            tmp.push(v);
                         }
+                    });
+                    if (typeof self.parent.setProperty == 'function') {
+                        self.parent.setProperty(self.parentProperty, tmp);
                     }
-
-
-                    o.next(options);
                 }
 
-                lastHash = currentHash;
+
+                o.next(options);
+
 
             });
         });

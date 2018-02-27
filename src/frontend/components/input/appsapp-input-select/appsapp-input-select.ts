@@ -1,7 +1,6 @@
 import {Component, Output} from '@angular/core';
 import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 import {SelectModel} from "../../../models/select";
-import * as objectHash from 'object-hash';
 import {PersistableModel} from "appsapp-cli";
 
 
@@ -14,10 +13,11 @@ import {PersistableModel} from "appsapp-cli";
 @Component({
     selector: 'appsapp-input-select',
     template: `
-            <mbsc-input [hidden]="selectoptions.length == 0" mbsc-select [error]="validator | async" #mbscInstance="mobiscroll"
-                        [ngModel]="_ngModelGettter | async" (ngModelChange)="modelChanges($event)">{{_label}}
-            </mbsc-input>
-     
+        <mbsc-input [hidden]="selectoptions.length == 0" mbsc-select [error]="validator | async"
+                    #mbscInstance="mobiscroll"
+                    [ngModel]="_ngModelGettter | async" (ngModelChange)="modelChanges($event)">{{_label}}
+        </mbsc-input>
+
     `
 })
 export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
@@ -78,7 +78,7 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
         }
     }
 
-    ngAfterContentInit() {
+    afterConstructor() {
 
         let self = this;
         let data = this.model.getMetadataValue(this.property, 'isSelect');
@@ -89,6 +89,7 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
 
         self.applyselectoptionsPostprocess();
 
+
         if (data) {
 
             if (data.options && typeof data.options == 'object') {
@@ -97,18 +98,21 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
 
             if (data.source) {
 
-               self.select = this.appsappModuleProvider.new(SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url));
+                self.select = this.appsappModuleProvider.new(SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url));
 
-               self.select.autosave();
 
-                self.select.loaded().then((select: any) => {
+                this.model.loaded().then((model) => {
 
-                    self.select.setProperty('url',data.source.url);
-                    self.select.setProperty('mapping',data.source.mapping);
-                    self.select.setProperty('parent',self.model);
-                    self.select.setProperty('parentProperty',self.property);
 
-                    select.getOptions().subscribe((selectoptions) => {
+                    self.select.setProperty('mapping', data.source.mapping);
+                    self.select.setProperty('parent', model);
+                    self.select.setProperty('parentProperty', this.property);
+                    self.select.setProperty('url', data.source.url);
+                    self.select.init();
+
+
+                    self.select.getOptions().subscribe((selectoptions) => {
+
 
                         self.selectoptions = selectoptions;
                         if (self.isUnique) {
@@ -116,7 +120,7 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
                         } else {
                             self.mbsc.instance.refresh(selectoptions);
                         }
-                        select.getHashedValues().forEach((v) => {
+                        self.select.getHashedValues().forEach((v) => {
                             self.model.addHashedValue(v.value, v.hash);
                         });
 
@@ -131,9 +135,11 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
                         self.mbsc.instance.setVal(hashedValues, false, true);
 
 
-
                     });
-                });
+
+
+                })
+
 
             }
 

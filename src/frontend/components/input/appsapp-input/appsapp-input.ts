@@ -138,7 +138,10 @@ export class AppsappInputComponent extends AbstractComponent {
 
     constructor(public appsappModuleProvider: AppsappModuleProvider) {
         super(appsappModuleProvider);
+
     }
+
+
 
     registerConditions(property, model) {
         let self = this;

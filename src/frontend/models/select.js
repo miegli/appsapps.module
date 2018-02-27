@@ -75,6 +75,7 @@ var SelectModel = /** @class */ (function (_super) {
                 }
                 if (finalurl.substr(0, 1) == '/') {
                     var path = self.getFirebaseDatabaseSessionPath(finalurl);
+                    self.update('data', []);
                     self.parent.getFirebaseDatabase().object(path).query.on('value', function (event) {
                         if (event) {
                             var data_1 = event.val();

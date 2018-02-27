@@ -298,7 +298,12 @@ export class PersistenceManager {
             let invokeTrigger = (observer) => {
 
                 let observableInterval = new Observable<any>((observerInterval: Observer<any>) => {
-                    this.callAction(model, observerInterval, action, null, null,{identifier: identifier, interval: interval, maxExecutions: maxExecutions, currentExecutions: executionCount});
+                    this.callAction(model, observerInterval, action, null, null, {
+                        identifier: identifier,
+                        interval: interval,
+                        maxExecutions: maxExecutions,
+                        currentExecutions: executionCount
+                    });
                 });
 
                 observableInterval.subscribe((next) => {
@@ -307,7 +312,7 @@ export class PersistenceManager {
                     if (maxExecutions === undefined || maxExecutions > executionCount) {
                         window.setTimeout(() => {
                             invokeTrigger(observer);
-                        },interval ? interval * 1000 : 1)
+                        }, interval ? interval * 1000 : 1)
 
                     } else {
                         if (maxExecutions !== undefined) {
@@ -319,7 +324,7 @@ export class PersistenceManager {
                     if (maxExecutions === undefined || maxExecutions > executionCount) {
                         window.setTimeout(() => {
                             invokeTrigger(observer);
-                        },interval ? interval * 1000 : 1)
+                        }, interval ? interval * 1000 : 1)
 
                     } else {
                         if (maxExecutions !== undefined) {
@@ -535,7 +540,7 @@ export class PersistenceManager {
                 // set default data
                 if (data) {
                     Object.keys(data).forEach((property) => {
-                        model.setProperty(property,data[property]);
+                        model.setProperty(property, data[property]);
                     });
                 }
 
@@ -576,15 +581,12 @@ export class PersistenceManager {
                 self.storageWrapper.ready().then((data) => {
 
                     self.storageWrapper.get(self.getPersistanceIdentifier(model)).then((json) => {
-                        if (json) {
-                            model.loadJson(json).then((model) => {
-                                resolve(model.emit());
-                            }).catch((error) => {
-                                reject(error);
-                            });
-                        } else {
+
+                        model.loadJson(json).then((model) => {
                             resolve(model.emit());
-                        }
+                        }).catch((error) => {
+                            reject(error);
+                        });
 
                     }).catch((error) => {
                         reject(error);
