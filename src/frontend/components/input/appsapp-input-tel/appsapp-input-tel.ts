@@ -31,7 +31,7 @@ export class AppsappInputTelComponent extends AppsappInputAbstractComponent {
    *
    * @param {ConfigModel} config
    */
-  afterInit(config) {
+  init(config) {
 
     let d = 'd';
 

@@ -27,7 +27,7 @@ export class AppsappInputNumberPlainComponent extends AppsappInputAbstractCompon
    *
    * @param {ConfigModel} config
    */
-  afterInit(config) {
+  init(config) {
 
 
 

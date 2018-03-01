@@ -39,7 +39,7 @@ export class AppsappInputBirthdayComponent extends AppsappInputAbstractComponent
      *
      * @param {ConfigModel} config
      */
-    afterInit(config) {
+    init(config) {
 
 
         if (this.model.getMetadataValue(this.property, 'maxDate')) {

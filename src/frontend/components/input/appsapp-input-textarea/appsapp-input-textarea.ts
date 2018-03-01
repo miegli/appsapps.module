@@ -26,7 +26,7 @@ export class AppsappInputTextareaComponent extends AppsappInputAbstractComponent
    *
    * @param {ConfigModel} config
    */
-  afterInit(config) {
+  init(config) {
 
     let self = this;
 

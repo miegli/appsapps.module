@@ -78,7 +78,7 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
         }
     }
 
-    afterConstructor() {
+    init(config) {
 
         let self = this;
         let data = this.model.getMetadataValue(this.property, 'isSelect');
@@ -100,12 +100,10 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
 
                 self.select = this.appsappModuleProvider.new(SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url));
 
-
-                this.model.loaded().then((model) => {
-
+                self.select.loaded().then((m) => {
 
                     self.select.setProperty('mapping', data.source.mapping);
-                    self.select.setProperty('parent', model);
+                    self.select.setProperty('parent',self.model);
                     self.select.setProperty('parentProperty', this.property);
                     self.select.setProperty('url', data.source.url);
                     self.select.init();
@@ -144,18 +142,9 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
 
         }
 
-    }
-
-    /**
-     *
-     * @param {ConfigModel} config
-     */
-    afterInit(config) {
-
-        let self = this;
 
         let groups = {};
-        if (typeof this.selectoptions.length == 'number') {
+        if (this.selectoptions && typeof this.selectoptions.length == 'number') {
             this.selectoptions.forEach((item) => {
                 if (item.group !== undefined) {
                     groups[item.group] = true;
@@ -163,19 +152,24 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
             });
         }
 
-        const options = this.model.getMetadataValue(this.property, 'isSelect');
 
-        this.setMbscOption({
-            group: self.selectoptions.length <= 20 ? {
-                groupWheel: Object.keys(groups).length > 5,
-                header: Object.keys(groups).length > 0,
-                clustered: Object.keys(groups).length > 2
-            } : null,
-            filter: self.selectoptions.length > 20,
-            display: options && options.display ? options.display : (config.getOs() !== 'desktop' ? 'bottom' : 'center'),
-            data: self.selectoptions,
-            select: self.model.getMetadataValue(self.property, 'arrayMaxSize') ? self.model.getMetadataValue(self.property, 'arrayMaxSize') : (self.model.isArray(self.property) ? 'multiple' : 'single')
-        });
+        if (this.model) {
+
+            const options = this.model.getMetadataValue(this.property, 'isSelect');
+
+            this.setMbscOption({
+                group: self.selectoptions.length <= 20 ? {
+                    groupWheel: Object.keys(groups).length > 5,
+                    header: Object.keys(groups).length > 0,
+                    clustered: Object.keys(groups).length > 2
+                } : null,
+                filter: self.selectoptions.length > 20,
+                display: options && options.display ? options.display : (config.getOs() !== 'desktop' ? 'bottom' : 'center'),
+                data: self.selectoptions,
+                select: self.model.getMetadataValue(self.property, 'arrayMaxSize') ? self.model.getMetadataValue(self.property, 'arrayMaxSize') : (self.model.isArray(self.property) ? 'multiple' : 'single')
+            });
+
+        }
 
     }
 

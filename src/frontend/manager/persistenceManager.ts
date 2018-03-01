@@ -8,6 +8,7 @@ import {FirebaseModel} from "../models/firebase";
 import {AngularFireAuth} from "angularfire2/auth";
 import * as objectHash from 'object-hash';
 import {UUID} from "angular2-uuid";
+import {PersistableModel} from 'appsapp-cli';
 
 @Injectable()
 
@@ -243,9 +244,7 @@ export class PersistenceManager {
                     }, (error) => {
                         // skip access denied
                     });
-
                     self._loadedResolver(model);
-
                 }
 
 
@@ -456,9 +455,7 @@ export class PersistenceManager {
                 self.storageWrapper.set(self.getPersistanceIdentifier(model), model.serialize(false, true)).then((m) => {
 
                     if (!localStorageOnly && model.getFirebaseDatabasePath() && model.getFirebaseDatabase()) {
-
                         self.clone(model).then((c: any) => {
-
                             model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(c.transformAllProperties().convertListPropertiesFromArrayToObject().serialize(true, true)).then((data) => {
                                 if (action) {
                                     self.callAction(model, observer, action, resolve, reject);
@@ -466,7 +463,6 @@ export class PersistenceManager {
                                     model.setHasPendingChanges(false);
                                 }
                                 resolve(model);
-
                             }).catch((error) => {
                                 reject(error);
                             });
@@ -474,7 +470,6 @@ export class PersistenceManager {
                         }).catch((error) => {
                             reject(error);
                         });
-
 
                     } else {
                         resolve(model);

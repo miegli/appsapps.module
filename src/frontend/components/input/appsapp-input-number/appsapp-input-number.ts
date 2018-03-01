@@ -23,7 +23,7 @@ export class AppsappInputNumberComponent extends AppsappInputAbstractComponent {
    *
    * @param {ConfigModel} config
    */
-  afterInit(config) {
+  init(config) {
 
     this.setMbscOption({
       scale: this.model.getMetadataValue(this.property,'hasPrecision') ? this.model.getMetadataValue(this.property,'hasPrecision') : 2,

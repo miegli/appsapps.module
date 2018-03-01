@@ -35,7 +35,7 @@ export class AppsappInputIntegerComponent extends AppsappInputAbstractComponent 
   /**
    * trigger befor init method
    */
-  beforeInit() {
+  init(config) {
 
 
     if (this.model.getMetadataValue(this.property, 'max') <= 25) {
@@ -53,13 +53,6 @@ export class AppsappInputIntegerComponent extends AppsappInputAbstractComponent 
 
   }
 
-  /**
-   *
-   * @param {ConfigModel} config
-   */
-  afterInit(config) {
 
-
-  }
 
 }

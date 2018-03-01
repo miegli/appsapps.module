@@ -40,8 +40,6 @@ export class AppsappModuleProvider {
         let self = this;
 
 
-       //this.persistenceManager = new PersistenceManager();
-
         // init configuration instance
         this.config = new ConfigModel();
 

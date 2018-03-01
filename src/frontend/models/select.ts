@@ -8,7 +8,7 @@ export class SelectModel extends PersistableModel {
     private options: any = [];
     private data: any = [];
     private dataCached: any = {};
-    private parent: any = null;
+    public parent: any = null;
     private parentProperty: string = null;
     private url: string = '';
     private mapping: {
@@ -47,8 +47,8 @@ export class SelectModel extends PersistableModel {
             }
         }
 
-        if (this.url.length) {
-            this.fetchdata(this.url);
+        if (self.url.length) {
+            self.fetchdata(this.url);
         }
 
 
@@ -60,20 +60,19 @@ export class SelectModel extends PersistableModel {
         var finalurl = url, self = this;
 
 
-
         if (finalurl !== undefined && self.parent && self.parent instanceof PersistableModel) {
 
 
             if (this.matchAll(url, this.__regex)) {
+
                 this.matchAll(url, this.__regex).forEach((m) => {
                     var d = property == m[1].substr(1) ? data : self.parent[m[1].substr(1)];
-                    d = d.toString();
+                    d = d === undefined ? null : d.toString();
                     if (d && typeof d == 'string' && d.length) {
                         finalurl = finalurl.replace(m[1], d);
                     } else {
                         finalurl = '';
                     }
-
                 });
             }
 
@@ -101,22 +100,23 @@ export class SelectModel extends PersistableModel {
 
                         self.loaded().then(() => {
 
-                            var path = self.getFirebaseDatabaseSessionPath(finalurl);
+                            if (self.parent) {
+                                var path = self.getFirebaseDatabaseSessionPath(finalurl);
 
-                            if (self.__registeredUrls[finalurl] === undefined) {
-                                self.update('data', []);
-                                self.__registeredUrls[finalurl] = path;
-                                self.parent.getFirebaseDatabase().object(path).query.on('value', (event) => {
-                                    self.updateFromFirebase(event, finalurlHash);
-                                });
-                            } else {
-                                self.parent.getFirebaseDatabase().object(path).query.once('value', (event) => {
-                                    self.updateFromFirebase(event, finalurlHash);
-                                });
+                                if (self.__registeredUrls[finalurl] === undefined) {
+                                    self.update('data', []);
+                                    self.__registeredUrls[finalurl] = path;
+                                    self.parent.getFirebaseDatabase().object(path).query.on('value', (event) => {
+                                        self.updateFromFirebase(event, finalurlHash);
+                                    });
+                                } else {
+                                    self.parent.getFirebaseDatabase().object(path).query.once('value', (event) => {
+                                        self.updateFromFirebase(event, finalurlHash);
+                                    });
+                                }
                             }
 
                         });
-
 
 
                     }

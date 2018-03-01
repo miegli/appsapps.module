@@ -31,7 +31,7 @@ export class AppsappInputTextComponent extends AppsappInputAbstractComponent {
    *
    * @param {ConfigModel} config
    */
-  afterInit(config) {
+  init(config) {
 
 
     if (this.model.getMetadata(this.property, 'maxLength').length) {
@@ -54,7 +54,7 @@ export class AppsappInputTextComponent extends AppsappInputAbstractComponent {
    */
   beforeModelChanges(model, property, value) {
 
-    let self = this;
+
     let changed = false;
 
 

@@ -4,7 +4,6 @@ import {ConfigModel} from "../../models/config";
 import {AppsappModuleProvider} from "../../providers/appsapp-module-provider";
 import {Observable} from "rxjs/Observable";
 import {Observer} from "rxjs/Observer";
-import {NgZone} from '@angular/core';
 
 /**
  * Generated class for the AppsappInputAbstractComponent component.
@@ -24,14 +23,12 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
     _ngModelGettter: Observable<any>;
     _ngModelGettterObserver: Observer<any>;
     _validationMetadata: any = {};
-    _config: ConfigModel;
     _options: any = {};
     _optionsTimeout: any = null;
     @Output() validator: Observable<any>;
     @Output() hidden: boolean = false;
     @Output() errormsg: string = '';
     @Output() placeholder: string = '';
-
 
     @ViewChild('mbscInstance') public mbsc;
     @ViewChild('mbscInstanceForm') public mbscForm;
@@ -40,16 +37,23 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
 
         super(appsappModuleProvider);
 
-        this.init();
 
     }
-
 
     /**.
      * init with config model
      * @param {ConfigModel} config
      */
-    init(config?: ConfigModel) {
+    public init(config?: ConfigModel) {
+
+    }
+
+    /**.
+     * priviate init with config model
+     * @param {ConfigModel} config
+     */
+    private _init(config?: ConfigModel) {
+
 
         let self = this;
 
@@ -65,8 +69,8 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
                 window.setTimeout(() => {
                     self._ngModelGettterObserver.next(self.model.getPropertyValue(self.property));
                     var p = self.model.getMetadataValue(self.property, 'hasPlaceholder')
-                    self.placeholder =  p ? p : '';
-                },1);
+                    self.placeholder = p ? p : '';
+                }, 1);
 
             });
             this._ngModelGettter.share();
@@ -78,58 +82,11 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
             });
 
 
-
-        }
-
-
-        if (config) {
-
-            let theme = 'material';
-
-            if (config.getOs() == 'ios') {
-                theme = 'ios';
-            }
-
-            if (config.getOs() == 'windows') {
-                theme = 'wp';
-            }
-
-            if (config.getOs() == 'desktop') {
-                theme = 'material';
-            }
-
-
-            let option = {
-                theme: theme,
-                closeOnOverlayTap: false
-            };
-
-            this.setMbscOption(option);
-
-            this.afterInit(config);
-            this._config = config;
-
         }
 
 
     }
 
-    /**
-     * trigger befor init method
-     */
-    beforeInit() {
-
-
-    }
-
-    /**
-     * trigger after init method
-     * @param {ConfigModel}
-     */
-    afterInit(options: ConfigModel) {
-
-
-    }
 
     /**
      * get observable getter method
@@ -179,14 +136,6 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
     }
 
     /**
-     * call after constructor
-     */
-    afterConstructor() {
-
-
-    }
-
-    /**
      * model changes event
      * @param event
      */
@@ -199,16 +148,39 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
     }
 
 
-    ngOnInit() {
+    private _beforeinit() {
 
-        let self = this;
-
-        this.afterConstructor();
 
         this._validationMetadata = this.model.getMetadata(this.property);
         this._name = this.property;
         this._label = this.label ? this.label : (this.model.getMetadataValue(this.property, 'hasLabel') ? this.model.getMetadataValue(this.property, 'hasLabel') : (this._name ? this._name.toUpperCase() : ''));
         this._description = this.model.getMetadataValue(this.property, 'hasDescription');
+
+        if (this.config) {
+
+            let theme = 'material';
+
+            if (this.config.getOs() == 'ios') {
+                theme = 'ios';
+            }
+
+            if (this.config.getOs() == 'windows') {
+                theme = 'wp';
+            }
+
+            if (this.config.getOs() == 'desktop') {
+                theme = 'material';
+            }
+
+            let option = {
+                theme: theme,
+                closeOnOverlayTap: false
+            };
+
+            this.setMbscOption(option);
+
+
+        }
 
 
     }
@@ -217,20 +189,20 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
     /**
      * ngAfterViewInit
      */
+    ngOnInit() {
+        this._beforeinit();
+        this._init(this.config);
+    }
+
+    /**
+     * ngAfterViewInit
+     */
     ngAfterViewInit() {
-
-        let self = this;
-
-
-        if (this.config) {
-            this.config.getObservable().subscribe((config) => {
-                this.beforeInit();
-                this.init(config);
-            });
-        }
+        this.init(this.config);
 
 
     }
+
 
     /**
      * update property of the main model and main property
@@ -244,7 +216,6 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
 
         if (this.model) {
             window.setTimeout(function () {
-                //self._ngModelGettter = self.model.update(self.property, value).setProperty(self.property, value).getProperty(self.property);
                 self.model.update(self.property, value).setProperty(self.property, value);
             }, 1);
             return this.model;

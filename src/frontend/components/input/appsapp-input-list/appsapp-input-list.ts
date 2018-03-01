@@ -30,7 +30,7 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
     @Output() parentProperty: any = null;
 
 
-    afterInit(config) {
+    init(config) {
 
         this.parentPropertyMetadata = this.model.getMetadata(this.property);
         this.parentProperty = this.property;
