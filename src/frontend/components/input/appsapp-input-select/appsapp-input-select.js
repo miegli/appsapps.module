@@ -73,7 +73,7 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
             });
         }
     };
-    AppsappInputSelectComponent.prototype.afterConstructor = function () {
+    AppsappInputSelectComponent.prototype.init = function (config) {
         var _this = this;
         var self = this;
         var data = this.model.getMetadataValue(this.property, 'isSelect');
@@ -87,9 +87,9 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
             }
             if (data.source) {
                 self.select = this.appsappModuleProvider["new"](select_1.SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url));
-                this.model.loaded().then(function (model) {
+                self.select.loaded().then(function (m) {
                     self.select.setProperty('mapping', data.source.mapping);
-                    self.select.setProperty('parent', model);
+                    self.select.setProperty('parent', self.model);
                     self.select.setProperty('parentProperty', _this.property);
                     self.select.setProperty('url', data.source.url);
                     self.select.init();
@@ -112,37 +112,33 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
                         }
                         self.update(hashedValues);
                         self.mbsc.instance.setVal(hashedValues, false, true);
+                        self.select.save().subscribe();
                     });
                 });
             }
         }
-    };
-    /**
-     *
-     * @param {ConfigModel} config
-     */
-    AppsappInputSelectComponent.prototype.afterInit = function (config) {
-        var self = this;
         var groups = {};
-        if (typeof this.selectoptions.length == 'number') {
+        if (this.selectoptions && typeof this.selectoptions.length == 'number') {
             this.selectoptions.forEach(function (item) {
                 if (item.group !== undefined) {
                     groups[item.group] = true;
                 }
             });
         }
-        var options = this.model.getMetadataValue(this.property, 'isSelect');
-        this.setMbscOption({
-            group: self.selectoptions.length <= 20 ? {
-                groupWheel: Object.keys(groups).length > 5,
-                header: Object.keys(groups).length > 0,
-                clustered: Object.keys(groups).length > 2
-            } : null,
-            filter: self.selectoptions.length > 20,
-            display: options && options.display ? options.display : (config.getOs() !== 'desktop' ? 'bottom' : 'center'),
-            data: self.selectoptions,
-            select: self.model.getMetadataValue(self.property, 'arrayMaxSize') ? self.model.getMetadataValue(self.property, 'arrayMaxSize') : (self.model.isArray(self.property) ? 'multiple' : 'single')
-        });
+        if (this.model) {
+            var options = this.model.getMetadataValue(this.property, 'isSelect');
+            this.setMbscOption({
+                group: self.selectoptions.length <= 20 ? {
+                    groupWheel: Object.keys(groups).length > 5,
+                    header: Object.keys(groups).length > 0,
+                    clustered: Object.keys(groups).length > 2
+                } : null,
+                filter: self.selectoptions.length > 20,
+                display: options && options.display ? options.display : (config.getOs() !== 'desktop' ? 'bottom' : 'center'),
+                data: self.selectoptions,
+                select: self.model.getMetadataValue(self.property, 'arrayMaxSize') ? self.model.getMetadataValue(self.property, 'arrayMaxSize') : (self.model.isArray(self.property) ? 'multiple' : 'single')
+            });
+        }
     };
     AppsappInputSelectComponent = __decorate([
         core_1.Component({

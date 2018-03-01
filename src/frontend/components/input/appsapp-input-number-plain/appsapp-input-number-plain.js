@@ -38,7 +38,7 @@ var AppsappInputNumberPlainComponent = /** @class */ (function (_super) {
      *
      * @param {ConfigModel} config
      */
-    AppsappInputNumberPlainComponent.prototype.afterInit = function (config) {
+    AppsappInputNumberPlainComponent.prototype.init = function (config) {
         if (this.model.getMetadata(this.property, 'isPrecision').length) {
             this.precision = this.model.getMetadataValue(this.property, 'isPrecision');
         }

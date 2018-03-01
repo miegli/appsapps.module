@@ -39,7 +39,6 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
         _this.hidden = false;
         _this.errormsg = '';
         _this.placeholder = '';
-        _this.init();
         return _this;
     }
     /**.
@@ -47,6 +46,12 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
      * @param {ConfigModel} config
      */
     AppsappInputAbstractComponent.prototype.init = function (config) {
+    };
+    /**.
+     * priviate init with config model
+     * @param {ConfigModel} config
+     */
+    AppsappInputAbstractComponent.prototype._init = function (config) {
         var self = this;
         this._options['lang'] = this.appsappModuleProvider.getLang();
         if (this.property) {
@@ -68,36 +73,6 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
                 }
             });
         }
-        if (config) {
-            var theme = 'material';
-            if (config.getOs() == 'ios') {
-                theme = 'ios';
-            }
-            if (config.getOs() == 'windows') {
-                theme = 'wp';
-            }
-            if (config.getOs() == 'desktop') {
-                theme = 'material';
-            }
-            var option = {
-                theme: theme,
-                closeOnOverlayTap: false
-            };
-            this.setMbscOption(option);
-            this.afterInit(config);
-            this._config = config;
-        }
-    };
-    /**
-     * trigger befor init method
-     */
-    AppsappInputAbstractComponent.prototype.beforeInit = function () {
-    };
-    /**
-     * trigger after init method
-     * @param {ConfigModel}
-     */
-    AppsappInputAbstractComponent.prototype.afterInit = function (options) {
     };
     /**
      * get observable getter method
@@ -139,11 +114,6 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
         return true;
     };
     /**
-     * call after constructor
-     */
-    AppsappInputAbstractComponent.prototype.afterConstructor = function () {
-    };
-    /**
      * model changes event
      * @param event
      */
@@ -152,26 +122,41 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
             this.model.setProperty(this.property, event);
         }
     };
-    AppsappInputAbstractComponent.prototype.ngOnInit = function () {
-        var self = this;
-        this.afterConstructor();
+    AppsappInputAbstractComponent.prototype._beforeinit = function () {
         this._validationMetadata = this.model.getMetadata(this.property);
         this._name = this.property;
         this._label = this.label ? this.label : (this.model.getMetadataValue(this.property, 'hasLabel') ? this.model.getMetadataValue(this.property, 'hasLabel') : (this._name ? this._name.toUpperCase() : ''));
         this._description = this.model.getMetadataValue(this.property, 'hasDescription');
+        if (this.config) {
+            var theme = 'material';
+            if (this.config.getOs() == 'ios') {
+                theme = 'ios';
+            }
+            if (this.config.getOs() == 'windows') {
+                theme = 'wp';
+            }
+            if (this.config.getOs() == 'desktop') {
+                theme = 'material';
+            }
+            var option = {
+                theme: theme,
+                closeOnOverlayTap: false
+            };
+            this.setMbscOption(option);
+        }
+    };
+    /**
+     * ngAfterViewInit
+     */
+    AppsappInputAbstractComponent.prototype.ngOnInit = function () {
+        this._beforeinit();
+        this._init(this.config);
     };
     /**
      * ngAfterViewInit
      */
     AppsappInputAbstractComponent.prototype.ngAfterViewInit = function () {
-        var _this = this;
-        var self = this;
-        if (this.config) {
-            this.config.getObservable().subscribe(function (config) {
-                _this.beforeInit();
-                _this.init(config);
-            });
-        }
+        this.init(this.config);
     };
     /**
      * update property of the main model and main property
@@ -183,7 +168,6 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
         var self = this;
         if (this.model) {
             window.setTimeout(function () {
-                //self._ngModelGettter = self.model.update(self.property, value).setProperty(self.property, value).getProperty(self.property);
                 self.model.update(self.property, value).setProperty(self.property, value);
             }, 1);
             return this.model;

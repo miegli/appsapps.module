@@ -22,7 +22,6 @@ var AppsappModuleProvider = /** @class */ (function () {
         this.http = http;
         this.platform = null;
         var self = this;
-        //this.persistenceManager = new PersistenceManager();
         // init configuration instance
         this.config = new config_1.ConfigModel();
         // init projects firebase instance

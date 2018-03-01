@@ -31,12 +31,6 @@ var AppsappInputTimeComponent = /** @class */ (function (_super) {
         _this.isInline = false;
         return _this;
     }
-    /**
-     * trigger befor init method
-     */
-    AppsappInputTimeComponent.prototype.beforeInit = function () {
-        this.model[this.property] = typeof this.model[this.property] == 'string' ? new Date(this.model[this.property]) : this.model[this.property];
-    };
     AppsappInputTimeComponent.prototype.beforeModelChanges = function (model, property, value) {
         // create iso date
         var date = Date.parse(value);
@@ -48,7 +42,8 @@ var AppsappInputTimeComponent = /** @class */ (function (_super) {
      *
      * @param {ConfigModel} config
      */
-    AppsappInputTimeComponent.prototype.afterInit = function (config) {
+    AppsappInputTimeComponent.prototype.init = function (config) {
+        this.model[this.property] = typeof this.model[this.property] == 'string' ? new Date(this.model[this.property]) : this.model[this.property];
         if (this.model.getMetadataValue(this.property, 'max')) {
             var max = this.model.getMetadataValue(this.property, 'max');
             this.setMbscOption({ max: max });
@@ -82,7 +77,7 @@ var AppsappInputTimeComponent = /** @class */ (function (_super) {
     AppsappInputTimeComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-time',
-            template: "\n     \n            <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-time [ngModel]=\"_ngModelGettter | async\"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n   \n\n    "
+            template: "\n\n        <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\" #mbscInstance=\"mobiscroll\" mbsc-time\n                    [ngModel]=\"_ngModelGettter | async\"\n                    (ngModelChange)=\"modelChanges($event)\">{{_label}}\n        </mbsc-input>\n\n\n    "
         })
     ], AppsappInputTimeComponent);
     return AppsappInputTimeComponent;

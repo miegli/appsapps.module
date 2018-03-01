@@ -36,7 +36,7 @@ var AppsappInputTextareaComponent = /** @class */ (function (_super) {
      *
      * @param {ConfigModel} config
      */
-    AppsappInputTextareaComponent.prototype.afterInit = function (config) {
+    AppsappInputTextareaComponent.prototype.init = function (config) {
         var self = this;
         this.maxLength = this.model.getMetadataValue(this.property, 'isText') ? this.model.getMetadataValue(this.property, 'isText') : 0;
         this.label = this._label;

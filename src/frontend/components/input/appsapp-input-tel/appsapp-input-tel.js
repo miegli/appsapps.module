@@ -38,7 +38,7 @@ var AppsappInputTelComponent = /** @class */ (function (_super) {
      *
      * @param {ConfigModel} config
      */
-    AppsappInputTelComponent.prototype.afterInit = function (config) {
+    AppsappInputTelComponent.prototype.init = function (config) {
         var d = 'd';
         this.setMbscOption({
             display: config.getOs() !== 'desktop' ? 'bottom' : 'center',

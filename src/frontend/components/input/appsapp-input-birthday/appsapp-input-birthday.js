@@ -42,7 +42,7 @@ var AppsappInputBirthdayComponent = /** @class */ (function (_super) {
      *
      * @param {ConfigModel} config
      */
-    AppsappInputBirthdayComponent.prototype.afterInit = function (config) {
+    AppsappInputBirthdayComponent.prototype.init = function (config) {
         if (this.model.getMetadataValue(this.property, 'maxDate')) {
             var maxDate = this.model.getMetadataValue(this.property, 'maxDate');
             this.setMbscOption({ max: maxDate });

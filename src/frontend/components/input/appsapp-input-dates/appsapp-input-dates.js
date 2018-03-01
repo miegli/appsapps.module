@@ -37,7 +37,7 @@ var AppsappInputDatesComponent = /** @class */ (function (_super) {
      *
      * @param {ConfigModel} config
      */
-    AppsappInputDatesComponent.prototype.afterInit = function (config) {
+    AppsappInputDatesComponent.prototype.init = function (config) {
         var self = this;
         this.get().subscribe(function (value) {
             if (!self.locked && value && value.length == 2) {

@@ -36,7 +36,7 @@ var AppsappInputTextComponent = /** @class */ (function (_super) {
      *
      * @param {ConfigModel} config
      */
-    AppsappInputTextComponent.prototype.afterInit = function (config) {
+    AppsappInputTextComponent.prototype.init = function (config) {
         if (this.model.getMetadata(this.property, 'maxLength').length) {
             this.max = this.model.getMetadataValue(this.property, 'maxLength');
         }
@@ -51,7 +51,6 @@ var AppsappInputTextComponent = /** @class */ (function (_super) {
      * @param value
      */
     AppsappInputTextComponent.prototype.beforeModelChanges = function (model, property, value) {
-        var self = this;
         var changed = false;
         if (this.max !== null && value.length > this.max) {
             value = this.lastvalue;

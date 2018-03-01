@@ -39,7 +39,7 @@ var AppsappInputIntegerComponent = /** @class */ (function (_super) {
     /**
      * trigger befor init method
      */
-    AppsappInputIntegerComponent.prototype.beforeInit = function () {
+    AppsappInputIntegerComponent.prototype.init = function (config) {
         if (this.model.getMetadataValue(this.property, 'max') <= 25) {
             this.__type = 'stepper';
             this.__min = this.model.getMetadataValue(this.property, 'min') ? this.model.getMetadataValue(this.property, 'min') : 0;
@@ -52,12 +52,6 @@ var AppsappInputIntegerComponent = /** @class */ (function (_super) {
                 min: this.model.getMetadataValue(this.property, 'min') ? this.model.getMetadataValue(this.property, 'min') : 0
             });
         }
-    };
-    /**
-     *
-     * @param {ConfigModel} config
-     */
-    AppsappInputIntegerComponent.prototype.afterInit = function (config) {
     };
     __decorate([
         core_1.Output()

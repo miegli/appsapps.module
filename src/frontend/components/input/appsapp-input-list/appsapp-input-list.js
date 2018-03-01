@@ -33,7 +33,7 @@ var AppsappInputListComponent = /** @class */ (function (_super) {
         _this.parentProperty = null;
         return _this;
     }
-    AppsappInputListComponent.prototype.afterInit = function (config) {
+    AppsappInputListComponent.prototype.init = function (config) {
         this.parentPropertyMetadata = this.model.getMetadata(this.property);
         this.parentProperty = this.property;
         this.updateConfig();

@@ -42,42 +42,44 @@ var AppsappInputDateComponent = /** @class */ (function (_super) {
      *
      * @param {ConfigModel} config
      */
-    AppsappInputDateComponent.prototype.afterInit = function (config) {
-        if (this.model.getMetadataValue(this.property, 'maxDate')) {
-            var maxDate = this.model.getMetadataValue(this.property, 'maxDate');
-            this.setMbscOption({ max: maxDate });
+    AppsappInputDateComponent.prototype.init = function (config) {
+        if (this.model) {
+            if (this.model.getMetadataValue(this.property, 'maxDate')) {
+                var maxDate = this.model.getMetadataValue(this.property, 'maxDate');
+                this.setMbscOption({ max: maxDate });
+            }
+            if (this.model.getMetadataValue(this.property, 'minDate')) {
+                var minDate = this.model.getMetadataValue(this.property, 'minDate');
+                this.setMbscOption({ min: minDate });
+            }
+            var options = this.model.getMetadataValue(this.property, 'isCalendar');
+            if (options) {
+                if (options.maxDate) {
+                    this.setMbscOption({ max: options.maxDate });
+                }
+                if (options.minDate) {
+                    this.setMbscOption({ min: options.minDate });
+                }
+                if (options.invalid) {
+                    this.setMbscOption({ invalid: options.invalid });
+                }
+                if (options.controls) {
+                    this.setMbscOption({ controls: options.controls });
+                }
+                if (options.steps) {
+                    this.setMbscOption({ steps: options.steps });
+                }
+                if (options.weeks) {
+                    this.setMbscOption({ weeks: options.weeks });
+                }
+                if (options.display == 'inline') {
+                    this.isInline = true;
+                }
+            }
+            this.setMbscOption({
+                display: options && options.display ? options.display : (config.getOs() !== 'desktop' ? 'bottom' : 'center')
+            });
         }
-        if (this.model.getMetadataValue(this.property, 'minDate')) {
-            var minDate = this.model.getMetadataValue(this.property, 'minDate');
-            this.setMbscOption({ min: minDate });
-        }
-        var options = this.model.getMetadataValue(this.property, 'isCalendar');
-        if (options) {
-            if (options.maxDate) {
-                this.setMbscOption({ max: options.maxDate });
-            }
-            if (options.minDate) {
-                this.setMbscOption({ min: options.minDate });
-            }
-            if (options.invalid) {
-                this.setMbscOption({ invalid: options.invalid });
-            }
-            if (options.controls) {
-                this.setMbscOption({ controls: options.controls });
-            }
-            if (options.steps) {
-                this.setMbscOption({ steps: options.steps });
-            }
-            if (options.weeks) {
-                this.setMbscOption({ weeks: options.weeks });
-            }
-            if (options.display == 'inline') {
-                this.isInline = true;
-            }
-        }
-        this.setMbscOption({
-            display: options && options.display ? options.display : (config.getOs() !== 'desktop' ? 'bottom' : 'center')
-        });
     };
     __decorate([
         core_1.Output()

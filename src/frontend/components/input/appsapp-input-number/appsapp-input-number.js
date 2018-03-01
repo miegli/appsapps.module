@@ -33,7 +33,7 @@ var AppsappInputNumberComponent = /** @class */ (function (_super) {
      *
      * @param {ConfigModel} config
      */
-    AppsappInputNumberComponent.prototype.afterInit = function (config) {
+    AppsappInputNumberComponent.prototype.init = function (config) {
         this.setMbscOption({
             scale: this.model.getMetadataValue(this.property, 'hasPrecision') ? this.model.getMetadataValue(this.property, 'hasPrecision') : 2,
             max: this.model.getMetadataValue(this.property, 'max') ? this.model.getMetadataValue(this.property, 'max') : 999999999,

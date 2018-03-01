@@ -40,6 +40,20 @@ var ConfigModel = /** @class */ (function (_super) {
         return this._os;
     };
     /**
+     * get config data
+     * @returns {any}
+     */
+    ConfigModel.prototype.getData = function () {
+        return this.data;
+    };
+    /**
+     * set config data
+     * @param data
+     */
+    ConfigModel.prototype.setData = function (data) {
+        this.data = data;
+    };
+    /**
      * get operating system
      * @returns {string}
      */

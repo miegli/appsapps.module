@@ -33,7 +33,7 @@ var SelectModel = /** @class */ (function (_super) {
                 if (this.matchAll(url, this.__regex)) {
                     this.matchAll(url, this.__regex).forEach(function (m) {
                         var d = property == m[1].substr(1) ? data : self.parent[m[1].substr(1)];
-                        d = d.toString();
+                        d = d === undefined ? null : d.toString();
                         if (d && typeof d == 'string' && d.length) {
                             finalurl = finalurl.replace(m[1], d);
                         }
@@ -59,18 +59,20 @@ var SelectModel = /** @class */ (function (_super) {
                     if (finalurl.substr(0, 1) == '/') {
                         if (self.parent instanceof appsapp_cli_1.PersistableModel) {
                             self.loaded().then(function () {
-                                var path = self.getFirebaseDatabaseSessionPath(finalurl);
-                                if (self.__registeredUrls[finalurl] === undefined) {
-                                    self.update('data', []);
-                                    self.__registeredUrls[finalurl] = path;
-                                    self.parent.getFirebaseDatabase().object(path).query.on('value', function (event) {
-                                        self.updateFromFirebase(event, finalurlHash);
-                                    });
-                                }
-                                else {
-                                    self.parent.getFirebaseDatabase().object(path).query.once('value', function (event) {
-                                        self.updateFromFirebase(event, finalurlHash);
-                                    });
+                                if (self.parent) {
+                                    var path = self.getFirebaseDatabaseSessionPath(finalurl);
+                                    if (self.__registeredUrls[finalurl] === undefined) {
+                                        self.update('data', []);
+                                        self.__registeredUrls[finalurl] = path;
+                                        self.parent.getFirebaseDatabase().object(path).query.on('value', function (event) {
+                                            self.updateFromFirebase(event, finalurlHash);
+                                        });
+                                    }
+                                    else {
+                                        self.parent.getFirebaseDatabase().object(path).query.once('value', function (event) {
+                                            self.updateFromFirebase(event, finalurlHash);
+                                        });
+                                    }
                                 }
                             });
                         }
@@ -116,8 +118,8 @@ var SelectModel = /** @class */ (function (_super) {
                 });
             }
         }
-        if (this.url.length) {
-            this.fetchdata(this.url);
+        if (self.url.length) {
+            self.fetchdata(this.url);
         }
     };
     /**
