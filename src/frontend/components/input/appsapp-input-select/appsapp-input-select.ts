@@ -100,6 +100,8 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
 
                 self.select = this.appsappModuleProvider.new(SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url));
 
+                self.select.autosave();
+
                 self.select.loaded().then((m) => {
 
                     self.select.setProperty('mapping', data.source.mapping);
@@ -130,7 +132,6 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
                         self.update(hashedValues);
 
                         self.mbsc.instance.setVal(hashedValues, false, true);
-                        self.select.save().subscribe();
 
 
                     });
@@ -169,7 +170,7 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
                 data: self.selectoptions,
                 select: self.model.getMetadataValue(self.property, 'arrayMaxSize') ? self.model.getMetadataValue(self.property, 'arrayMaxSize') : (self.model.isArray(self.property) ? 'multiple' : 'single')
             });
-
+            
         }
 
     }

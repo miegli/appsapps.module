@@ -203,7 +203,6 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
 
     }
 
-
     /**
      * update property of the main model and main property
      * @param property
@@ -215,9 +214,9 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
         let self = this;
 
         if (this.model) {
-            window.setTimeout(function () {
+            //window.setTimeout(function () {
                 self.model.update(self.property, value).setProperty(self.property, value);
-            }, 1);
+          //  }, 1);
             return this.model;
         } else {
             return null;

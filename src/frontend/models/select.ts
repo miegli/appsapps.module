@@ -24,6 +24,7 @@ export class SelectModel extends PersistableModel {
     private __lastHash = '';
     private __dataRecalcalatedCount = 0;
     private __dataTmpValues = {};
+    private __optionObserver;
 
     constructor() {
 
@@ -50,14 +51,27 @@ export class SelectModel extends PersistableModel {
             }
         }
 
+
         if (self.url.length) {
-            self.fetchdata(this.url);
+            if (!self.isOnline()) {
+                var hash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(this.url);
+                if (self.dataCached[hash] !== undefined) {
+                    self.update('data', JSON.parse(self.dataCached[hash]));
+                    self.applyData(JSON.parse(self.dataCached[hash]));
+                }
+            } else {
+                self.fetchdata(this.url);
+            }
         }
 
-        self.parent.watch(self.parentProperty,(value) => {
-           self.__dataTmpValues[self.__currentUrl] = value;
+        self.parent.watch(self.parentProperty, (value) => {
+            self.__dataTmpValues[self.__currentUrl] = value;
         });
 
+
+    }
+
+    public __refresh() {
 
     }
 
@@ -65,7 +79,6 @@ export class SelectModel extends PersistableModel {
     private fetchdata = function (url, property?, data?) {
 
         var finalurl = url, self = this;
-
 
         if (finalurl !== undefined && self.parent && self.parent instanceof PersistableModel) {
 
@@ -214,70 +227,77 @@ export class SelectModel extends PersistableModel {
 
         let self = this;
 
-
         return new Observable<any>((observer: Observer<any>) => {
-            let o = observer;
+            self.__optionObserver = observer;
             self.loaded().then(() => {
                 self.parent.loaded().then(() => {
-
                     self.watch('data', (data) => {
-
-                        let options = [];
-
-                        let allOptions = {};
-
-                        data.forEach((item) => {
-
-                            var v = self.mapping.value ? self.setHashedValue(self._getPropertyFromObject(item, self.mapping.value)) : self.setHashedValue(item);
-                            allOptions[v] = true;
-                            options.push({
-                                value: v,
-                                text: self._getPropertyFromObject(item, self.mapping.text),
-                                disabled: self.mapping.disabled !== undefined ? self._getPropertyFromObject(item, self.mapping.disabled) : false,
-                            })
-                        });
-
-
-                        self.setProperty('options', options);
-
-                        // reset temp values
-                        if (self.parent[self.parentProperty] !== undefined && self.parent[self.parentProperty].length == 0 && self.__dataTmpValues[self.__currentUrl]) {
-                            self.parent.setProperty(self.parentProperty, self.__dataTmpValues[self.__currentUrl]);
-                        }
-
-
-
-                        // remove non valid select options from current value
-                        if (self.parent instanceof PersistableModel) {
-                            if (Object.keys(allOptions).length && self.parent[self.parentProperty] !== undefined) {
-                                var tmp = [];
-                                self.parent[self.parentProperty].forEach((v) => {
-                                    if (allOptions[v] === true) {
-                                        tmp.push(v);
-                                    }
-                                });
-                                self.parent.setProperty(self.parentProperty, tmp);
-
-
-                            } else {
-                                if (self.__dataRecalcalatedCount && self.parent[self.parentProperty] !== undefined) {
-                                    self.parent.setProperty(self.parentProperty, []);
-                                }
-                            }
-                        }
-
-
-
-
-                        o.next(options);
-
-
+                        self.applyData(data);
                     });
                 });
             });
         });
 
     }
+
+    private applyData(data) {
+
+        let self = this;
+
+        let options = [];
+
+        let allOptions = {};
+
+
+        if (data.length == 0 && !self.isOnline() && self.dataCached && self.__currentUrl) {
+            var hash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(self.__currentUrl);
+            if (self.dataCached[hash] !== undefined) {
+                data = JSON.parse(self.dataCached[hash]);
+            }
+        }
+
+        data.forEach((item) => {
+
+            var v = self.mapping.value ? self.setHashedValue(self._getPropertyFromObject(item, self.mapping.value)) : self.setHashedValue(item);
+            allOptions[v] = true;
+            options.push({
+                value: v,
+                text: self._getPropertyFromObject(item, self.mapping.text),
+                disabled: self.mapping.disabled !== undefined ? self._getPropertyFromObject(item, self.mapping.disabled) : false,
+            })
+        });
+
+        self.setProperty('options', options);
+
+        // reset temp values
+        if (self.parent[self.parentProperty] !== undefined && self.parent[self.parentProperty].length == 0 && self.__dataTmpValues[self.__currentUrl]) {
+            self.parent.setProperty(self.parentProperty, self.__dataTmpValues[self.__currentUrl]);
+        }
+
+        // remove non valid select options from current value
+        if (self.parent instanceof PersistableModel) {
+            if (Object.keys(allOptions).length && self.parent[self.parentProperty] !== undefined) {
+                var tmp = [];
+                self.parent[self.parentProperty].forEach((v) => {
+                    if (allOptions[v] === true) {
+                        tmp.push(v);
+                    }
+                });
+                self.parent.setProperty(self.parentProperty, tmp);
+            } else {
+                if (self.__dataRecalcalatedCount && self.parent[self.parentProperty] !== undefined) {
+                    self.parent.setProperty(self.parentProperty, []);
+                }
+            }
+        }
+
+        if (self.__optionObserver) {
+            self.__optionObserver.next(options);
+        }
+
+
+    }
+
 
     /**
      * get property from object
