@@ -128,6 +128,7 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
                         }
 
                         self.update(hashedValues);
+
                         self.mbsc.instance.setVal(hashedValues, false, true);
                         self.select.save().subscribe();
 
