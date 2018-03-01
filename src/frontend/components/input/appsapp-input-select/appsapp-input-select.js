@@ -87,6 +87,7 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
             }
             if (data.source) {
                 self.select = this.appsappModuleProvider["new"](select_1.SelectModel, this.appsappModuleProvider.getPersistenceManager().getHash(data.source.url));
+                self.select.autosave();
                 self.select.loaded().then(function (m) {
                     self.select.setProperty('mapping', data.source.mapping);
                     self.select.setProperty('parent', self.model);
@@ -112,7 +113,6 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
                         }
                         self.update(hashedValues);
                         self.mbsc.instance.setVal(hashedValues, false, true);
-                        self.select.save().subscribe();
                     });
                 });
             }
