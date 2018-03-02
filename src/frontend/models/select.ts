@@ -122,7 +122,6 @@ export class SelectModel extends PersistableModel {
 
                                 self.update('data', []);
 
-
                                 this.__updateFromLocalStorage(finalurlHash);
 
                                 if (self.__registeredUrls[finalurl] === undefined) {
