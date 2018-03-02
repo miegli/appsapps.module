@@ -30,6 +30,7 @@ var SelectModel = /** @class */ (function (_super) {
         _this.__dataRecalcalatedCount = 0;
         _this.__dataTmpValues = {};
         _this.fetchdata = function (url, property, data) {
+            var _this = this;
             var finalurl = url, self = this;
             if (finalurl !== undefined && self.parent && self.parent instanceof appsapp_cli_1.PersistableModel) {
                 if (this.matchAll(url, this.__regex)) {
@@ -47,9 +48,9 @@ var SelectModel = /** @class */ (function (_super) {
                 if (finalurl.length) {
                     this.__currentUrl = finalurl;
                     var finalurlHash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(finalurl);
-                    if (self.dataCached[finalurlHash] !== undefined && self.dataCached[finalurlHash]) {
-                        self.update('data', JSON.parse(self.dataCached[finalurlHash]));
-                    }
+                    // if (self.dataCached[finalurlHash] !== undefined && self.dataCached[finalurlHash]) {
+                    //     self.update('data', JSON.parse(self.dataCached[finalurlHash]));
+                    // }
                     if (finalurl.substr(0, 4) == 'http') {
                         this.getHttpClient().get(finalurl).subscribe(function (data) {
                             self.dataCached[finalurlHash] = JSON.stringify(data);
@@ -63,8 +64,9 @@ var SelectModel = /** @class */ (function (_super) {
                             self.loaded().then(function () {
                                 if (self.parent) {
                                     var path = self.getFirebaseDatabaseSessionPath(finalurl);
+                                    self.update('data', []);
+                                    _this.__updateFromLocalStorage(finalurlHash);
                                     if (self.__registeredUrls[finalurl] === undefined) {
-                                        self.update('data', []);
                                         self.__registeredUrls[finalurl] = path;
                                         self.parent.getFirebaseDatabase().object(path).query.on('value', function (event) {
                                             self.updateFromFirebase(event, finalurlHash);
@@ -122,22 +124,18 @@ var SelectModel = /** @class */ (function (_super) {
             }
         }
         if (self.url.length) {
-            if (!self.isOnline()) {
-                var hash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(this.url);
-                if (self.dataCached[hash] !== undefined) {
-                    self.update('data', JSON.parse(self.dataCached[hash]));
-                    self.applyData(JSON.parse(self.dataCached[hash]));
-                }
-            }
-            else {
-                self.fetchdata(this.url);
-            }
+            self.fetchdata(this.url);
         }
         self.parent.watch(self.parentProperty, function (value) {
-            self.__dataTmpValues[self.__currentUrl] = value;
+            if (value && value.length) {
+                self.__dataTmpValues[self.__currentUrl] = value;
+            }
         });
     };
-    SelectModel.prototype.__refresh = function () {
+    SelectModel.prototype.__updateFromLocalStorage = function (finalurlHash) {
+        if (this.dataCached[finalurlHash] !== undefined) {
+            this.update('data', JSON.parse(this.dataCached[finalurlHash]));
+        }
     };
     /**
      *
@@ -194,12 +192,6 @@ var SelectModel = /** @class */ (function (_super) {
         var self = this;
         var options = [];
         var allOptions = {};
-        if (data.length == 0 && !self.isOnline() && self.dataCached && self.__currentUrl) {
-            var hash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(self.__currentUrl);
-            if (self.dataCached[hash] !== undefined) {
-                data = JSON.parse(self.dataCached[hash]);
-            }
-        }
         data.forEach(function (item) {
             var v = self.mapping.value ? self.setHashedValue(self._getPropertyFromObject(item, self.mapping.value)) : self.setHashedValue(item);
             allOptions[v] = true;
