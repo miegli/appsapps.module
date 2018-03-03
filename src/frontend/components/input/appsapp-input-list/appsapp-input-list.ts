@@ -14,10 +14,17 @@ import {Observable} from "rxjs/Observable";
 @Component({
     selector: 'appsapp-input-list',
     template: `
-
+        <style>
+            .mbsc-lv-item-pop-in {
+                -webkit-animation: none !important;
+                animation: none !important;;
+               
+            }
+        </style>
         <mbsc-listview #mbscInstance="mobiscroll">
             <mbsc-listview-item *ngFor="let item of _ngModelGettter | async" [id]="item.__uuid">
-                <appsapp-input [model]="item" [parentPropertyMetadata]="parentPropertyMetadata" [parentProperty]="parentProperty"></appsapp-input>
+                <appsapp-input [model]="item" [parentPropertyMetadata]="parentPropertyMetadata"
+                               [parentProperty]="parentProperty"></appsapp-input>
             </mbsc-listview-item>
         </mbsc-listview>
 
@@ -65,16 +72,14 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
                 self.model.update(self.property, valueSorted).setProperty(self.property, valueSorted);
 
                 if (self.model.getParent()) {
-                    self.model.getParent().setProperty(self.property,self.model.getPropertyValue(self.property, true));
+                    self.model.getParent().setProperty(self.property, self.model.getPropertyValue(self.property, true));
                 }
 
 
             }
 
 
-
         }
-
 
 
     }
@@ -91,6 +96,7 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
             onSortUpdate: function (event, inst) {
                 self.reCalculateAfterSorting();
             },
+            fillAnimation: false,
             sortable: {handle: 'right'}, striped: false, stages: [{
                 percent: -10,
                 color: 'red',
@@ -120,8 +126,6 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
     }
 
 
-
-
     ngAfterContentInit() {
 
         if (this.model.getMetadataValue(this.property, 'arrayMinSize')) {
@@ -146,7 +150,7 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
         }
 
         if (!this.model.getMetadataValue(this.property, 'arrayMinSize') || this.model.getMetadataValue(this.property, 'arrayMinSize') < value.length) {
-                let index = 0;
+            let index = 0;
             let wasdeleted = false;
             value.forEach((item) => {
                 if (!wasdeleted && (item.getUuid() == uuidOrIndex || uuidOrIndex == index)) {
@@ -174,7 +178,7 @@ export class AppsappInputListComponent extends AppsappInputAbstractComponent {
             this.model.add(this.property);
         }
 
-        this.model.setProperty(this.property,this.model.getPropertyValue(this.property, true));
+        this.model.setProperty(this.property, this.model.getPropertyValue(this.property, true));
         this.updateConfig();
 
     }

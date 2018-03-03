@@ -153,6 +153,13 @@ export class PersistenceManager {
 
     }
 
+    /**
+     * generates new UUID
+     * @returns {() => string}
+     */
+    public generateUUID() {
+        return UUID.UUID();
+    }
 
     /**
      * get firebase
