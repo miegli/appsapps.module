@@ -107,6 +107,13 @@ var PersistenceManager = /** @class */ (function () {
         return this;
     };
     /**
+     * generates new UUID
+     * @returns {() => string}
+     */
+    PersistenceManager.prototype.generateUUID = function () {
+        return angular2_uuid_1.UUID.UUID();
+    };
+    /**
      * get firebase
      * @returns {FirebaseModel}
      */
