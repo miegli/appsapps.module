@@ -457,13 +457,13 @@ export class PersistenceManager {
         return new Promise(function (resolve, reject) {
 
 
-            model.validate(localStorageOnly).then(() => {
+                model.validate(localStorageOnly).then(() => {
 
-                self.storageWrapper.set(self.getPersistanceIdentifier(model), model.serialize(false, true)).then((m) => {
+                    self.storageWrapper.set(self.getPersistanceIdentifier(model), model.serialize(false, true)).then((m) => {
 
-                    if (!localStorageOnly && model.getFirebaseDatabasePath() && model.getFirebaseDatabase()) {
-                        self.clone(model).then((c: any) => {
-                            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(c.transformAllProperties().convertListPropertiesFromArrayToObject().serialize(true, true)).then((data) => {
+                        if (!localStorageOnly && model.getFirebaseDatabasePath() && model.getFirebaseDatabase()) {
+
+                            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(model.serialize(true, true)).then((data) => {
                                 if (action) {
                                     self.callAction(model, observer, action, resolve, reject);
                                 } else {
@@ -474,21 +474,19 @@ export class PersistenceManager {
                                 reject(error);
                             });
 
-                        }).catch((error) => {
-                            reject(error);
-                        });
 
-                    } else {
-                        resolve(model);
-                    }
+                        } else {
+                            resolve(model);
+                        }
+
+                    }).catch((error) => {
+                        reject(error);
+                    });
 
                 }).catch((error) => {
                     reject(error);
                 });
 
-            }).catch((error) => {
-                reject(error);
-            });
 
 
         });
@@ -649,7 +647,7 @@ export class PersistenceManager {
         return new Promise(function (resolve, reject) {
 
             let m = new model.constructor();
-            m.loadJson(model.serialize(true, true)).then((m) => {
+            m.loadJson(model.serialize(true, true), true).then((m) => {
                 resolve(m);
             }).catch((error) => {
                 reject(error);
