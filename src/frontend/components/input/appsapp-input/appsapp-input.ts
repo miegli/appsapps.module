@@ -258,7 +258,7 @@ export class AppsappInputComponent extends AbstractComponent {
                     self.ngOnInitExecute(model);
                 })
             } else {
-                if (this.model instanceof PersistableModel) {
+                if (this.model.__isPersistableModel) {
                     self.ngOnInitExecute(this.model);
                 } else {
                     this.model.forEach((vm) => {

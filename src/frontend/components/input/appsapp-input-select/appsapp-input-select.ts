@@ -43,7 +43,7 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
             value.forEach(() => {
 
                 value.forEach((option) => {
-                    if (option instanceof PersistableModel && option.getUuid() !== self.model.getUuid()) {
+                    if (option.__isPersistableModel && option.getUuid() !== self.model.getUuid()) {
                         option.getPropertyValue(self.property).forEach((option) => {
                             currentSelectedselectoptions[option] = true;
                         })
@@ -66,7 +66,7 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
         console.log(values,selectoptionsPreProcessed);
 
         self.mbsc.instance.refresh(selectoptionsPreProcessed);
-        self.mbsc.instance.setVal(values, true, true);
+        self.mbsc.instance.setVal(values, true, false);
 
     }
 
@@ -87,6 +87,8 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
 
         let self = this;
         let data = this.model.getMetadataValue(this.property, 'isSelect');
+
+        console.log(self.model.__isPersistableModel);
 
         if (this.parentPropertyMetadata) {
             this.isUnique = this.model.getMetadataValue(null, 'isList', this.parentPropertyMetadata, 'uniqueItems');
@@ -117,7 +119,6 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
 
                     self.select.getOptions().subscribe((selectoptions) => {
 
-                        console.log(self.property,selectoptions);
 
                         self.selectoptions = selectoptions;
                         if (self.isUnique) {
@@ -136,8 +137,8 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
                             });
                         }
 
-                        self.update(hashedValues);
-                        self.mbsc.instance.setVal(hashedValues, true, true);
+                        //self.update(hashedValues);
+                        self.mbsc.instance.setVal(hashedValues, true, false);
 
                     });
 
