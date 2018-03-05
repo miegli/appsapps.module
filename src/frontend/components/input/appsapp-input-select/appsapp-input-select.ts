@@ -32,6 +32,8 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
      */
     setOptions(values?) {
 
+
+
         let self = this;
         let selectoptionsPreProcessed = [];
         let currentSelectedselectoptions = {};
@@ -61,7 +63,10 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
             selectoptionsPreProcessed.push(option);
         });
 
+        console.log(values,selectoptionsPreProcessed);
+
         self.mbsc.instance.refresh(selectoptionsPreProcessed);
+        self.mbsc.instance.setVal(values, true, true);
 
     }
 
@@ -112,6 +117,8 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
 
                     self.select.getOptions().subscribe((selectoptions) => {
 
+                        console.log(self.property,selectoptions);
+
                         self.selectoptions = selectoptions;
                         if (self.isUnique) {
                             self.setOptions();
@@ -130,9 +137,7 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
                         }
 
                         self.update(hashedValues);
-
-                        self.mbsc.instance.setVal(hashedValues, false, true);
-
+                        self.mbsc.instance.setVal(hashedValues, true, true);
 
                     });
 

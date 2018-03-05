@@ -214,9 +214,7 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
         let self = this;
 
         if (this.model) {
-            //window.setTimeout(function () {
-                self.model.update(self.property, value).setProperty(self.property, value);
-          //  }, 1);
+            self.model.setProperty(self.property, value);
             return this.model;
         } else {
             return null;

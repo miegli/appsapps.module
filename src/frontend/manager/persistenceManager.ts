@@ -239,18 +239,20 @@ export class PersistenceManager {
                             }, 1000);
 
                         } else {
-
-                            model.loadJson(action.payload.val()).then((m) => {
-                                m.emit();
-                            }).catch((error) => {
-                                //
-                                console.log('error', error);
-                            });
+                            if (action.payload.val()) {
+                                model.loadJson(action.payload.val()).then((m) => {
+                                    m.emit();
+                                }).catch((error) => {
+                                    //
+                                    console.log('error', error);
+                                });
+                            }
                         }
 
                     }, (error) => {
                         // skip access denied
                     });
+
                     self._loadedResolver(model);
                 }
 
@@ -536,14 +538,6 @@ export class PersistenceManager {
 
 
             self.load(model, data).then((model: any) => {
-
-                // set default data
-                if (data) {
-                    Object.keys(data).forEach((property) => {
-                        model.setProperty(property, data[property]);
-                    });
-                }
-
                 model.removeEditedState();
 
                 // init remote firebase connection
@@ -552,7 +546,6 @@ export class PersistenceManager {
                 }).catch((err) => {
                     reject(err);
                 });
-
 
             }).catch((err) => {
                 reject(err);
@@ -583,7 +576,7 @@ export class PersistenceManager {
                     self.storageWrapper.get(self.getPersistanceIdentifier(model)).then((json) => {
 
                         model.loadJson(json).then((model) => {
-                            resolve(model.emit());
+                            resolve(model);
                         }).catch((error) => {
                             reject(error);
                         });

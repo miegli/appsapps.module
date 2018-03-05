@@ -22,7 +22,6 @@ export class SelectModel extends PersistableModel {
     private __currentUrl: string = '';
     private __registeredUrls: object = {};
     private __lastHash = '';
-    private __dataRecalcalatedCount = 0;
     private __dataTmpValues = {};
     private __optionObserver;
 
@@ -44,7 +43,6 @@ export class SelectModel extends PersistableModel {
                     self.parent.watch(m[1].substr(1), (data) => {
                         self.options = [];
                         self.data = [];
-                        self.__dataRecalcalatedCount++;
                         self.fetchdata(self.url, m[1].substr(1), data);
                     });
                 });
@@ -93,18 +91,13 @@ export class SelectModel extends PersistableModel {
 
                 this.__currentUrl = finalurl;
 
-
-
                 var finalurlHash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(finalurl);
 
-                // if (self.dataCached[finalurlHash] !== undefined && self.dataCached[finalurlHash]) {
-                //     self.update('data', JSON.parse(self.dataCached[finalurlHash]));
-                // }
 
                 if (finalurl.substr(0, 4) == 'http') {
                     this.getHttpClient().get(finalurl).subscribe((data) => {
                         self.dataCached[finalurlHash] = JSON.stringify(data);
-                        self.update('data', data);
+                        self.setProperty('data', data);
                     }, (error) => {
                         // skip error
                     });
@@ -119,20 +112,23 @@ export class SelectModel extends PersistableModel {
                             if (self.parent) {
                                 var path = self.getFirebaseDatabaseSessionPath(finalurl);
 
-
-                                self.update('data', []);
+                                self.setProperty('data', []);
 
                                 this.__updateFromLocalStorage(finalurlHash);
 
                                 if (self.__registeredUrls[finalurl] === undefined) {
                                     self.__registeredUrls[finalurl] = path;
-                                    self.parent.getFirebaseDatabase().object(path).query.on('value', (event) => {
-                                        self.updateFromFirebase(event, finalurlHash);
-                                    });
+                                    if (self.parent.getFirebaseDatabase() !== undefined) {
+                                        self.parent.getFirebaseDatabase().object(path).query.on('value', (event) => {
+                                            self.updateFromFirebase(event, finalurlHash);
+                                        });
+                                    }
                                 } else {
-                                    self.parent.getFirebaseDatabase().object(path).query.once('value', (event) => {
-                                        self.updateFromFirebase(event, finalurlHash);
-                                    });
+                                    if (self.parent.getFirebaseDatabase() !== undefined) {
+                                        self.parent.getFirebaseDatabase().object(path).query.once('value', (event) => {
+                                            self.updateFromFirebase(event, finalurlHash);
+                                        });
+                                    }
                                 }
                             }
 
@@ -144,7 +140,7 @@ export class SelectModel extends PersistableModel {
 
                 }
             } else {
-                self.update('data', []);
+                self.setProperty('data', []);
             }
 
         }
@@ -155,11 +151,9 @@ export class SelectModel extends PersistableModel {
 
     private __updateFromLocalStorage(finalurlHash) {
 
-
         if (this.dataCached[finalurlHash] !== undefined) {
-            this.update('data', JSON.parse(this.dataCached[finalurlHash]));
+            this.setProperty('data', JSON.parse(this.dataCached[finalurlHash]));
         }
-
 
     }
 
@@ -290,7 +284,7 @@ export class SelectModel extends PersistableModel {
                 });
                 self.parent.setProperty(self.parentProperty, tmp);
             } else {
-                if (self.__dataRecalcalatedCount && self.parent[self.parentProperty] !== undefined) {
+                if (self.parent[self.parentProperty] !== undefined) {
                     self.parent.setProperty(self.parentProperty, []);
                 }
             }
