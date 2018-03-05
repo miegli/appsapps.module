@@ -167,12 +167,14 @@ var PersistenceManager = /** @class */ (function () {
                             }, 1000);
                         }
                         else {
-                            model.loadJson(action.payload.val()).then(function (m) {
-                                m.emit();
-                            })["catch"](function (error) {
-                                //
-                                console.log('error', error);
-                            });
+                            if (action.payload.val()) {
+                                model.loadJson(action.payload.val()).then(function (m) {
+                                    m.emit();
+                                })["catch"](function (error) {
+                                    //
+                                    console.log('error', error);
+                                });
+                            }
                         }
                     }, function (error) {
                         // skip access denied
@@ -384,12 +386,6 @@ var PersistenceManager = /** @class */ (function () {
         var self = this;
         return new Promise(function (resolve, reject) {
             self.load(model, data).then(function (model) {
-                // set default data
-                if (data) {
-                    Object.keys(data).forEach(function (property) {
-                        model.setProperty(property, data[property]);
-                    });
-                }
                 model.removeEditedState();
                 // init remote firebase connection
                 self.initModelForFirebaseDatabase(model).then(function (model) {
@@ -415,7 +411,7 @@ var PersistenceManager = /** @class */ (function () {
                 self.storageWrapper.ready().then(function (data) {
                     self.storageWrapper.get(self.getPersistanceIdentifier(model)).then(function (json) {
                         model.loadJson(json).then(function (model) {
-                            resolve(model.emit());
+                            resolve(model);
                         })["catch"](function (error) {
                             reject(error);
                         });

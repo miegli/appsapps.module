@@ -27,7 +27,6 @@ var SelectModel = /** @class */ (function (_super) {
         _this.__currentUrl = '';
         _this.__registeredUrls = {};
         _this.__lastHash = '';
-        _this.__dataRecalcalatedCount = 0;
         _this.__dataTmpValues = {};
         _this.fetchdata = function (url, property, data) {
             var _this = this;
@@ -48,13 +47,10 @@ var SelectModel = /** @class */ (function (_super) {
                 if (finalurl.length) {
                     this.__currentUrl = finalurl;
                     var finalurlHash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(finalurl);
-                    // if (self.dataCached[finalurlHash] !== undefined && self.dataCached[finalurlHash]) {
-                    //     self.update('data', JSON.parse(self.dataCached[finalurlHash]));
-                    // }
                     if (finalurl.substr(0, 4) == 'http') {
                         this.getHttpClient().get(finalurl).subscribe(function (data) {
                             self.dataCached[finalurlHash] = JSON.stringify(data);
-                            self.update('data', data);
+                            self.setProperty('data', data);
                         }, function (error) {
                             // skip error
                         });
@@ -64,18 +60,22 @@ var SelectModel = /** @class */ (function (_super) {
                             self.loaded().then(function () {
                                 if (self.parent) {
                                     var path = self.getFirebaseDatabaseSessionPath(finalurl);
-                                    self.update('data', []);
+                                    self.setProperty('data', []);
                                     _this.__updateFromLocalStorage(finalurlHash);
                                     if (self.__registeredUrls[finalurl] === undefined) {
                                         self.__registeredUrls[finalurl] = path;
-                                        self.parent.getFirebaseDatabase().object(path).query.on('value', function (event) {
-                                            self.updateFromFirebase(event, finalurlHash);
-                                        });
+                                        if (self.parent.getFirebaseDatabase() !== undefined) {
+                                            self.parent.getFirebaseDatabase().object(path).query.on('value', function (event) {
+                                                self.updateFromFirebase(event, finalurlHash);
+                                            });
+                                        }
                                     }
                                     else {
-                                        self.parent.getFirebaseDatabase().object(path).query.once('value', function (event) {
-                                            self.updateFromFirebase(event, finalurlHash);
-                                        });
+                                        if (self.parent.getFirebaseDatabase() !== undefined) {
+                                            self.parent.getFirebaseDatabase().object(path).query.once('value', function (event) {
+                                                self.updateFromFirebase(event, finalurlHash);
+                                            });
+                                        }
                                     }
                                 }
                             });
@@ -83,7 +83,7 @@ var SelectModel = /** @class */ (function (_super) {
                     }
                 }
                 else {
-                    self.update('data', []);
+                    self.setProperty('data', []);
                 }
             }
         };
@@ -117,7 +117,6 @@ var SelectModel = /** @class */ (function (_super) {
                     self.parent.watch(m[1].substr(1), function (data) {
                         self.options = [];
                         self.data = [];
-                        self.__dataRecalcalatedCount++;
                         self.fetchdata(self.url, m[1].substr(1), data);
                     });
                 });
@@ -134,7 +133,7 @@ var SelectModel = /** @class */ (function (_super) {
     };
     SelectModel.prototype.__updateFromLocalStorage = function (finalurlHash) {
         if (this.dataCached[finalurlHash] !== undefined) {
-            this.update('data', JSON.parse(this.dataCached[finalurlHash]));
+            this.setProperty('data', JSON.parse(this.dataCached[finalurlHash]));
         }
     };
     /**
@@ -218,7 +217,7 @@ var SelectModel = /** @class */ (function (_super) {
                 self.parent.setProperty(self.parentProperty, tmp);
             }
             else {
-                if (self.__dataRecalcalatedCount && self.parent[self.parentProperty] !== undefined) {
+                if (self.parent[self.parentProperty] !== undefined) {
                     self.parent.setProperty(self.parentProperty, []);
                 }
             }

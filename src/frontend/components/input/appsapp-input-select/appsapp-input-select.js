@@ -61,7 +61,9 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
             }
             selectoptionsPreProcessed.push(option);
         });
+        console.log(values, selectoptionsPreProcessed);
         self.mbsc.instance.refresh(selectoptionsPreProcessed);
+        self.mbsc.instance.setVal(values, true, true);
     };
     AppsappInputSelectComponent.prototype.applyselectoptionsPostprocess = function () {
         var self = this;
@@ -95,6 +97,7 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
                     self.select.setProperty('url', data.source.url);
                     self.select.init();
                     self.select.getOptions().subscribe(function (selectoptions) {
+                        console.log(self.property, selectoptions);
                         self.selectoptions = selectoptions;
                         if (self.isUnique) {
                             self.setOptions();
@@ -112,7 +115,7 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
                             });
                         }
                         self.update(hashedValues);
-                        self.mbsc.instance.setVal(hashedValues, false, true);
+                        self.mbsc.instance.setVal(hashedValues, true, true);
                     });
                 });
             }

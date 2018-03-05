@@ -167,9 +167,7 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
     AppsappInputAbstractComponent.prototype.update = function (value) {
         var self = this;
         if (this.model) {
-            //window.setTimeout(function () {
-            self.model.update(self.property, value).setProperty(self.property, value);
-            //  }, 1);
+            self.model.setProperty(self.property, value);
             return this.model;
         }
         else {
