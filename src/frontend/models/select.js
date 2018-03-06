@@ -28,65 +28,6 @@ var SelectModel = /** @class */ (function (_super) {
         _this.__registeredUrls = {};
         _this.__lastHash = '';
         _this.__dataTmpValues = {};
-        _this.fetchdata = function (url, property, data) {
-            var _this = this;
-            var finalurl = url, self = this;
-            if (finalurl !== undefined && self.parent && self.parent instanceof appsapp_cli_1.PersistableModel) {
-                if (this.matchAll(url, this.__regex)) {
-                    this.matchAll(url, this.__regex).forEach(function (m) {
-                        var d = property == m[1].substr(1) ? data : self.parent[m[1].substr(1)];
-                        d = d === undefined ? null : d.toString();
-                        if (d && typeof d == 'string' && d.length) {
-                            finalurl = finalurl.replace(m[1], d);
-                        }
-                        else {
-                            finalurl = '';
-                        }
-                    });
-                }
-                if (finalurl.length) {
-                    this.__currentUrl = finalurl;
-                    var finalurlHash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(finalurl);
-                    if (finalurl.substr(0, 4) == 'http') {
-                        this.getHttpClient().get(finalurl).subscribe(function (data) {
-                            self.dataCached[finalurlHash] = JSON.stringify(data);
-                            self.setProperty('data', data);
-                        }, function (error) {
-                            // skip error
-                        });
-                    }
-                    if (finalurl.substr(0, 1) == '/') {
-                        if (self.parent instanceof appsapp_cli_1.PersistableModel) {
-                            self.loaded().then(function () {
-                                if (self.parent) {
-                                    var path = self.getFirebaseDatabaseSessionPath(finalurl);
-                                    self.setProperty('data', []);
-                                    _this.__updateFromLocalStorage(finalurlHash);
-                                    if (self.__registeredUrls[finalurl] === undefined) {
-                                        self.__registeredUrls[finalurl] = path;
-                                        if (self.parent.getFirebaseDatabase() !== undefined) {
-                                            self.parent.getFirebaseDatabase().object(path).query.on('value', function (event) {
-                                                self.updateFromFirebase(event, finalurlHash);
-                                            });
-                                        }
-                                    }
-                                    else {
-                                        if (self.parent.getFirebaseDatabase() !== undefined) {
-                                            self.parent.getFirebaseDatabase().object(path).query.once('value', function (event) {
-                                                self.updateFromFirebase(event, finalurlHash);
-                                            });
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    }
-                }
-                else {
-                    self.setProperty('data', []);
-                }
-            }
-        };
         /**
          * match all in string
          * @param string
@@ -111,25 +52,77 @@ var SelectModel = /** @class */ (function (_super) {
     }
     SelectModel.prototype.init = function () {
         var self = this;
-        if (self.matchAll(this.url, this.__regex)) {
-            if (self.parent && self.parent.getPropertyValue !== undefined) {
-                self.matchAll(this.url, this.__regex).forEach(function (m) {
-                    self.parent.watch(m[1].substr(1), function (data) {
-                        self.options = [];
-                        self.data = [];
-                        self.fetchdata(self.url, m[1].substr(1), data);
+        if (self.url !== undefined) {
+            if (self.matchAll(this.url, this.__regex)) {
+                if (self.parent) {
+                    self.matchAll(this.url, this.__regex).forEach(function (m) {
+                        self.parent.watch(m[1].substr(1), function (data) {
+                            self.fetchdata(self.url, m[1].substr(1), data);
+                        });
                     });
+                }
+            }
+            if (self.url.length) {
+                self.fetchdata(self.url);
+            }
+            self.parent.watch(self.parentProperty, function (value) {
+                if (value && value.length) {
+                    self.__dataTmpValues[self.__currentUrl] = value;
+                }
+            });
+        }
+    };
+    SelectModel.prototype.fetchdata = function (url, property, data) {
+        var finalurl = url, self = this;
+        if (this.matchAll(url, this.__regex)) {
+            this.matchAll(url, this.__regex).forEach(function (m) {
+                var d = property == m[1].substr(1) ? data : self.parent[m[1].substr(1)];
+                d = d === undefined || d === null ? null : d.toString();
+                if (d && typeof d == 'string' && d.length) {
+                    finalurl = finalurl.replace(m[1], d);
+                }
+                else {
+                    finalurl = '';
+                }
+            });
+        }
+        if (finalurl.length) {
+            this.__currentUrl = finalurl;
+            var finalurlHash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(finalurl);
+            self.setProperty('data', []);
+            this.__updateFromLocalStorage(finalurlHash);
+            if (finalurl.substr(0, 4) == 'http') {
+                this.getHttpClient().get(finalurl).subscribe(function (data) {
+                    self.dataCached[finalurlHash] = JSON.stringify(data);
+                    self.setProperty('data', data);
+                }, function (error) {
+                    // skip error
                 });
             }
-        }
-        if (self.url.length) {
-            self.fetchdata(this.url);
-        }
-        self.parent.watch(self.parentProperty, function (value) {
-            if (value && value.length) {
-                self.__dataTmpValues[self.__currentUrl] = value;
+            if (finalurl.substr(0, 1) == '/') {
+                if (self.parent && self.parent.__isPersistableModel) {
+                    var path = self.getFirebaseDatabaseSessionPath(finalurl);
+                    if (self.__registeredUrls[finalurl] === undefined) {
+                        self.__registeredUrls[finalurl] = path;
+                        if (self.parent.getFirebaseDatabase() !== undefined) {
+                            self.parent.getFirebaseDatabase().object(path).query.on('value', function (event) {
+                                self.updateFromFirebase(event, finalurlHash);
+                            });
+                        }
+                    }
+                    else {
+                        if (self.parent.getFirebaseDatabase() !== undefined) {
+                            self.parent.getFirebaseDatabase().object(path).query.once('value', function (event) {
+                                self.updateFromFirebase(event, finalurlHash);
+                            });
+                        }
+                    }
+                }
             }
-        });
+        }
+        else {
+            self.setProperty('data', []);
+        }
     };
     SelectModel.prototype.__updateFromLocalStorage = function (finalurlHash) {
         if (this.dataCached[finalurlHash] !== undefined) {
@@ -169,6 +162,9 @@ var SelectModel = /** @class */ (function (_super) {
                 self.setProperty('data', []);
             }
         }
+        else {
+            self.setProperty('data', []);
+        }
     };
     /**
      * Get options array as promise
@@ -206,20 +202,20 @@ var SelectModel = /** @class */ (function (_super) {
             self.parent.setProperty(self.parentProperty, self.__dataTmpValues[self.__currentUrl]);
         }
         // remove non valid select options from current value
-        if (self.parent instanceof appsapp_cli_1.PersistableModel) {
-            if (Object.keys(allOptions).length && self.parent[self.parentProperty] !== undefined) {
-                var tmp = [];
-                self.parent[self.parentProperty].forEach(function (v) {
-                    if (allOptions[v] === true) {
-                        tmp.push(v);
-                    }
-                });
+        if (Object.keys(allOptions).length && self.parent[self.parentProperty] !== undefined) {
+            var tmp = [];
+            self.parent[self.parentProperty].forEach(function (v) {
+                if (allOptions[v] === true) {
+                    tmp.push(v);
+                }
+            });
+            if (self.parent[self.parentProperty] !== undefined && self.parent.__isPersistableModel) {
                 self.parent.setProperty(self.parentProperty, tmp);
             }
-            else {
-                if (self.parent[self.parentProperty] !== undefined) {
-                    self.parent.setProperty(self.parentProperty, []);
-                }
+        }
+        else {
+            if (self.parent[self.parentProperty] !== undefined && self.parent.__isPersistableModel) {
+                self.parent.setProperty(self.parentProperty, []);
             }
         }
         if (self.__optionObserver) {

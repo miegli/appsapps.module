@@ -96,10 +96,12 @@ var PersistenceManager = /** @class */ (function () {
         if (!this.firebaseModel) {
             firebaseModel.getDatabase().then(function (database) {
                 self.firebaseDatabase = database;
-                firebaseModel.getAuth().then(function (auth) {
-                    auth.authState.subscribe(function (user) {
+            });
+            firebaseModel.getAuth().then(function (auth) {
+                auth.authState.subscribe(function (user) {
+                    if (user) {
                         self.getObserver().next({ action: 'initFirebaseDatabase' });
-                    });
+                    }
                 });
             });
             this.firebaseModel = firebaseModel;
@@ -407,7 +409,7 @@ var PersistenceManager = /** @class */ (function () {
     PersistenceManager.prototype.load = function (model, json) {
         var self = this;
         return new Promise(function (resolve, reject) {
-            if (json == undefined || json == null) {
+            if (json === undefined || json === null) {
                 self.storageWrapper.ready().then(function (data) {
                     self.storageWrapper.get(self.getPersistanceIdentifier(model)).then(function (json) {
                         model.loadJson(json).then(function (model) {

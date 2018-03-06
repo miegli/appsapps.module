@@ -19,7 +19,6 @@ exports.__esModule = true;
 var core_1 = require("@angular/core");
 var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
 var select_1 = require("../../../models/select");
-var appsapp_cli_1 = require("appsapp-cli");
 /**
  * Generated class for the AppsappInputSelectComponent component.
  *
@@ -46,7 +45,7 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
         if (value && value.length) {
             value.forEach(function () {
                 value.forEach(function (option) {
-                    if (option instanceof appsapp_cli_1.PersistableModel && option.getUuid() !== self.model.getUuid()) {
+                    if (option.__isPersistableModel && option.getUuid() !== self.model.getUuid()) {
                         option.getPropertyValue(self.property).forEach(function (option) {
                             currentSelectedselectoptions[option] = true;
                         });
@@ -63,7 +62,7 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
         });
         console.log(values, selectoptionsPreProcessed);
         self.mbsc.instance.refresh(selectoptionsPreProcessed);
-        self.mbsc.instance.setVal(values, true, true);
+        self.mbsc.instance.setVal(values, true, false);
     };
     AppsappInputSelectComponent.prototype.applyselectoptionsPostprocess = function () {
         var self = this;
@@ -97,7 +96,6 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
                     self.select.setProperty('url', data.source.url);
                     self.select.init();
                     self.select.getOptions().subscribe(function (selectoptions) {
-                        console.log(self.property, selectoptions);
                         self.selectoptions = selectoptions;
                         if (self.isUnique) {
                             self.setOptions();
@@ -114,8 +112,8 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
                                 hashedValues.push(self.model.setHashedValue(value));
                             });
                         }
-                        self.update(hashedValues);
-                        self.mbsc.instance.setVal(hashedValues, true, true);
+                        //self.update(hashedValues);
+                        self.mbsc.instance.setVal(hashedValues, true, false);
                     });
                 });
             }

@@ -20,7 +20,6 @@ var core_1 = require("@angular/core");
 var abstractComponent_1 = require("../../abstractComponent");
 var core_2 = require("@angular/core");
 var Observable_1 = require("rxjs/Observable");
-var appsapp_cli_1 = require("appsapp-cli");
 /**
  * Generate d class for the AppsappInputComponent component.
  *
@@ -122,7 +121,7 @@ var AppsappInputComponent = /** @class */ (function (_super) {
                 });
             }
             else {
-                if (this.model instanceof appsapp_cli_1.PersistableModel) {
+                if (this.model.__isPersistableModel) {
                     self.ngOnInitExecute(this.model);
                 }
                 else {

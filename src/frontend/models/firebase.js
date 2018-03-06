@@ -30,11 +30,8 @@ var FirebaseModel = /** @class */ (function (_super) {
     FirebaseModel.prototype.getDatabase = function () {
         var self = this;
         return new Promise(function (resolve) {
-            if (self.instance && self.database) {
-                resolve(self.database);
-            }
-            self.getObservable().subscribe(function () {
-                if (self.instance && self.database) {
+            self.watch('database', function (database) {
+                if (database) {
                     resolve(self.database);
                 }
             });
@@ -47,11 +44,8 @@ var FirebaseModel = /** @class */ (function (_super) {
     FirebaseModel.prototype.getFirestore = function () {
         var self = this;
         return new Promise(function (resolve) {
-            if (self.instance && self.firestore) {
-                resolve(self.firestore);
-            }
-            self.getObservable().subscribe(function () {
-                if (self.instance && self.firestore) {
+            self.watch('firestore', function (firestore) {
+                if (firestore) {
                     resolve(self.firestore);
                 }
             });
@@ -64,12 +58,9 @@ var FirebaseModel = /** @class */ (function (_super) {
     FirebaseModel.prototype.getAuth = function () {
         var self = this;
         return new Promise(function (resolve) {
-            if (self.instance && self.auth) {
-                resolve(self.auth);
-            }
-            self.getObservable().subscribe(function () {
-                if (self.instance && self.auth) {
-                    resolve(self.auth);
+            self.watch('auth', function (auth) {
+                if (auth) {
+                    resolve(auth);
                 }
             });
         });
@@ -140,18 +131,17 @@ var FirebaseModel = /** @class */ (function (_super) {
                         projectId: rawConfig.firebaseProjectId,
                         apiKey: rawConfig.firebaseApiKey
                     };
-                    this.instance = this.firebase.initializeApp(this.firebaseAppConfig, rawConfig.firebaseProjectId);
+                    this.setProperty('instance', this.firebase.initializeApp(this.firebaseAppConfig, rawConfig.firebaseProjectId));
                 }
                 catch (error) {
                     console.log(error);
-                    this.instance = null;
+                    this.setProperty('instance', null);
                 }
             }
             if (this.instance) {
-                this.database = new database_1.AngularFireDatabase(this.instance.database !== undefined ? this.instance : this.firebase.app(rawConfig.firebaseProjectId));
-                this.firestore = new firestore_1.AngularFirestore(this.instance, false);
-                this.auth = new auth_1.AngularFireAuth(this.instance);
-                this.emit();
+                this.setProperty('database', new database_1.AngularFireDatabase(this.instance.database !== undefined ? this.instance : this.firebase.app(rawConfig.firebaseProjectId)));
+                this.setProperty('firestore', new firestore_1.AngularFirestore(this.instance, false));
+                this.setProperty('auth', new auth_1.AngularFireAuth(this.instance));
             }
         }
         return this;
