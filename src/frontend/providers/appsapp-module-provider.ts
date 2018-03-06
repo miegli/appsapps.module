@@ -139,7 +139,7 @@ export class AppsappModuleProvider {
     public new(constructor: any, uuid?: any, data?: any) {
 
 
-        let model = new constructor();
+        let model = new constructor(), initialdata = null;
 
         if (uuid) {
             model.setUuid(uuid);
@@ -147,15 +147,17 @@ export class AppsappModuleProvider {
 
         if (data && typeof data == 'object') {
             if (typeof data.serialize == 'function') {
-                data = data.serialize(true, true);
+                initialdata = data.serialize(true, true);
             }
         } else {
             if (typeof data == 'string') {
-                data = JSON.parse(data);
+                initialdata = JSON.parse(data);
             }
         }
 
-        this.lazyLoad(model, data);
+
+       this.lazyLoad(model, initialdata);
+
 
         return model;
 
@@ -174,7 +176,7 @@ export class AppsappModuleProvider {
 
         if (!model.__isLoaded) {
             let self = this, pm = new PersistenceManager(),
-                modeldata = data == undefined ? model.serialize(true, true) : data;
+                modeldata = data === undefined ? model.serialize(true, true) : data;
 
             let p = new Promise(function (resolve, reject) {
 

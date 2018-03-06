@@ -37,6 +37,8 @@ export class SelectModel extends PersistableModel {
         let self = this;
 
 
+
+
         if (self.url !== undefined) {
 
             if (self.matchAll(this.url, this.__regex)) {
@@ -76,7 +78,7 @@ export class SelectModel extends PersistableModel {
 
                 this.matchAll(url, this.__regex).forEach((m) => {
                     var d = property == m[1].substr(1) ? data : self.parent[m[1].substr(1)];
-                    d = d === undefined ? null : d.toString();
+                    d = d === undefined || d === null ? null : d.toString();
                     if (d && typeof d == 'string' && d.length) {
                         finalurl = finalurl.replace(m[1], d);
                     } else {
@@ -93,8 +95,8 @@ export class SelectModel extends PersistableModel {
                 this.__currentUrl = finalurl;
 
                 var finalurlHash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(finalurl);
+                self.setProperty('data', []);
                 this.__updateFromLocalStorage(finalurlHash);
-
 
                 if (finalurl.substr(0, 4) == 'http') {
                     this.getHttpClient().get(finalurl).subscribe((data) => {
@@ -113,7 +115,6 @@ export class SelectModel extends PersistableModel {
                             var path = self.getFirebaseDatabaseSessionPath(finalurl);
 
                             if (self.__registeredUrls[finalurl] === undefined) {
-                                self.setProperty('data', []);
 
                                 self.__registeredUrls[finalurl] = path;
                                 if (self.parent.getFirebaseDatabase() !== undefined) {
@@ -129,10 +130,6 @@ export class SelectModel extends PersistableModel {
                                 }
                             }
                         }
-
-
-
-
 
                 }
             } else {
@@ -192,6 +189,8 @@ export class SelectModel extends PersistableModel {
                 self.setProperty('data', []);
             }
 
+        } else {
+            self.setProperty('data', []);
         }
     }
 
@@ -278,7 +277,9 @@ export class SelectModel extends PersistableModel {
                         tmp.push(v);
                     }
                 });
-                self.parent.setProperty(self.parentProperty, tmp);
+                if (self.parent[self.parentProperty] !== undefined && self.parent.__isPersistableModel) {
+                    self.parent.setProperty(self.parentProperty, tmp);
+                }
             } else {
                 if (self.parent[self.parentProperty] !== undefined && self.parent.__isPersistableModel) {
                     self.parent.setProperty(self.parentProperty, []);
