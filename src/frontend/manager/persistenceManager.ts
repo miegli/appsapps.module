@@ -133,14 +133,14 @@ export class PersistenceManager {
 
             firebaseModel.getDatabase().then((database) => {
                 self.firebaseDatabase = database;
+            });
 
-                firebaseModel.getAuth().then((auth: AngularFireAuth) => {
-
-                    auth.authState.subscribe((user) => {
+            firebaseModel.getAuth().then((auth: AngularFireAuth) => {
+                auth.authState.subscribe((user) => {
+                    if (user) {
                         self.getObserver().next({action: 'initFirebaseDatabase'});
-                    });
+                    }
                 });
-
             });
 
 
@@ -211,6 +211,7 @@ export class PersistenceManager {
 
             model.setPersistenceManager(self);
 
+
             //  if (!model.getPersistenceManager() || !model.getFirebaseDatabasePath()) {
 
             self.observable.subscribe((data) => {
@@ -223,7 +224,6 @@ export class PersistenceManager {
                 if (data.action == 'initFirebaseDatabase' && self.getFirebasePath(model)) {
                     model.setFirebaseDatabase(self.getFirebaseDatabase());
                     model.setFirebaseDatabasePath(self.getFirebasePath(model));
-
                 }
 
                 if (data.action == 'initFirebaseDatabase' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
@@ -252,7 +252,6 @@ export class PersistenceManager {
                     }, (error) => {
                         // skip access denied
                     });
-
                     self._loadedResolver(model);
                 }
 
@@ -459,36 +458,35 @@ export class PersistenceManager {
         return new Promise(function (resolve, reject) {
 
 
-                model.validate(localStorageOnly).then(() => {
+            model.validate(localStorageOnly).then(() => {
 
-                    self.storageWrapper.set(self.getPersistanceIdentifier(model), model.serialize(false, true)).then((m) => {
+                self.storageWrapper.set(self.getPersistanceIdentifier(model), model.serialize(false, true)).then((m) => {
 
-                        if (!localStorageOnly && model.getFirebaseDatabasePath() && model.getFirebaseDatabase()) {
+                    if (!localStorageOnly && model.getFirebaseDatabasePath() && model.getFirebaseDatabase()) {
 
-                            model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(model.serialize(true, true)).then((data) => {
-                                if (action) {
-                                    self.callAction(model, observer, action, resolve, reject);
-                                } else {
-                                    model.setHasPendingChanges(false);
-                                }
-                                resolve(model);
-                            }).catch((error) => {
-                                reject(error);
-                            });
-
-
-                        } else {
+                        model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + '/data').set(model.serialize(true, true)).then((data) => {
+                            if (action) {
+                                self.callAction(model, observer, action, resolve, reject);
+                            } else {
+                                model.setHasPendingChanges(false);
+                            }
                             resolve(model);
-                        }
+                        }).catch((error) => {
+                            reject(error);
+                        });
 
-                    }).catch((error) => {
-                        reject(error);
-                    });
+
+                    } else {
+                        resolve(model);
+                    }
 
                 }).catch((error) => {
                     reject(error);
                 });
 
+            }).catch((error) => {
+                reject(error);
+            });
 
 
         });
@@ -569,6 +567,7 @@ export class PersistenceManager {
 
 
         return new Promise(function (resolve, reject) {
+
 
             if (json == undefined || json == null) {
                 self.storageWrapper.ready().then((data) => {

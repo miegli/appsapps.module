@@ -23,6 +23,7 @@ export class FirebaseModel extends PersistableModel {
         super();
         this.firebase = firebase;
 
+
     }
 
 
@@ -34,16 +35,11 @@ export class FirebaseModel extends PersistableModel {
         let self = this;
 
         return new Promise(function (resolve) {
-
-            if (self.instance && self.database) {
-                resolve(self.database);
-            }
-            self.getObservable().subscribe(() => {
-                if (self.instance && self.database) {
+            self.watch('database',(database) => {
+                if (database) {
                     resolve(self.database);
                 }
             });
-
         });
     }
 
@@ -55,12 +51,8 @@ export class FirebaseModel extends PersistableModel {
         let self = this;
 
         return new Promise(function (resolve) {
-
-            if (self.instance && self.firestore) {
-                resolve(self.firestore);
-            }
-            self.getObservable().subscribe(() => {
-                if (self.instance && self.firestore) {
+            self.watch('firestore', (firestore) => {
+                if (firestore) {
                     resolve(self.firestore);
                 }
             });
@@ -78,17 +70,11 @@ export class FirebaseModel extends PersistableModel {
         let self = this;
 
         return new Promise(function (resolve) {
-
-            if (self.instance && self.auth) {
-                resolve(self.auth);
-            }
-
-            self.getObservable().subscribe(() => {
-                if (self.instance && self.auth) {
-                    resolve(self.auth);
+            self.watch('auth',(auth) => {
+                if (auth) {
+                    resolve(auth);
                 }
             });
-
         });
 
     }
@@ -179,21 +165,20 @@ export class FirebaseModel extends PersistableModel {
                         apiKey: rawConfig.firebaseApiKey
                     };
 
+                    this.setProperty('instance',this.firebase.initializeApp(this.firebaseAppConfig, rawConfig.firebaseProjectId));
 
-                    this.instance = this.firebase.initializeApp(this.firebaseAppConfig, rawConfig.firebaseProjectId);
                 } catch (error) {
                   console.log(error);
-                    this.instance = null;
+                    this.setProperty('instance',null);
                 }
             }
 
 
 
             if (this.instance) {
-                this.database = new AngularFireDatabase(this.instance.database !== undefined ? this.instance : this.firebase.app(rawConfig.firebaseProjectId));
-                this.firestore = new AngularFirestore(this.instance, false);
-                this.auth = new AngularFireAuth(this.instance);
-                this.emit();
+                this.setProperty('database',new AngularFireDatabase(this.instance.database !== undefined ? this.instance : this.firebase.app(rawConfig.firebaseProjectId)));
+                this.setProperty('firestore', new AngularFirestore(this.instance, false));
+                this.setProperty('auth', new AngularFireAuth(this.instance));
             }
 
         }

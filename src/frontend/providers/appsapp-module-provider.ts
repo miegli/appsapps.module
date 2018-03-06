@@ -34,7 +34,6 @@ export class AppsappModuleProvider {
     private notificationProvider: object;
 
 
-
     constructor(@Inject('config') private providerConfig: AppsappModuleProviderConfig, @Inject('messages') private providerMessages: AppsappModuleProviderMessages, private http: HttpClient) {
 
         let self = this;
@@ -95,11 +94,11 @@ export class AppsappModuleProvider {
         }
 
 
-        this.config.getObservable().subscribe((config) => {
+        this.config.watch('config', (config) => {
 
             // try to auto-login
-            if (self.config.getFirebaseUserPassword() && self.config.getFirebaseUserName()) {
-                self.userSignIn(self.config.getFirebaseUserName(), self.config.getFirebaseUserPassword()).then((user) => {
+            if (config && config.getFirebaseUserPassword() && self.config.getFirebaseUserName()) {
+                self.userSignIn(config.getFirebaseUserName(), config.getFirebaseUserPassword()).then((user) => {
                     //
                 }).catch((error) => {
                     console.log(error);
@@ -115,6 +114,9 @@ export class AppsappModuleProvider {
             }
 
         });
+
+
+
 
     }
 
@@ -138,13 +140,10 @@ export class AppsappModuleProvider {
 
 
         let model = new constructor();
-        let pm = new PersistenceManager();
-        let self = this;
 
         if (uuid) {
             model.setUuid(uuid);
         }
-
 
         if (data && typeof data == 'object') {
             if (typeof data.serialize == 'function') {
@@ -156,34 +155,51 @@ export class AppsappModuleProvider {
             }
         }
 
+        this.lazyLoad(model, data);
 
-        let p = new Promise(function (resolve, reject) {
+        return model;
 
-            pm.init().then((persistenceManager: PersistenceManager) => {
-                self.persistenceManager = persistenceManager;
 
-                model.setHttpClient(self.http).setNotificationProvider(self.notificationProvider).setMessages(self.providerMessages);
-                persistenceManager.initAndload(model, data).then((model:any) => {
-                    persistenceManager.setFirebase(self.firebaseProject);
-                    model.setPersistenceManager(persistenceManager);
-                    persistenceManager._loadedResolver = resolve;
-                }).catch((e) => {
-                    console.log(e);
-                    resolve(model);
+    }
+
+    /**
+     * load lazy model
+     * @param model
+     * @param data
+     * @param promise
+     * @returns {any}
+     */
+    public lazyLoad(model, data?) {
+
+
+        if (!model.__isLoaded) {
+            let self = this, pm = new PersistenceManager(),
+                modeldata = data == undefined ? model.serialize(true, true) : data;
+
+            let p = new Promise(function (resolve, reject) {
+
+                pm.init().then((persistenceManager: PersistenceManager) => {
+                    self.persistenceManager = persistenceManager;
+                    model.setHttpClient(self.http).setNotificationProvider(self.notificationProvider).setMessages(self.providerMessages);
+                    persistenceManager.initAndload(model, modeldata).then((model: any) => {
+                        persistenceManager.setFirebase(self.firebaseProject);
+                        model.setPersistenceManager(persistenceManager);
+                        persistenceManager._loadedResolver = resolve;
+                    }).catch((e) => {
+                        console.log(e);
+                        resolve(model);
+                    });
+
                 });
 
             });
 
+            model.setIsLoadedPromise(p);
+            model.setAppsAppModuleProvider(this);
 
-
-           });
-
-
-        model.setIsLoadedPromise(p);
-        model.setAppsAppModuleProvider(this);
+        }
 
         return model;
-
 
     }
 
@@ -332,7 +348,6 @@ export class AppsappModuleProvider {
 
 
     }
-
 
 
     /**

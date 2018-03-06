@@ -88,8 +88,6 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
         let self = this;
         let data = this.model.getMetadataValue(this.property, 'isSelect');
 
-        console.log(self.model.__isPersistableModel);
-
         if (this.parentPropertyMetadata) {
             this.isUnique = this.model.getMetadataValue(null, 'isList', this.parentPropertyMetadata, 'uniqueItems');
         }
