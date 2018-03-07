@@ -74,6 +74,7 @@ var SelectModel = /** @class */ (function (_super) {
     };
     SelectModel.prototype.fetchdata = function (url, property, data) {
         var finalurl = url, self = this;
+        this.setProperty('data', []);
         if (this.matchAll(url, this.__regex)) {
             this.matchAll(url, this.__regex).forEach(function (m) {
                 var d = property == m[1].substr(1) ? data : self.parent[m[1].substr(1)];
@@ -89,7 +90,6 @@ var SelectModel = /** @class */ (function (_super) {
         if (finalurl.length) {
             this.__currentUrl = finalurl;
             var finalurlHash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(finalurl);
-            self.setProperty('data', []);
             this.__updateFromLocalStorage(finalurlHash);
             if (finalurl.substr(0, 4) == 'http') {
                 this.getHttpClient().get(finalurl).subscribe(function (data) {
@@ -134,6 +134,7 @@ var SelectModel = /** @class */ (function (_super) {
      */
     SelectModel.prototype.updateFromFirebase = function (event, finalurlHash) {
         var self = this;
+        this.setProperty('data', []);
         if (event && event.ref.path.toString().indexOf(self.__registeredUrls[self.__currentUrl]) >= 0) {
             var data_1 = event.val();
             if (data_1) {
@@ -159,9 +160,6 @@ var SelectModel = /** @class */ (function (_super) {
                 }
                 self.setProperty('data', []);
             }
-        }
-        else {
-            self.setProperty('data', []);
         }
     };
     /**
