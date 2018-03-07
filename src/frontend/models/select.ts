@@ -37,8 +37,6 @@ export class SelectModel extends PersistableModel {
         let self = this;
 
 
-
-
         if (self.url !== undefined) {
 
             if (self.matchAll(this.url, this.__regex)) {
@@ -73,71 +71,61 @@ export class SelectModel extends PersistableModel {
         var finalurl = url, self = this;
 
 
+        if (this.matchAll(url, this.__regex)) {
 
-            if (this.matchAll(url, this.__regex)) {
+            this.matchAll(url, this.__regex).forEach((m) => {
+                var d = property == m[1].substr(1) ? data : self.parent[m[1].substr(1)];
+                d = d === undefined || d === null ? null : d.toString();
+                if (d && typeof d == 'string' && d.length) {
+                    finalurl = finalurl.replace(m[1], d);
+                } else {
+                    finalurl = '';
+                }
+            });
+        }
 
-                this.matchAll(url, this.__regex).forEach((m) => {
-                    var d = property == m[1].substr(1) ? data : self.parent[m[1].substr(1)];
-                    d = d === undefined || d === null ? null : d.toString();
-                    if (d && typeof d == 'string' && d.length) {
-                        finalurl = finalurl.replace(m[1], d);
-                    } else {
-                        finalurl = '';
-                    }
+
+        if (finalurl.length) {
+
+            this.__currentUrl = finalurl;
+
+            var finalurlHash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(finalurl);
+            self.setProperty('data', []);
+            this.__updateFromLocalStorage(finalurlHash);
+
+            if (finalurl.substr(0, 4) == 'http') {
+                this.getHttpClient().get(finalurl).subscribe((data) => {
+                    self.dataCached[finalurlHash] = JSON.stringify(data);
+                    self.setProperty('data', data);
+                }, (error) => {
+                    // skip error
                 });
             }
 
+            if (finalurl.substr(0, 1) == '/') {
 
+                var path = self.getFirebaseDatabaseSessionPath(finalurl);
 
-
-            if (finalurl.length) {
-
-                this.__currentUrl = finalurl;
-
-                var finalurlHash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(finalurl);
-                self.setProperty('data', []);
-                this.__updateFromLocalStorage(finalurlHash);
-
-                if (finalurl.substr(0, 4) == 'http') {
-                    this.getHttpClient().get(finalurl).subscribe((data) => {
-                        self.dataCached[finalurlHash] = JSON.stringify(data);
-                        self.setProperty('data', data);
-                    }, (error) => {
-                        // skip error
-                    });
+                if (self.__registeredUrls[finalurl] === undefined) {
+                    self.__registeredUrls[finalurl] = path;
+                    if (self.getFirebaseDatabase() !== undefined) {
+                        self.getFirebaseDatabase().object(path).query.on('value', (event) => {
+                            self.updateFromFirebase(event, finalurlHash);
+                        });
+                    }
+                } else {
+                    if (self.getFirebaseDatabase() !== undefined) {
+                        self.getFirebaseDatabase().object(path).query.once('value', (event) => {
+                            self.updateFromFirebase(event, finalurlHash);
+                        });
+                    }
                 }
 
-                if (finalurl.substr(0, 1) == '/') {
 
-
-                        if (self.parent && self.parent.__isPersistableModel) {
-
-                            var path = self.getFirebaseDatabaseSessionPath(finalurl);
-
-                            if (self.__registeredUrls[finalurl] === undefined) {
-
-                                self.__registeredUrls[finalurl] = path;
-                                if (self.parent.getFirebaseDatabase() !== undefined) {
-                                    self.parent.getFirebaseDatabase().object(path).query.on('value', (event) => {
-                                        self.updateFromFirebase(event, finalurlHash);
-                                    });
-                                }
-                            } else {
-                                if (self.parent.getFirebaseDatabase() !== undefined) {
-                                    self.parent.getFirebaseDatabase().object(path).query.once('value', (event) => {
-                                        self.updateFromFirebase(event, finalurlHash);
-                                    });
-                                }
-                            }
-                        }
-
-                }
-            } else {
-                self.setProperty('data', []);
             }
-
-
-
+        } else {
+            self.setProperty('data', []);
+        }
 
 
     }
@@ -270,21 +258,21 @@ export class SelectModel extends PersistableModel {
 
         // remove non valid select options from current value
 
-            if (Object.keys(allOptions).length && self.parent[self.parentProperty] !== undefined) {
-                var tmp = [];
-                self.parent[self.parentProperty].forEach((v) => {
-                    if (allOptions[v] === true) {
-                        tmp.push(v);
-                    }
-                });
-                if (self.parent[self.parentProperty] !== undefined && self.parent.__isPersistableModel) {
-                    self.parent.setProperty(self.parentProperty, tmp);
+        if (Object.keys(allOptions).length && self.parent[self.parentProperty] !== undefined) {
+            var tmp = [];
+            self.parent[self.parentProperty].forEach((v) => {
+                if (allOptions[v] === true) {
+                    tmp.push(v);
                 }
-            } else {
-                if (self.parent[self.parentProperty] !== undefined && self.parent.__isPersistableModel) {
-                    self.parent.setProperty(self.parentProperty, []);
-                }
+            });
+            if (self.parent[self.parentProperty] !== undefined && self.parent.__isPersistableModel) {
+                self.parent.setProperty(self.parentProperty, tmp);
             }
+        } else {
+            if (self.parent[self.parentProperty] !== undefined && self.parent.__isPersistableModel) {
+                self.parent.setProperty(self.parentProperty, []);
+            }
+        }
 
 
         if (self.__optionObserver) {
