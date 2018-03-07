@@ -240,14 +240,18 @@ export class PersistenceManager {
 
                         } else {
                             if (action.payload.val()) {
+
+                                model.removeEditedState();
                                 model.loadJson(action.payload.val()).then((m) => {
-                                    m.emit();
+                                   //
                                 }).catch((error) => {
                                     //
                                     console.log('error', error);
                                 });
                             }
                         }
+
+
 
                     }, (error) => {
                         // skip access denied
