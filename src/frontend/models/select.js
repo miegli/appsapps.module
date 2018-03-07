@@ -100,22 +100,20 @@ var SelectModel = /** @class */ (function (_super) {
                 });
             }
             if (finalurl.substr(0, 1) == '/') {
-                if (self.parent && self.parent.__isPersistableModel) {
-                    var path = self.getFirebaseDatabaseSessionPath(finalurl);
-                    if (self.__registeredUrls[finalurl] === undefined) {
-                        self.__registeredUrls[finalurl] = path;
-                        if (self.parent.getFirebaseDatabase() !== undefined) {
-                            self.parent.getFirebaseDatabase().object(path).query.on('value', function (event) {
-                                self.updateFromFirebase(event, finalurlHash);
-                            });
-                        }
+                var path = self.getFirebaseDatabaseSessionPath(finalurl);
+                if (self.__registeredUrls[finalurl] === undefined) {
+                    self.__registeredUrls[finalurl] = path;
+                    if (self.getFirebaseDatabase() !== undefined) {
+                        self.getFirebaseDatabase().object(path).query.on('value', function (event) {
+                            self.updateFromFirebase(event, finalurlHash);
+                        });
                     }
-                    else {
-                        if (self.parent.getFirebaseDatabase() !== undefined) {
-                            self.parent.getFirebaseDatabase().object(path).query.once('value', function (event) {
-                                self.updateFromFirebase(event, finalurlHash);
-                            });
-                        }
+                }
+                else {
+                    if (self.getFirebaseDatabase() !== undefined) {
+                        self.getFirebaseDatabase().object(path).query.once('value', function (event) {
+                            self.updateFromFirebase(event, finalurlHash);
+                        });
                     }
                 }
             }
