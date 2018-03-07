@@ -70,6 +70,7 @@ export class SelectModel extends PersistableModel {
 
         var finalurl = url, self = this;
 
+        this.setProperty('data', []);
 
         if (this.matchAll(url, this.__regex)) {
 
@@ -90,7 +91,7 @@ export class SelectModel extends PersistableModel {
             this.__currentUrl = finalurl;
 
             var finalurlHash = self.getAppsAppModuleProvider().getPersistenceManager().getHash(finalurl);
-            self.setProperty('data', []);
+
             this.__updateFromLocalStorage(finalurlHash);
 
             if (finalurl.substr(0, 4) == 'http') {
@@ -133,6 +134,8 @@ export class SelectModel extends PersistableModel {
 
     private __updateFromLocalStorage(finalurlHash) {
 
+
+
         if (this.dataCached[finalurlHash] !== undefined) {
             this.setProperty('data', JSON.parse(this.dataCached[finalurlHash]));
         }
@@ -146,6 +149,8 @@ export class SelectModel extends PersistableModel {
      */
     public updateFromFirebase(event, finalurlHash) {
         let self = this;
+
+        this.setProperty('data', []);
 
         if (event && event.ref.path.toString().indexOf(self.__registeredUrls[self.__currentUrl]) >= 0) {
             let data = event.val();
@@ -177,8 +182,6 @@ export class SelectModel extends PersistableModel {
                 self.setProperty('data', []);
             }
 
-        } else {
-            self.setProperty('data', []);
         }
     }
 
