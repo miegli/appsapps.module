@@ -170,8 +170,9 @@ var PersistenceManager = /** @class */ (function () {
                         }
                         else {
                             if (action.payload.val()) {
+                                model.removeEditedState();
                                 model.loadJson(action.payload.val()).then(function (m) {
-                                    m.emit();
+                                    //
                                 })["catch"](function (error) {
                                     //
                                     console.log('error', error);
