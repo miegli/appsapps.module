@@ -134,8 +134,8 @@ var SelectModel = /** @class */ (function (_super) {
      */
     SelectModel.prototype.updateFromFirebase = function (event, finalurlHash) {
         var self = this;
-        this.setProperty('data', []);
         if (event && event.ref.path.toString().indexOf(self.__registeredUrls[self.__currentUrl]) >= 0) {
+            this.setProperty('data', []);
             var data_1 = event.val();
             if (data_1) {
                 if (typeof data_1.forEach !== 'function') {
