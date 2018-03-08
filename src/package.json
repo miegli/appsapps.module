@@ -16,7 +16,6 @@
   "dependencies": {
     "appsapp-cli": "^1.6.216",
     "angularfire2": "=5.0.0-rc.6",
-    "@mobiscroll/angular": "^4.0.0",
     "firebase": "^4.9.1",
     "class-transformer": "^0.1.9",
     "class-validator": "^0.8.1",
