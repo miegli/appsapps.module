@@ -14,6 +14,7 @@
   "jsnext:main": "appsapp-module.js",
   "typings": "appsapp-module.d.ts",
   "dependencies": {
+    "@firebase/util": "^0.1.10",
     "appsapp-cli": "^1.6.216",
     "angularfire2": "=5.0.0-rc.6",
     "@mobiscroll/angular": "^4.0.0",
