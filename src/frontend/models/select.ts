@@ -150,9 +150,12 @@ export class SelectModel extends PersistableModel {
     public updateFromFirebase(event, finalurlHash) {
         let self = this;
 
-        this.setProperty('data', []);
+
 
         if (event && event.ref.path.toString().indexOf(self.__registeredUrls[self.__currentUrl]) >= 0) {
+
+            this.setProperty('data', []);
+
             let data = event.val();
 
             if (data) {
