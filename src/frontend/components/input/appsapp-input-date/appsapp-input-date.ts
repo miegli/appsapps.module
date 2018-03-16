@@ -12,7 +12,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
     selector: 'appsapp-input-date',
     template: `
         <mbsc-input [ngClass]="{isInline: isInline}" [error]="validator | async" #mbscInstance="mobiscroll"
-                    mbsc-calendar [ngModel]="_ngModelGettter | async"
+                    mbsc-calendar [ngModel]="_ngModelGettter "
                     (ngModelChange)="modelChanges($event)"><span *ngIf="!isInline">{{_label}}</span></mbsc-input>
 
 

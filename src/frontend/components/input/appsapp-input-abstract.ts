@@ -60,27 +60,14 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
         this._options['lang'] = this.appsappModuleProvider.getLang();
 
         if (this.property) {
+
             if (!this.validator) {
                 this.validator = this.model.getValidation(this.property);
             }
 
-            this._ngModelGettter = new Observable<any>((observer: Observer<any>) => {
-                self._ngModelGettterObserver = observer;
-                window.setTimeout(() => {
-                    self._ngModelGettterObserver.next(self.model.getPropertyValue(self.property));
-                    var p = self.model.getMetadataValue(self.property, 'hasPlaceholder')
-                    self.placeholder = p ? p : '';
-                }, 1);
-
-            });
-            this._ngModelGettter.share();
-
-            self.model.watch(self.property, (value) => {
-                if (self._ngModelGettterObserver !== undefined) {
-                    self._ngModelGettterObserver.next(value);
-                }
-            });
-
+            var p = self.model.getMetadataValue(self.property, 'hasPlaceholder')
+            this.placeholder = p ? p : '';
+            this._ngModelGettter = self.model.getPropertyValue(self.property);
 
         }
 
@@ -110,17 +97,6 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
         if (this.mbsc && this.mbsc.instance) {
             this.mbsc.instance.option(this._options);
         }
-
-
-        // if (this.mbsc !== undefined && this.mbsc.instance) {
-        //     if (this._optionsTimeout) {
-        //         window.clearTimeout(this._optionsTimeout);
-        //     }
-        //     this._optionsTimeout = window.setTimeout(() => {
-        //         this.mbsc.instance.option(this._options);
-        //     },2)
-        //
-        // }
 
     }
 

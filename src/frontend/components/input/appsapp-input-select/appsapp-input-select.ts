@@ -15,7 +15,7 @@ import {PersistableModel} from "appsapp-cli";
     template: `
         <mbsc-input [hidden]="selectoptions.length == 0" mbsc-select [error]="validator | async"
                     #mbscInstance="mobiscroll"
-                    [ngModel]="_ngModelGettter | async" (ngModelChange)="modelChanges($event)">{{_label}}
+                    [ngModel]="_ngModelGettter " (ngModelChange)="modelChanges($event)">{{_label}}
         </mbsc-input>
 
     `
@@ -63,7 +63,6 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
             selectoptionsPreProcessed.push(option);
         });
 
-        console.log(values,selectoptionsPreProcessed);
 
         self.mbsc.instance.refresh(selectoptionsPreProcessed);
         self.mbsc.instance.setVal(values, true, false);
@@ -163,12 +162,28 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
 
             const options = this.model.getMetadataValue(this.property, 'isSelect');
 
+            let buttons = [];
+            if (self.model.getMetadataValue(self.property, 'arrayMaxSize') !== 1) {
+                buttons.push('set');
+            }
+
+            buttons.push('cancel');
+
             this.setMbscOption({
+                onChange: function (event, inst) {
+                    if (self.model.getMetadataValue(self.property, 'arrayMaxSize') === 1) {
+                        if (!self.model.getMetadataValue(self.property, 'arrayMinSize') || event.valueText.length) {
+                            inst.hide();
+                        }
+                    }
+                },
                 group: self.selectoptions.length <= 20 ? {
                     groupWheel: Object.keys(groups).length > 5,
                     header: Object.keys(groups).length > 0,
                     clustered: Object.keys(groups).length > 2
                 } : null,
+                buttons: buttons,
+                counter: self.model.getMetadataValue(self.property, 'arrayMinSize') > 1 ? true : false,
                 filter: self.selectoptions.length > 20,
                 display: options && options.display ? options.display : (config.getOs() !== 'desktop' ? 'bottom' : 'center'),
                 data: self.selectoptions,

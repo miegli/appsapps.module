@@ -11,7 +11,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
   selector: 'appsapp-input-boolean',
     template: `
        
-            <mbsc-switch [ngModel]="_ngModelGettter | async" (ngModelChange)="modelChanges($event)">{{_label}}
+            <mbsc-switch [ngModel]="_ngModelGettter " (ngModelChange)="modelChanges($event)">{{_label}}
                 <span class="mbsc-desc">{{_description}}</span>
             </mbsc-switch>
       

@@ -22,7 +22,7 @@ import {Observable} from "rxjs/Observable";
             }
         </style>
         <mbsc-listview #mbscInstance="mobiscroll">
-            <mbsc-listview-item *ngFor="let item of _ngModelGettter | async" [id]="item.__uuid">
+            <mbsc-listview-item *ngFor="let item of _ngModelGettter " [id]="item.__uuid">
                 <appsapp-input [model]="item" [parentPropertyMetadata]="parentPropertyMetadata"
                                [parentProperty]="parentProperty"></appsapp-input>
             </mbsc-listview-item>

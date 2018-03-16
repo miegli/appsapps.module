@@ -11,7 +11,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
   selector: 'appsapp-input-textarea',
     template: `
        
-            <mbsc-textarea [error]="validator | async" [ngModel]="_ngModelGettter | async" [placeholder]="placeholder" (ngModelChange)="modelChanges($event)">{{_label}}</mbsc-textarea>
+            <mbsc-textarea [error]="validator | async" [ngModel]="_ngModelGettter " [placeholder]="placeholder" (ngModelChange)="modelChanges($event)">{{_label}}</mbsc-textarea>
    
 
     `

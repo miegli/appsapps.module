@@ -11,7 +11,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
   selector: 'appsapp-input-tel',
     template: `
        
-            <mbsc-input [error]="validator | async"  [placeholder]="placeholder" #mbscInstance="mobiscroll" mbsc-numpad type="tel" [ngModel]="_ngModelGettter | async" (ngModelChange)="modelChanges($event)">{{_label}} {{prefix}}</mbsc-input>
+            <mbsc-input [error]="validator | async"  [placeholder]="placeholder" #mbscInstance="mobiscroll" mbsc-numpad type="tel" [ngModel]="_ngModelGettter " (ngModelChange)="modelChanges($event)">{{_label}} {{prefix}}</mbsc-input>
     
 
     `

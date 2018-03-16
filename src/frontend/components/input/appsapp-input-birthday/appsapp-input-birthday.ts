@@ -13,7 +13,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
     template: `
 
         <mbsc-input [ngClass]="{isInline: isInline}" [error]="validator | async" #mbscInstance="mobiscroll" mbsc-date
-                    [ngModel]="_ngModelGettter | async"
+                    [ngModel]="_ngModelGettter "
                     (ngModelChange)="modelChanges($event)">{{_label}}
         </mbsc-input>
 

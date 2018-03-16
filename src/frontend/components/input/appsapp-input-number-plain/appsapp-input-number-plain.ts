@@ -11,7 +11,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
     selector: 'appsapp-input-number-plain',
     template: `
       
-        <mbsc-input [error]="validator | async" [ngModel]="_ngModelGettter | async" type="number" (ngModelChange)="modelChanges($event)">{{_label}}</mbsc-input>
+        <mbsc-input [error]="validator | async" [ngModel]="_ngModelGettter " type="number" (ngModelChange)="modelChanges($event)">{{_label}}</mbsc-input>
    
     `
 })
@@ -22,13 +22,11 @@ export class AppsappInputNumberPlainComponent extends AppsappInputAbstractCompon
   max: number = null;
   lastvalue: number = null;
 
-
   /**
    *
    * @param {ConfigModel} config
    */
   init(config) {
-
 
 
    if (this.model.getMetadata(this.property,'isPrecision').length) {
@@ -38,7 +36,6 @@ export class AppsappInputNumberPlainComponent extends AppsappInputAbstractCompon
    if (this.model.getMetadata(this.property,'isInt').length) {
      this.isInt = true;
    }
-
 
    if (this.model.getMetadata(this.property,'max').length) {
     this.max = this.model.getMetadataValue(this.property,'max');
@@ -58,6 +55,8 @@ export class AppsappInputNumberPlainComponent extends AppsappInputAbstractCompon
 
 
     if (this.isInt) {
+
+
       let v = parseInt(value);
       if (v && v !== NaN && typeof v == 'number') {
         value = v;
@@ -74,6 +73,7 @@ export class AppsappInputNumberPlainComponent extends AppsappInputAbstractCompon
     }
 
     if (this.precision) {
+
       let v = parseFloat(value);
       let c = v.toFixed(this.precision);
 
@@ -84,10 +84,13 @@ export class AppsappInputNumberPlainComponent extends AppsappInputAbstractCompon
 
     }
 
+
     this.lastvalue = value;
 
     if (changed) {
+
       this.update(value);
+
       return false;
     } else {
       return true;
