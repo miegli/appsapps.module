@@ -171,12 +171,7 @@ var PersistenceManager = /** @class */ (function () {
                         else {
                             if (action.payload.val()) {
                                 model.removeEditedState();
-                                model.loadJson(action.payload.val()).then(function (m) {
-                                    //
-                                })["catch"](function (error) {
-                                    //
-                                    console.log('error', error);
-                                });
+                                model.loadJson(action.payload.val());
                             }
                         }
                     }, function (error) {
@@ -413,11 +408,7 @@ var PersistenceManager = /** @class */ (function () {
             if (json === undefined || json === null) {
                 self.storageWrapper.ready().then(function (data) {
                     self.storageWrapper.get(self.getPersistanceIdentifier(model)).then(function (json) {
-                        model.loadJson(json).then(function (model) {
-                            resolve(model);
-                        })["catch"](function (error) {
-                            reject(error);
-                        });
+                        resolve(model.loadJson(json));
                     })["catch"](function (error) {
                         reject(error);
                     });
@@ -426,11 +417,7 @@ var PersistenceManager = /** @class */ (function () {
                 });
             }
             else {
-                model.loadJson(json).then(function (model) {
-                    resolve(model.emit());
-                })["catch"](function (error) {
-                    reject(error);
-                });
+                resolve(model.loadJson(json));
             }
         });
     };
@@ -462,11 +449,7 @@ var PersistenceManager = /** @class */ (function () {
     PersistenceManager.prototype.clone = function (model) {
         return new Promise(function (resolve, reject) {
             var m = new model.constructor();
-            m.loadJson(model.serialize(true, true), true).then(function (m) {
-                resolve(m);
-            })["catch"](function (error) {
-                reject(error);
-            });
+            resolve(m.loadJson(model.serialize(true, true), true));
         });
     };
     /**

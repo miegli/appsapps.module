@@ -76,7 +76,7 @@
     "@mobiscroll/angular": "^4.0.0",
     "angular2-uuid": "^1.1.1",
     "angularfire2": "=5.0.0-rc.6",
-    "appsapp-cli": "^1.6.225",
+    "appsapp-cli": "^1.6.249",
     "class-transformer": "^0.1.9",
     "class-validator": "^0.8.1",
     "core-js": "^2.5.3",

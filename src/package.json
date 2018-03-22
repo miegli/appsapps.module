@@ -1,6 +1,6 @@
 {
   "name": "appsapp-module",
-  "version": "0.9.155",
+  "version": "0.9.156",
   "repository": {
     "type": "git",
     "url": "https://github.com/miegli/appsapps.module"
@@ -16,7 +16,7 @@
   "dependencies": {
     "@firebase/util": "^0.1.10",
     "@firebase/app": "^0.1.10",
-    "appsapp-cli": "^1.6.225",
+    "appsapp-cli": "^1.6.249",
     "angularfire2": "=5.0.0-rc.6",
     "@mobiscroll/angular": "^4.0.0",
     "firebase": "^4.9.1",
