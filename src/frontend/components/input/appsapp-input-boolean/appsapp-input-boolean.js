@@ -32,7 +32,7 @@ var AppsappInputBooleanComponent = /** @class */ (function (_super) {
     AppsappInputBooleanComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-boolean',
-            template: "\n       \n            <mbsc-switch [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n                <span class=\"mbsc-desc\">{{_description}}</span>\n            </mbsc-switch>\n      \n\n            "
+            template: "\n       \n            <mbsc-switch [ngModel]=\"_ngModelGettter \" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n                <span class=\"mbsc-desc\">{{_description}}</span>\n            </mbsc-switch>\n      \n\n            "
         })
     ], AppsappInputBooleanComponent);
     return AppsappInputBooleanComponent;

@@ -240,14 +240,8 @@ export class PersistenceManager {
 
                         } else {
                             if (action.payload.val()) {
-
                                 model.removeEditedState();
-                                model.loadJson(action.payload.val()).then((m) => {
-                                   //
-                                }).catch((error) => {
-                                    //
-                                    console.log('error', error);
-                                });
+                                model.loadJson(action.payload.val());
                             }
                         }
 
@@ -576,12 +570,7 @@ export class PersistenceManager {
                 self.storageWrapper.ready().then((data) => {
 
                     self.storageWrapper.get(self.getPersistanceIdentifier(model)).then((json) => {
-                        model.loadJson(json).then((model) => {
-                            resolve(model);
-                        }).catch((error) => {
-                            reject(error);
-                        });
-
+                        resolve(model.loadJson(json));
                     }).catch((error) => {
                         reject(error);
                     });
@@ -590,11 +579,7 @@ export class PersistenceManager {
                 });
             } else {
 
-                model.loadJson(json).then((model) => {
-                    resolve(model.emit());
-                }).catch((error) => {
-                    reject(error);
-                });
+                resolve(model.loadJson(json));
 
             }
 
@@ -641,11 +626,7 @@ export class PersistenceManager {
         return new Promise(function (resolve, reject) {
 
             let m = new model.constructor();
-            m.loadJson(model.serialize(true, true), true).then((m) => {
-                resolve(m);
-            }).catch((error) => {
-                reject(error);
-            });
+            resolve(m.loadJson(model.serialize(true, true), true));
 
 
         });

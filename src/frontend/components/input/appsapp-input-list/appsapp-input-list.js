@@ -152,7 +152,7 @@ var AppsappInputListComponent = /** @class */ (function (_super) {
     AppsappInputListComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-list',
-            template: "\n        <style>\n            .mbsc-lv-item-pop-in {\n                -webkit-animation: none !important;\n                animation: none !important;;\n               \n            }\n        </style>\n        <mbsc-listview #mbscInstance=\"mobiscroll\">\n            <mbsc-listview-item *ngFor=\"let item of _ngModelGettter | async\" [id]=\"item.__uuid\">\n                <appsapp-input [model]=\"item\" [parentPropertyMetadata]=\"parentPropertyMetadata\"\n                               [parentProperty]=\"parentProperty\"></appsapp-input>\n            </mbsc-listview-item>\n        </mbsc-listview>\n\n    "
+            template: "\n        <style>\n            .mbsc-lv-item-pop-in {\n                -webkit-animation: none !important;\n                animation: none !important;;\n               \n            }\n        </style>\n        <mbsc-listview #mbscInstance=\"mobiscroll\">\n            <mbsc-listview-item *ngFor=\"let item of _ngModelGettter \" [id]=\"item.__uuid\">\n                <appsapp-input [model]=\"item\" [parentPropertyMetadata]=\"parentPropertyMetadata\"\n                               [parentProperty]=\"parentProperty\"></appsapp-input>\n            </mbsc-listview-item>\n        </mbsc-listview>\n\n    "
         })
     ], AppsappInputListComponent);
     return AppsappInputListComponent;

@@ -67,7 +67,7 @@ var AppsappInputTextareaComponent = /** @class */ (function (_super) {
     AppsappInputTextareaComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-textarea',
-            template: "\n       \n            <mbsc-textarea [error]=\"validator | async\" [ngModel]=\"_ngModelGettter | async\" [placeholder]=\"placeholder\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-textarea>\n   \n\n    "
+            template: "\n       \n            <mbsc-textarea [error]=\"validator | async\" [ngModel]=\"_ngModelGettter \" [placeholder]=\"placeholder\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-textarea>\n   \n\n    "
         })
     ], AppsappInputTextareaComponent);
     return AppsappInputTextareaComponent;

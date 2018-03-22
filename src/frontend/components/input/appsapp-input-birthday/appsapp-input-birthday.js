@@ -68,7 +68,7 @@ var AppsappInputBirthdayComponent = /** @class */ (function (_super) {
     AppsappInputBirthdayComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-birthday',
-            template: "\n\n        <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\" #mbscInstance=\"mobiscroll\" mbsc-date\n                    [ngModel]=\"_ngModelGettter | async\"\n                    (ngModelChange)=\"modelChanges($event)\">{{_label}}\n        </mbsc-input>\n\n\n    "
+            template: "\n\n        <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\" #mbscInstance=\"mobiscroll\" mbsc-date\n                    [ngModel]=\"_ngModelGettter \"\n                    (ngModelChange)=\"modelChanges($event)\">{{_label}}\n        </mbsc-input>\n\n\n    "
         })
     ], AppsappInputBirthdayComponent);
     return AppsappInputBirthdayComponent;

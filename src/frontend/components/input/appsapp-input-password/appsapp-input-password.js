@@ -32,7 +32,7 @@ var AppsappInputPasswordComponent = /** @class */ (function (_super) {
     AppsappInputPasswordComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-password',
-            template: "\n        \n            <mbsc-input [error]=\"validator | async\" [placeholder]=\"placeholder\" type=\"password\" [password-toggle]=\"true\" [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n     \n\n    "
+            template: "\n        \n            <mbsc-input [error]=\"validator | async\" [placeholder]=\"placeholder\" type=\"password\" [password-toggle]=\"true\" [ngModel]=\"_ngModelGettter \" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n     \n\n    "
         })
     ], AppsappInputPasswordComponent);
     return AppsappInputPasswordComponent;

@@ -32,7 +32,7 @@ var AppsappInputUrlComponent = /** @class */ (function (_super) {
     AppsappInputUrlComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-url',
-            template: "\n        \n            <mbsc-input [error]=\"validator | async\" [placeholder]=\"placeholder\" type=\"url\" [ngModel]=\"_ngModelGettter | async\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n       \n\n    "
+            template: "\n        \n            <mbsc-input [error]=\"validator | async\" [placeholder]=\"placeholder\" type=\"url\" [ngModel]=\"_ngModelGettter \" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n       \n\n    "
         })
     ], AppsappInputUrlComponent);
     return AppsappInputUrlComponent;
