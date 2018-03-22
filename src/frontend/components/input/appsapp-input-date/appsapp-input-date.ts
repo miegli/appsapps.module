@@ -17,11 +17,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
                         (ngModelChange)="modelChanges($event)">{{_label}}
             </mbsc-input>
         </div>
-        <style>
-            .appsapp-input-date-inline label {
-                display:none !important;
-            }
-        </style>
+
 
     `
 })

@@ -73,7 +73,7 @@ var AppsappInputDateComponent = /** @class */ (function (_super) {
                     this.setMbscOption({ weeks: options.weeks });
                 }
                 if (options.display == 'inline') {
-                    this.isInline = true;
+                    this.wrapper.nativeElement.className = 'appsapp-input-date-inline';
                 }
             }
             this.setMbscOption({
@@ -84,10 +84,13 @@ var AppsappInputDateComponent = /** @class */ (function (_super) {
     __decorate([
         core_1.Output()
     ], AppsappInputDateComponent.prototype, "isInline");
+    __decorate([
+        core_1.ViewChild('wrapper')
+    ], AppsappInputDateComponent.prototype, "wrapper");
     AppsappInputDateComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-date',
-            template: "\n        <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\" #mbscInstance=\"mobiscroll\"\n                    mbsc-calendar [ngModel]=\"_ngModelGettter \"\n                    (ngModelChange)=\"modelChanges($event)\"><span *ngIf=\"!isInline\">{{_label}}</span></mbsc-input>\n\n\n    "
+            template: "\n        <div id=\"wrapper\" #wrapper>\n            <mbsc-input [error]=\"validator | async\" #mbscInstance=\"mobiscroll\"\n                        mbsc-calendar [ngModel]=\"_ngModelGettter \"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}\n            </mbsc-input>\n        </div>\n        <style>\n            .appsapp-input-date-inline label {\n                display:none !important;\n            }\n        </style>\n\n    "
         })
     ], AppsappInputDateComponent);
     return AppsappInputDateComponent;
