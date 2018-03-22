@@ -90,7 +90,7 @@ var AppsappInputDateComponent = /** @class */ (function (_super) {
     AppsappInputDateComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-date',
-            template: "\n        <div id=\"wrapper\" #wrapper>\n            <mbsc-input [error]=\"validator | async\" #mbscInstance=\"mobiscroll\"\n                        mbsc-calendar [ngModel]=\"_ngModelGettter \"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}\n            </mbsc-input>\n        </div>\n        <style>\n            .appsapp-input-date-inline label {\n                display:none !important;\n            }\n        </style>\n\n    "
+            template: "\n        <div id=\"wrapper\" #wrapper>\n            <mbsc-input [error]=\"validator | async\" #mbscInstance=\"mobiscroll\"\n                        mbsc-calendar [ngModel]=\"_ngModelGettter \"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}\n            </mbsc-input>\n        </div>\n\n\n    "
         })
     ], AppsappInputDateComponent);
     return AppsappInputDateComponent;
