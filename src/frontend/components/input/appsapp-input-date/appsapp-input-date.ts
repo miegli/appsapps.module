@@ -1,4 +1,4 @@
-import {Component, Output} from '@angular/core';
+import {Component, Output, ViewChild, ElementRef} from '@angular/core';
 import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 
 
@@ -11,17 +11,24 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 @Component({
     selector: 'appsapp-input-date',
     template: `
-        <mbsc-input [ngClass]="{isInline: isInline}" [error]="validator | async" #mbscInstance="mobiscroll"
-                    mbsc-calendar [ngModel]="_ngModelGettter "
-                    (ngModelChange)="modelChanges($event)"><span *ngIf="!isInline">{{_label}}</span></mbsc-input>
-
+        <div id="wrapper" #wrapper>
+            <mbsc-input [error]="validator | async" #mbscInstance="mobiscroll"
+                        mbsc-calendar [ngModel]="_ngModelGettter "
+                        (ngModelChange)="modelChanges($event)">{{_label}}
+            </mbsc-input>
+        </div>
+        <style>
+            .appsapp-input-date-inline label {
+                display:none !important;
+            }
+        </style>
 
     `
 })
 export class AppsappInputDateComponent extends AppsappInputAbstractComponent {
 
     @Output() isInline: boolean = false;
-
+    @ViewChild('wrapper') wrapper: ElementRef;
 
     beforeModelChanges(model, property, value) {
         // create iso date
@@ -81,7 +88,7 @@ export class AppsappInputDateComponent extends AppsappInputAbstractComponent {
                 }
 
                 if (options.display == 'inline') {
-                    this.isInline = true;
+                    this.wrapper.nativeElement.className = 'appsapp-input-date-inline';
                 }
 
             }
