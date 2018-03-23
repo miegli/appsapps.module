@@ -281,6 +281,7 @@ export class SelectModel extends PersistableModel {
         }
 
 
+
         if (self.__optionObserver) {
             self.__optionObserver.next(options);
         }
