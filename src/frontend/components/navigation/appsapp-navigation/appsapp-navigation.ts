@@ -14,21 +14,7 @@ import {Observable} from "rxjs/Observable";
 @Component({
     selector: 'appsapp-navigation',
     template: `
-
-        <mbsc-hamburger-nav [options]="options" *ngIf="options.type == 'hamburger'">
-            <mbsc-nav-item *ngFor="let item of children" [icon]="item.icon" [badge]="item.badge">{{item.name}}
-            </mbsc-nav-item>
-        </mbsc-hamburger-nav>
-
-        <mbsc-tab-nav [options]="options" *ngIf="options.type == 'tab'">
-            <mbsc-nav-item *ngFor="let item of children" [icon]="item.icon" [badge]="item.badge">{{item.name}}
-            </mbsc-nav-item>
-        </mbsc-tab-nav>
-
-        <mbsc-bottom-nav [options]="options" *ngIf="options.type == 'bottom'">
-            <mbsc-nav-item *ngFor="let item of children" [icon]="item.icon" [badge]="item.badge">{{item.name}}
-            </mbsc-nav-item>
-        </mbsc-bottom-nav>
+ .
     `
 })
 

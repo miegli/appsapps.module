@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Output} from '@angular/core';
 import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 
 /**
@@ -10,12 +10,21 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 @Component({
     selector: 'appsapp-input-email',
     template: `
-       
-            <mbsc-input [error]="validator | async" [placeholder]="placeholder" [error]="validator | async" [ngModel]="_ngModelGettter " (ngModelChange)="modelChanges($event)">{{_label}}</mbsc-input>
+
+        <mat-form-field style="width:100%">
+            <input (ngModelChange)="modelChanges($event)" type="email" [errorStateMatcher]="errorStateMatcher" [ngModel]="_ngModelGettter | async" matInput [placeholder]="placeholder">
+            <mat-label>{{_label}}</mat-label>
+            <mat-hint align="start" *ngIf="description.length">{{description}}</mat-hint>
+            <button mat-button *ngIf="clearable &&  model[property] &&  model[property].length" matSuffix mat-icon-button aria-label="Clear" (click)="clear()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
 
     `
 })
 export class AppsappInputEmailComponent extends AppsappInputAbstractComponent {
+
+
 
 
 }

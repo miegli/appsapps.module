@@ -11,12 +11,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
   selector: 'appsapp-input-integer',
     template: `
         
-            <ng-container [ngSwitch]="__type">
-                <mbsc-input [error]="validator | async"  *ngSwitchCase="'default'" #mbscInstance="mobiscroll" mbsc-numpad-decimal [ngModel]="_ngModelGettter " (ngModelChange)="modelChanges($event)">{{_label}}</mbsc-input>
-                <mbsc-stepper *ngSwitchCase="'stepper'" #mbscInstance="mobiscroll" [min]="__min" [max]="__max" [ngModel]="_ngModelGettter " (ngModelChange)="modelChanges($event)">{{_label}}
-                    <span class="mbsc-desc">{{_description}}</span>
-                </mbsc-stepper>
-            </ng-container>
+           
    
 
     `

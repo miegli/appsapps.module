@@ -13,10 +13,7 @@ import {PersistableModel} from "appsapp-cli";
 @Component({
     selector: 'appsapp-input-select',
     template: `
-        <mbsc-input [hidden]="selectoptions.length == 0" mbsc-select [error]="validator | async"
-                    #mbscInstance="mobiscroll"
-                    [ngModel]="_ngModelGettter " (ngModelChange)="modelChanges($event)">{{_label}}
-        </mbsc-input>
+       
 
     `
 })
@@ -34,38 +31,6 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
 
 
 
-        let self = this;
-        let selectoptionsPreProcessed = [];
-        let currentSelectedselectoptions = {};
-        let value = values === undefined ? this.model.getParent().getPropertyValue(this.parentProperty) : values;
-
-        if (value && value.length) {
-            value.forEach(() => {
-
-                value.forEach((option) => {
-                    if (option.__isPersistableModel && option.getUuid() !== self.model.getUuid()) {
-                        option.getPropertyValue(self.property).forEach((option) => {
-                            currentSelectedselectoptions[option] = true;
-                        })
-                    }
-
-                });
-
-
-            });
-        }
-
-        let clonedselectoptions = JSON.parse(JSON.stringify(self.selectoptions));
-        clonedselectoptions.forEach((option) => {
-            if (currentSelectedselectoptions[option.value] !== undefined) {
-                option.disabled = true;
-            }
-            selectoptionsPreProcessed.push(option);
-        });
-
-
-        self.mbsc.instance.refresh(selectoptionsPreProcessed);
-        self.mbsc.instance.setVal(values, true, false);
 
     }
 
@@ -121,7 +86,7 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
                         if (self.isUnique) {
                             self.setOptions();
                         } else {
-                            self.mbsc.instance.refresh(selectoptions);
+                            //self.mbsc.instance.refresh(selectoptions);
                         }
                         self.select.getHashedValues().forEach((v) => {
                             self.model.addHashedValue(v.value, v.hash);
@@ -135,7 +100,7 @@ export class AppsappInputSelectComponent extends AppsappInputAbstractComponent {
                         }
 
                         //self.update(hashedValues);
-                        self.mbsc.instance.setVal(hashedValues, true, false);
+                       // self.mbsc.instance.setVal(hashedValues, true, false);
 
                     });
 

@@ -3,7 +3,6 @@ import {AbstractComponent} from "../../abstractComponent";
 import {AppsappModuleProvider} from "../../../providers/appsapp-module-provider";
 import {Output} from "@angular/core";
 import {Observable} from "rxjs/Observable";
-import {PersistableModel} from "appsapp-cli";
 
 /**
  * Generate d class for the AppsappInputComponent component.
@@ -14,8 +13,7 @@ import {PersistableModel} from "appsapp-cli";
 @Component({
     selector: 'appsapp-input',
     template: `
-
-        <mbsc-form #mbscInstanceForm="mobiscroll">
+        
             <ng-container [ngSwitch]="input.type" *ngFor="let input of _inputs">
                 <ng-container *ngSwitchCase="'text'">
                     <appsapp-input-text [model]="model" [property]="input.property" [label]="input.label"
@@ -117,7 +115,7 @@ import {PersistableModel} from "appsapp-cli";
                     <appsapp-input [model]="input.model"></appsapp-input>
                 </ng-container>
             </ng-container>
-        </mbsc-form>
+       
 
     `
 })

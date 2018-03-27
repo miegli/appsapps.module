@@ -1,5 +1,9 @@
 import {NgModule, ModuleWithProviders} from '@angular/core';
 import {CommonModule} from "@angular/common";
+import {BrowserModule} from '@angular/platform-browser';
+import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppsappInputComponent} from "./components/input/appsapp-input/appsapp-input";
 import {AppsappInputUrlComponent} from "./components/input/appsapp-input-url/appsapp-input-url";
 import {AppsappInputNumberComponent} from "./components/input/appsapp-input-number/appsapp-input-number";
@@ -17,7 +21,6 @@ import {AppsappInputSelectComponent} from "./components/input/appsapp-input-sele
 import {AppsappInputListComponent} from "./components/input/appsapp-input-list/appsapp-input-list";
 import {AppsappInputTimeComponent} from "./components/input/appsapp-input-time/appsapp-input-time";
 import {AppsappInputAbstractComponent} from "./components/input/appsapp-input-abstract";
-import {MbscModule} from "@mobiscroll/angular";
 import {FormsModule} from "@angular/forms";
 import {AppsappModuleProvider} from "./providers/appsapp-module-provider";
 import {AppsappModuleProviderConfig} from "./providers/appsapp-module-provider";
@@ -25,6 +28,11 @@ import {AppsappModuleProviderMessages} from "appsapp-cli";
 import {AppsappInputNumberPlainComponent} from "./components/input/appsapp-input-number-plain/appsapp-input-number-plain";
 import {HttpClientModule, HttpClient} from "@angular/common/http";
 import {AppsappNavigationComponent} from "./components/navigation/appsapp-navigation/appsapp-navigation";
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {MatButtonModule, MatCheckboxModule,MatDatepickerModule, MatCardModule, MatButtonToggleModule, MatAutocompleteModule, MatChipsModule, MatCommonModule, MatDialogModule, MatDividerModule, MatExpansionModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatInputModule, MatLineModule, MatListModule, MatMenuModule, MatNativeDateModule,
+ MatOptionModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatPseudoCheckboxModule, MatRadioModule, MatRippleModule, MatSelectModule, MatSidenavModule, MatSliderModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatStepperModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule, NativeDateModule} from '@angular/material';
+
+import './polyfills';
 
 @NgModule({
     declarations: [
@@ -49,12 +57,24 @@ import {AppsappNavigationComponent} from "./components/navigation/appsapp-naviga
         AppsappInputTimeComponent,
         AppsappNavigationComponent
     ],
-    providers: [AppsappModuleProvider, HttpClient],
-    imports: [MbscModule, CommonModule, FormsModule, HttpClientModule],
+    providers: [AppsappModuleProvider, HttpClient, // The locale would typically be provided on the root module of your application. We do it at
+        // the component level here, due to limitations of our example generation script.
+        {provide: MAT_DATE_LOCALE, useValue: 'de-CH'},
+
+        // `MomentDateAdapter` and `MAT_MOMENT_DATE_FORMATS` can be automatically provided by importing
+        // `MatMomentDateModule` in your applications root module. We provide it at the component level
+        // here, due to limitations of our example generation script.
+        {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+        {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},],
+    imports: [BrowserModule,
+        BrowserAnimationsModule,CommonModule, NoopAnimationsModule, FormsModule, HttpClientModule, MatButtonModule, MatCheckboxModule,MatDatepickerModule, MatCardModule, MatButtonToggleModule, MatAutocompleteModule, MatChipsModule, MatCommonModule, MatDialogModule, MatDividerModule, MatExpansionModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatInputModule, MatLineModule, MatListModule, MatMenuModule, MatNativeDateModule,
+        MatOptionModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatPseudoCheckboxModule, MatRadioModule, MatRippleModule, MatSelectModule, MatSidenavModule, MatSliderModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatStepperModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule, NativeDateModule],
     exports: [
         // export the component(s) that you want others to be able to use
         AppsappInputComponent,
-        AppsappNavigationComponent
+        AppsappNavigationComponent,
+        MatButtonModule, MatCheckboxModule,MatDatepickerModule, MatCardModule, MatButtonToggleModule, MatAutocompleteModule, MatChipsModule, MatCommonModule, MatDialogModule, MatDividerModule, MatExpansionModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatInputModule, MatLineModule, MatListModule, MatMenuModule, MatNativeDateModule,
+        MatOptionModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatPseudoCheckboxModule, MatRadioModule, MatRippleModule, MatSelectModule, MatSidenavModule, MatSliderModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatStepperModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule, NativeDateModule
     ],
     entryComponents: [
 

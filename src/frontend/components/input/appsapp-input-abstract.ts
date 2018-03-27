@@ -3,7 +3,6 @@ import {AppsappInputComponent} from "./appsapp-input/appsapp-input";
 import {ConfigModel} from "../../models/config";
 import {AppsappModuleProvider} from "../../providers/appsapp-module-provider";
 import {Observable} from "rxjs/Observable";
-import {Observer} from "rxjs/Observer";
 
 /**
  * Generated class for the AppsappInputAbstractComponent component.
@@ -19,19 +18,25 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
 
     _name: string = '';
     _label: string = '';
+    _labelPosition: string = '';
+    _color: string = '';
     _description: string = '';
     _ngModelGettter: Observable<any>;
-    _ngModelGettterObserver: Observer<any>;
     _validationMetadata: any = {};
     _options: any = {};
-    _optionsTimeout: any = null;
+    _hasErrors: boolean = false;
     @Output() validator: Observable<any>;
+    @Output() errorStateMatcher = {
+        isErrorState: () => {
+            return this._hasErrors;
+        }
+    }
     @Output() hidden: boolean = false;
+    @Output() clearable: boolean = false;
     @Output() errormsg: string = '';
     @Output() placeholder: string = '';
+    @Output() description: string = '';
 
-    @ViewChild('mbscInstance') public mbsc;
-    @ViewChild('mbscInstanceForm') public mbscForm;
 
     constructor(public appsappModuleProvider: AppsappModuleProvider) {
 
@@ -63,15 +68,38 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
 
             if (!this.validator) {
                 this.validator = this.model.getValidation(this.property);
+                this.validator.subscribe((next) => {
+                    this._hasErrors = next ? true : false;
+                })
+
             }
 
-            var p = self.model.getMetadataValue(self.property, 'hasPlaceholder')
+            var p = self.model.getMetadataValue(self.property, 'hasPlaceholder');
             this.placeholder = p ? p : '';
-            this._ngModelGettter = self.model.getPropertyValue(self.property);
+
+            var d = self.model.getMetadataValue(self.property, 'hasDescription');
+            this.description = d ? d : '';
+
+            if (self.model.getMetadataValue(self.property, 'hasClearable')) {
+                this.clearable = true;
+            }
+
+            this._ngModelGettter = self.model.getProperty(self.property);
 
         }
 
 
+    }
+
+    /**
+     * clear properties value
+     */
+    clear() {
+
+        this.model.clear(this.property);
+        console.log(this.property, this.model);
+
+        return this;
     }
 
 
@@ -90,13 +118,6 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
      */
     setMbscOption(options: any) {
 
-        Object.keys(options).forEach((v) => {
-            this._options[v] = options[v];
-        });
-
-        if (this.mbsc && this.mbsc.instance) {
-            this.mbsc.instance.option(this._options);
-        }
 
     }
 
@@ -129,35 +150,10 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
 
         this._validationMetadata = this.model.getMetadata(this.property);
         this._name = this.property;
-        this._label = this.label ? this.label : (this.model.getMetadataValue(this.property, 'hasLabel') ? this.model.getMetadataValue(this.property, 'hasLabel') : (this._name ? this._name.toUpperCase() : ''));
+        this._label = this.label ? this.label : (this.model.getMetadataValue(this.property, 'hasLabel') ? this.model.getMetadataValue(this.property, 'hasLabel').label : (this._name ? this._name.toUpperCase() : ''));
+        this._labelPosition = this.model.getMetadataValue(this.property, 'hasLabel') ? this.model.getMetadataValue(this.property, 'hasLabel').labelPosition : 'after';
         this._description = this.model.getMetadataValue(this.property, 'hasDescription');
-
-        if (this.config) {
-
-            let theme = 'material';
-
-            if (this.config.getOs() == 'ios') {
-                theme = 'ios';
-            }
-
-            if (this.config.getOs() == 'windows') {
-                theme = 'wp';
-            }
-
-            if (this.config.getOs() == 'desktop') {
-                theme = 'material';
-            }
-
-            let option = {
-                theme: theme,
-                closeOnOverlayTap: false
-            };
-
-            this.setMbscOption(option);
-
-
-        }
-
+        this._color = this.model.getMetadataValue(this.property, 'hasColor');
 
     }
 

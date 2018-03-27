@@ -1,6 +1,6 @@
 {
   "name": "appsapp-module",
-  "version": "0.9.160",
+  "version": "0.9.161",
   "repository": {
     "type": "git",
     "url": "https://github.com/miegli/appsapps.module"
@@ -16,9 +16,13 @@
   "dependencies": {
     "@firebase/util": "^0.1.10",
     "@firebase/app": "^0.1.10",
-    "appsapp-cli": "^1.6.249",
+    "appsapp-cli": "^1.6.254",
+    "hammerjs": "2.0.8",
+    "core-js": "2.5.3",
+    "moment": "2.21.0",
+    "@angular/material-moment-adapter": "5.2.4",
+    "web-animations-js": "2.3.1",
     "angularfire2": "=5.0.0-rc.6",
-    "@mobiscroll/angular": "^4.0.0",
     "firebase": "^4.9.1",
     "class-transformer": "^0.1.9",
     "class-validator": "^0.8.1",

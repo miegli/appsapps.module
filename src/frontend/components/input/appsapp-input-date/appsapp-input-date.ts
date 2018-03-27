@@ -11,12 +11,22 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 @Component({
     selector: 'appsapp-input-date',
     template: `
-        <div id="wrapper" #wrapper>
-            <mbsc-input [error]="validator | async" #mbscInstance="mobiscroll"
-                        mbsc-calendar [ngModel]="_ngModelGettter "
-                        (ngModelChange)="modelChanges($event)">{{_label}}
-            </mbsc-input>
-        </div>
+
+        <mat-form-field style="width:100%">
+
+            <input (ngModelChange)="modelChanges($event)" [ngModel]="_ngModelGettter | async" matInput [min]="minDate"
+                   [max]="maxDate" [matDatepicker]="picker" [placeholder]="placeholder">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+
+            <mat-label>{{_label}}</mat-label>
+            <mat-hint align="start" *ngIf="description.length">{{description}}</mat-hint>
+            <mat-hint align="end" *ngIf="max && model[property]">{{model[property].length}} / {{max}}</mat-hint>
+            <button mat-button *ngIf="clearable &&  model[property] &&  model[property].length" matSuffix
+                    mat-icon-button aria-label="Clear" (click)="clear()">
+            <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
 
 
     `
@@ -24,14 +34,13 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 export class AppsappInputDateComponent extends AppsappInputAbstractComponent {
 
     @Output() isInline: boolean = false;
+    @Output() minDate: Date;
+    @Output() maxDate: Date;
     @ViewChild('wrapper') wrapper: ElementRef;
 
     beforeModelChanges(model, property, value) {
-        // create iso date
-        let date = Date.parse(value);
-        value = !isNaN(date) ? new Date(date) : null;
-        model.setProperty(property, value);
 
+       model.setProperty(property, value.toDate());
         return false;
 
     }
@@ -45,53 +54,13 @@ export class AppsappInputDateComponent extends AppsappInputAbstractComponent {
         if (this.model) {
 
             if (this.model.getMetadataValue(this.property, 'maxDate')) {
-                const maxDate: Date = this.model.getMetadataValue(this.property, 'maxDate');
-                this.setMbscOption({max: maxDate});
+                this.maxDate = this.model.getMetadataValue(this.property, 'maxDate');
             }
 
             if (this.model.getMetadataValue(this.property, 'minDate')) {
-                const minDate: Date = this.model.getMetadataValue(this.property, 'minDate');
-                this.setMbscOption({min: minDate});
+                this.minDate = this.model.getMetadataValue(this.property, 'minDate');
             }
 
-
-            const options = this.model.getMetadataValue(this.property, 'isCalendar');
-
-            if (options) {
-
-                if (options.maxDate) {
-                    this.setMbscOption({max: options.maxDate});
-                }
-
-                if (options.minDate) {
-                    this.setMbscOption({min: options.minDate});
-                }
-
-                if (options.invalid) {
-                    this.setMbscOption({invalid: options.invalid});
-                }
-
-                if (options.controls) {
-                    this.setMbscOption({controls: options.controls});
-                }
-
-                if (options.steps) {
-                    this.setMbscOption({steps: options.steps});
-                }
-
-                if (options.weeks) {
-                    this.setMbscOption({weeks: options.weeks});
-                }
-
-                if (options.display == 'inline') {
-                    this.wrapper.nativeElement.className = 'appsapp-input-date-inline';
-                }
-
-            }
-
-            this.setMbscOption({
-                display: options && options.display ? options.display : (config.getOs() !== 'desktop' ? 'bottom' : 'center')
-            });
 
         }
 

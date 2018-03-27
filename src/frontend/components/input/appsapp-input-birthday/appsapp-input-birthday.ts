@@ -12,10 +12,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
     selector: 'appsapp-input-birthday',
     template: `
 
-        <mbsc-input [ngClass]="{isInline: isInline}" [error]="validator | async" #mbscInstance="mobiscroll" mbsc-date
-                    [ngModel]="_ngModelGettter "
-                    (ngModelChange)="modelChanges($event)">{{_label}}
-        </mbsc-input>
+      
 
 
     `

@@ -232,11 +232,13 @@ export class PersistenceManager {
 
                         if (model.hasPendingChanges()) {
 
-                            window.setTimeout(function () {
+
                                 self.workOnPendingChanges(model).then(() => {
                                     model.setHasPendingChanges(false).emit();
-                                }).catch();
-                            }, 1000);
+                            }).catch((e) => {
+                                console.log(e);
+                                });
+
 
                         } else {
                             if (action.payload.val()) {
@@ -244,6 +246,7 @@ export class PersistenceManager {
                                 model.loadJson(action.payload.val());
                             }
                         }
+
 
 
 

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Output} from '@angular/core';
 import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 
 
@@ -11,11 +11,16 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 @Component({
   selector: 'appsapp-input-text',
   template: `
-    
-      <mbsc-input [error]="validator | async" [placeholder]="placeholder" [ngModel]="_ngModelGettter "
-                  (ngModelChange)="modelChanges($event)">{{_label}}
-      </mbsc-input>
-  
+
+      <mat-form-field style="width:100%">
+          <input (ngModelChange)="modelChanges($event)" [errorStateMatcher]="errorStateMatcher" [maxlength]="max" [ngModel]="_ngModelGettter | async" matInput [placeholder]="placeholder">
+          <mat-label>{{_label}}</mat-label>
+          <mat-hint align="start" *ngIf="description.length">{{description}}</mat-hint>
+          <mat-hint align="end" *ngIf="max && model[property]">{{model[property].length}} / {{max}}</mat-hint>
+          <button mat-button *ngIf="clearable &&  model[property] &&  model[property].length" matSuffix mat-icon-button aria-label="Clear" (click)="clear()">
+              <mat-icon>close</mat-icon>
+          </button>
+      </mat-form-field>
 
   `
 })
@@ -23,8 +28,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
 
 export class AppsappInputTextComponent extends AppsappInputAbstractComponent {
 
-  max: number = null;
-  lastvalue: number = null;
+  @Output() max: number = 0;
 
 
   /**
@@ -40,37 +44,6 @@ export class AppsappInputTextComponent extends AppsappInputAbstractComponent {
 
     if (this.max === null && this.model.getMetadata(this.property, 'length').length) {
       this.max = this.model.getMetadataValue(this.property, 'length')[1];
-    }
-
-
-  }
-
-
-  /**
-   *
-   * @param model
-   * @param property
-   * @param value
-   */
-  beforeModelChanges(model, property, value) {
-
-
-    let changed = false;
-
-
-    if (this.max !== null && value.length > this.max) {
-      value = this.lastvalue;
-      changed = true;
-    }
-
-
-    this.lastvalue = value;
-
-    if (changed) {
-      this.update(value);
-      return false;
-    } else {
-      return true;
     }
 
 
