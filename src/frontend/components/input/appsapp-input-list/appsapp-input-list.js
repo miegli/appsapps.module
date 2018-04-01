@@ -40,28 +40,6 @@ var AppsappInputListComponent = /** @class */ (function (_super) {
     };
     AppsappInputListComponent.prototype.reCalculateAfterSorting = function () {
         var self = this;
-        if (self.mbsc && self.mbsc.element !== undefined && self.mbsc.element) {
-            var valueAsObject_1 = {};
-            var valueSorted = [];
-            var value = self.model.getPropertyValue(self.property, true);
-            if (typeof value !== 'object' && value.length == undefined) {
-                value = [];
-            }
-            value.forEach(function (item) {
-                valueAsObject_1[item.__uuid] = item;
-            });
-            for (var i = 0; i < self.mbsc.element.children.length; i++) {
-                if (self.mbsc.element.children.item(i)) {
-                    valueSorted.push(valueAsObject_1[self.mbsc.element.children.item(i).getAttribute('data-id')]);
-                }
-            }
-            if (valueSorted.length) {
-                self.model.update(self.property, valueSorted).setProperty(self.property, valueSorted);
-                if (self.model.getParent()) {
-                    self.model.getParent().setProperty(self.property, self.model.getPropertyValue(self.property, true));
-                }
-            }
-        }
     };
     AppsappInputListComponent.prototype.updateConfig = function () {
         var _this = this;
@@ -152,7 +130,7 @@ var AppsappInputListComponent = /** @class */ (function (_super) {
     AppsappInputListComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-list',
-            template: "\n        <style>\n            .mbsc-lv-item-pop-in {\n                -webkit-animation: none !important;\n                animation: none !important;;\n               \n            }\n        </style>\n        <mbsc-listview #mbscInstance=\"mobiscroll\">\n            <mbsc-listview-item *ngFor=\"let item of _ngModelGettter \" [id]=\"item.__uuid\">\n                <appsapp-input [model]=\"item\" [parentPropertyMetadata]=\"parentPropertyMetadata\"\n                               [parentProperty]=\"parentProperty\"></appsapp-input>\n            </mbsc-listview-item>\n        </mbsc-listview>\n\n    "
+            template: "\n       \n\n    "
         })
     ], AppsappInputListComponent);
     return AppsappInputListComponent;

@@ -162,11 +162,11 @@ var PersistenceManager = /** @class */ (function () {
                 if (data.action == 'initFirebaseDatabase' && model.getFirebaseDatabase() && model.getFirebaseDatabasePath()) {
                     model.setFirebaseDatabaseObject(model.getFirebaseDatabase().object(model.getFirebaseDatabasePath() + "/data")).getFirebaseDatabaseObject().snapshotChanges().subscribe(function (action) {
                         if (model.hasPendingChanges()) {
-                            window.setTimeout(function () {
-                                self.workOnPendingChanges(model).then(function () {
-                                    model.setHasPendingChanges(false).emit();
-                                })["catch"]();
-                            }, 1000);
+                            self.workOnPendingChanges(model).then(function () {
+                                model.setHasPendingChanges(false).emit();
+                            })["catch"](function (e) {
+                                console.log(e);
+                            });
                         }
                         else {
                             if (action.payload.val()) {

@@ -91,7 +91,7 @@ var AppsappInputNumberPlainComponent = /** @class */ (function (_super) {
     AppsappInputNumberPlainComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-number-plain',
-            template: "\n      \n        <mbsc-input [error]=\"validator | async\" [ngModel]=\"_ngModelGettter\" type=\"number\" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n   \n    "
+            template: "\n      \n       \n   \n    "
         })
     ], AppsappInputNumberPlainComponent);
     return AppsappInputNumberPlainComponent;

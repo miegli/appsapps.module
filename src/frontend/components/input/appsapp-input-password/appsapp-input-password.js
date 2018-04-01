@@ -27,12 +27,31 @@ var appsapp_input_abstract_1 = require("../appsapp-input-abstract");
 var AppsappInputPasswordComponent = /** @class */ (function (_super) {
     __extends(AppsappInputPasswordComponent, _super);
     function AppsappInputPasswordComponent() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.max = 0;
+        _this.lastvalue = null;
+        _this.hide = true;
+        return _this;
     }
+    /**
+     *
+     * @param {ConfigModel} config
+     */
+    AppsappInputPasswordComponent.prototype.init = function (config) {
+        if (this.model.getMetadata(this.property, 'maxLength').length) {
+            this.max = this.model.getMetadataValue(this.property, 'maxLength');
+        }
+        if (this.max === null && this.model.getMetadata(this.property, 'length').length) {
+            this.max = this.model.getMetadataValue(this.property, 'length')[1];
+        }
+    };
+    __decorate([
+        core_1.Output()
+    ], AppsappInputPasswordComponent.prototype, "max");
     AppsappInputPasswordComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-password',
-            template: "\n        \n            <mbsc-input [error]=\"validator | async\" [placeholder]=\"placeholder\" type=\"password\" [password-toggle]=\"true\" [ngModel]=\"_ngModelGettter \" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n     \n\n    "
+            template: "\n\n\n        <mat-form-field style=\"width:100%\">\n            <input [type]=\"hide ? 'password' : 'text'\" (ngModelChange)=\"modelChanges($event)\" [errorStateMatcher]=\"errorStateMatcher\" [maxlength]=\"max\" [ngModel]=\"_ngModelGettter | async\" matInput [placeholder]=\"placeholder\">\n            <mat-label>{{_label}}</mat-label>\n            <mat-hint align=\"start\" *ngIf=\"description.length\">{{description}}</mat-hint>\n            <mat-hint align=\"end\" *ngIf=\"max && model[property]\">{{model[property].length}} / {{max}}</mat-hint>\n            <mat-icon matSuffix (click)=\"hide = !hide\">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>\n        </mat-form-field>  \n     \n\n    "
         })
     ], AppsappInputPasswordComponent);
     return AppsappInputPasswordComponent;

@@ -32,7 +32,7 @@ var AppsappInputUrlComponent = /** @class */ (function (_super) {
     AppsappInputUrlComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-url',
-            template: "\n        \n            <mbsc-input [error]=\"validator | async\" [placeholder]=\"placeholder\" type=\"url\" [ngModel]=\"_ngModelGettter \" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n       \n\n    "
+            template: "\n\n        <mat-form-field style=\"width:100%\">\n            <input (ngModelChange)=\"modelChanges($event)\" type=\"url\" [errorStateMatcher]=\"errorStateMatcher\" [ngModel]=\"_ngModelGettter | async\" matInput [placeholder]=\"placeholder\">\n            <mat-label>{{_label}}</mat-label>\n            <mat-hint align=\"start\" *ngIf=\"description.length\">{{description}}</mat-hint>\n            <button mat-button *ngIf=\"clearable &&  model[property] &&  model[property].length\" matSuffix mat-icon-button aria-label=\"Clear\" (click)=\"clear()\">\n                <mat-icon>close</mat-icon>\n            </button>\n        </mat-form-field>\n       \n\n    "
         })
     ], AppsappInputUrlComponent);
     return AppsappInputUrlComponent;

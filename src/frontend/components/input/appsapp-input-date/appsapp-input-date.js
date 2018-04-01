@@ -32,10 +32,7 @@ var AppsappInputDateComponent = /** @class */ (function (_super) {
         return _this;
     }
     AppsappInputDateComponent.prototype.beforeModelChanges = function (model, property, value) {
-        // create iso date
-        var date = Date.parse(value);
-        value = !isNaN(date) ? new Date(date) : null;
-        model.setProperty(property, value);
+        model.setProperty(property, value.toDate());
         return false;
     };
     /**
@@ -45,52 +42,29 @@ var AppsappInputDateComponent = /** @class */ (function (_super) {
     AppsappInputDateComponent.prototype.init = function (config) {
         if (this.model) {
             if (this.model.getMetadataValue(this.property, 'maxDate')) {
-                var maxDate = this.model.getMetadataValue(this.property, 'maxDate');
-                this.setMbscOption({ max: maxDate });
+                this.maxDate = this.model.getMetadataValue(this.property, 'maxDate');
             }
             if (this.model.getMetadataValue(this.property, 'minDate')) {
-                var minDate = this.model.getMetadataValue(this.property, 'minDate');
-                this.setMbscOption({ min: minDate });
+                this.minDate = this.model.getMetadataValue(this.property, 'minDate');
             }
-            var options = this.model.getMetadataValue(this.property, 'isCalendar');
-            if (options) {
-                if (options.maxDate) {
-                    this.setMbscOption({ max: options.maxDate });
-                }
-                if (options.minDate) {
-                    this.setMbscOption({ min: options.minDate });
-                }
-                if (options.invalid) {
-                    this.setMbscOption({ invalid: options.invalid });
-                }
-                if (options.controls) {
-                    this.setMbscOption({ controls: options.controls });
-                }
-                if (options.steps) {
-                    this.setMbscOption({ steps: options.steps });
-                }
-                if (options.weeks) {
-                    this.setMbscOption({ weeks: options.weeks });
-                }
-                if (options.display == 'inline') {
-                    this.wrapper.nativeElement.className = 'appsapp-input-date-inline';
-                }
-            }
-            this.setMbscOption({
-                display: options && options.display ? options.display : (config.getOs() !== 'desktop' ? 'bottom' : 'center')
-            });
         }
     };
     __decorate([
         core_1.Output()
     ], AppsappInputDateComponent.prototype, "isInline");
     __decorate([
+        core_1.Output()
+    ], AppsappInputDateComponent.prototype, "minDate");
+    __decorate([
+        core_1.Output()
+    ], AppsappInputDateComponent.prototype, "maxDate");
+    __decorate([
         core_1.ViewChild('wrapper')
     ], AppsappInputDateComponent.prototype, "wrapper");
     AppsappInputDateComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-date',
-            template: "\n        <div id=\"wrapper\" #wrapper>\n            <mbsc-input [error]=\"validator | async\" #mbscInstance=\"mobiscroll\"\n                        mbsc-calendar [ngModel]=\"_ngModelGettter \"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}\n            </mbsc-input>\n        </div>\n\n\n    "
+            template: "\n\n        <mat-form-field style=\"width:100%\">\n\n            <input (ngModelChange)=\"modelChanges($event)\" [ngModel]=\"_ngModelGettter | async\" matInput [min]=\"minDate\"\n                   [max]=\"maxDate\" [matDatepicker]=\"picker\" [placeholder]=\"placeholder\">\n            <mat-datepicker-toggle matSuffix [for]=\"picker\"></mat-datepicker-toggle>\n            <mat-datepicker #picker></mat-datepicker>\n\n            <mat-label>{{_label}}</mat-label>\n            <mat-hint align=\"start\" *ngIf=\"description.length\">{{description}}</mat-hint>\n            <mat-hint align=\"end\" *ngIf=\"max && model[property]\">{{model[property].length}} / {{max}}</mat-hint>\n            <button mat-button *ngIf=\"clearable &&  model[property] &&  model[property].length\" matSuffix\n                    mat-icon-button aria-label=\"Clear\" (click)=\"clear()\">\n            <mat-icon>close</mat-icon>\n            </button>\n        </mat-form-field>\n\n\n    "
         })
     ], AppsappInputDateComponent);
     return AppsappInputDateComponent;

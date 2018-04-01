@@ -31,13 +31,22 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
         _this.appsappModuleProvider = appsappModuleProvider;
         _this._name = '';
         _this._label = '';
+        _this._labelPosition = '';
+        _this._color = '';
         _this._description = '';
         _this._validationMetadata = {};
         _this._options = {};
-        _this._optionsTimeout = null;
+        _this._hasErrors = false;
+        _this.errorStateMatcher = {
+            isErrorState: function () {
+                return _this._hasErrors;
+            }
+        };
         _this.hidden = false;
+        _this.clearable = false;
         _this.errormsg = '';
         _this.placeholder = '';
+        _this.description = '';
         return _this;
     }
     /**.
@@ -51,16 +60,33 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
      * @param {ConfigModel} config
      */
     AppsappInputAbstractComponent.prototype._init = function (config) {
+        var _this = this;
         var self = this;
         this._options['lang'] = this.appsappModuleProvider.getLang();
         if (this.property) {
             if (!this.validator) {
                 this.validator = this.model.getValidation(this.property);
+                this.validator.subscribe(function (next) {
+                    _this._hasErrors = next ? true : false;
+                });
             }
             var p = self.model.getMetadataValue(self.property, 'hasPlaceholder');
             this.placeholder = p ? p : '';
-            this._ngModelGettter = self.model.getPropertyValue(self.property);
+            var d = self.model.getMetadataValue(self.property, 'hasDescription');
+            this.description = d ? d : '';
+            if (self.model.getMetadataValue(self.property, 'hasClearable')) {
+                this.clearable = true;
+            }
+            this._ngModelGettter = self.model.getProperty(self.property);
         }
+    };
+    /**
+     * clear properties value
+     */
+    AppsappInputAbstractComponent.prototype.clear = function () {
+        this.model.clear(this.property);
+        console.log(this.property, this.model);
+        return this;
     };
     /**
      * get observable getter method
@@ -74,13 +100,6 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
      * @param {Object} options
      */
     AppsappInputAbstractComponent.prototype.setMbscOption = function (options) {
-        var _this = this;
-        Object.keys(options).forEach(function (v) {
-            _this._options[v] = options[v];
-        });
-        if (this.mbsc && this.mbsc.instance) {
-            this.mbsc.instance.option(this._options);
-        }
     };
     /**
      * event before model changes
@@ -104,25 +123,10 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
     AppsappInputAbstractComponent.prototype._beforeinit = function () {
         this._validationMetadata = this.model.getMetadata(this.property);
         this._name = this.property;
-        this._label = this.label ? this.label : (this.model.getMetadataValue(this.property, 'hasLabel') ? this.model.getMetadataValue(this.property, 'hasLabel') : (this._name ? this._name.toUpperCase() : ''));
+        this._label = this.label ? this.label : (this.model.getMetadataValue(this.property, 'hasLabel') ? this.model.getMetadataValue(this.property, 'hasLabel').label : (this._name ? this._name.toUpperCase() : ''));
+        this._labelPosition = this.model.getMetadataValue(this.property, 'hasLabel') ? this.model.getMetadataValue(this.property, 'hasLabel').labelPosition : 'after';
         this._description = this.model.getMetadataValue(this.property, 'hasDescription');
-        if (this.config) {
-            var theme = 'material';
-            if (this.config.getOs() == 'ios') {
-                theme = 'ios';
-            }
-            if (this.config.getOs() == 'windows') {
-                theme = 'wp';
-            }
-            if (this.config.getOs() == 'desktop') {
-                theme = 'material';
-            }
-            var option = {
-                theme: theme,
-                closeOnOverlayTap: false
-            };
-            this.setMbscOption(option);
-        }
+        this._color = this.model.getMetadataValue(this.property, 'hasColor');
     };
     /**
      * ngAfterViewInit
@@ -158,7 +162,13 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
     ], AppsappInputAbstractComponent.prototype, "validator");
     __decorate([
         core_1.Output()
+    ], AppsappInputAbstractComponent.prototype, "errorStateMatcher");
+    __decorate([
+        core_1.Output()
     ], AppsappInputAbstractComponent.prototype, "hidden");
+    __decorate([
+        core_1.Output()
+    ], AppsappInputAbstractComponent.prototype, "clearable");
     __decorate([
         core_1.Output()
     ], AppsappInputAbstractComponent.prototype, "errormsg");
@@ -166,11 +176,8 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
         core_1.Output()
     ], AppsappInputAbstractComponent.prototype, "placeholder");
     __decorate([
-        core_1.ViewChild('mbscInstance')
-    ], AppsappInputAbstractComponent.prototype, "mbsc");
-    __decorate([
-        core_1.ViewChild('mbscInstanceForm')
-    ], AppsappInputAbstractComponent.prototype, "mbscForm");
+        core_1.Output()
+    ], AppsappInputAbstractComponent.prototype, "description");
     AppsappInputAbstractComponent = __decorate([
         core_1.Component({
             template: ''

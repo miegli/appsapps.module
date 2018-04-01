@@ -8,6 +8,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
+var platform_browser_1 = require("@angular/platform-browser");
+var material_moment_adapter_1 = require("@angular/material-moment-adapter");
+var core_2 = require("@angular/material/core");
+var animations_1 = require("@angular/platform-browser/animations");
 var appsapp_input_1 = require("./components/input/appsapp-input/appsapp-input");
 var appsapp_input_url_1 = require("./components/input/appsapp-input-url/appsapp-input-url");
 var appsapp_input_number_1 = require("./components/input/appsapp-input-number/appsapp-input-number");
@@ -25,12 +29,14 @@ var appsapp_input_select_1 = require("./components/input/appsapp-input-select/ap
 var appsapp_input_list_1 = require("./components/input/appsapp-input-list/appsapp-input-list");
 var appsapp_input_time_1 = require("./components/input/appsapp-input-time/appsapp-input-time");
 var appsapp_input_abstract_1 = require("./components/input/appsapp-input-abstract");
-var angular_1 = require("@mobiscroll/angular");
 var forms_1 = require("@angular/forms");
 var appsapp_module_provider_1 = require("./providers/appsapp-module-provider");
 var appsapp_input_number_plain_1 = require("./components/input/appsapp-input-number-plain/appsapp-input-number-plain");
 var http_1 = require("@angular/common/http");
 var appsapp_navigation_1 = require("./components/navigation/appsapp-navigation/appsapp-navigation");
+var animations_2 = require("@angular/platform-browser/animations");
+var material_1 = require("@angular/material");
+require("./polyfills");
 var AppsappModule = /** @class */ (function () {
     function AppsappModule() {
     }
@@ -68,12 +74,23 @@ var AppsappModule = /** @class */ (function () {
                 appsapp_input_time_1.AppsappInputTimeComponent,
                 appsapp_navigation_1.AppsappNavigationComponent
             ],
-            providers: [appsapp_module_provider_1.AppsappModuleProvider, http_1.HttpClient],
-            imports: [angular_1.MbscModule, common_1.CommonModule, forms_1.FormsModule, http_1.HttpClientModule],
+            providers: [appsapp_module_provider_1.AppsappModuleProvider, http_1.HttpClient,
+                // the component level here, due to limitations of our example generation script.
+                { provide: core_2.MAT_DATE_LOCALE, useValue: 'de-CH' },
+                // `MomentDateAdapter` and `MAT_MOMENT_DATE_FORMATS` can be automatically provided by importing
+                // `MatMomentDateModule` in your applications root module. We provide it at the component level
+                // here, due to limitations of our example generation script.
+                { provide: core_2.DateAdapter, useClass: material_moment_adapter_1.MomentDateAdapter, deps: [core_2.MAT_DATE_LOCALE] },
+                { provide: core_2.MAT_DATE_FORMATS, useValue: material_moment_adapter_1.MAT_MOMENT_DATE_FORMATS },],
+            imports: [platform_browser_1.BrowserModule,
+                animations_1.BrowserAnimationsModule, common_1.CommonModule, animations_2.NoopAnimationsModule, forms_1.FormsModule, http_1.HttpClientModule, material_1.MatButtonModule, material_1.MatCheckboxModule, material_1.MatDatepickerModule, material_1.MatCardModule, material_1.MatButtonToggleModule, material_1.MatAutocompleteModule, material_1.MatChipsModule, material_1.MatCommonModule, material_1.MatDialogModule, material_1.MatDividerModule, material_1.MatExpansionModule, material_1.MatFormFieldModule, material_1.MatGridListModule, material_1.MatIconModule, material_1.MatInputModule, material_1.MatLineModule, material_1.MatListModule, material_1.MatMenuModule, material_1.MatNativeDateModule,
+                material_1.MatOptionModule, material_1.MatPaginatorModule, material_1.MatProgressBarModule, material_1.MatProgressSpinnerModule, material_1.MatPseudoCheckboxModule, material_1.MatRadioModule, material_1.MatRippleModule, material_1.MatSelectModule, material_1.MatSidenavModule, material_1.MatSliderModule, material_1.MatSlideToggleModule, material_1.MatSnackBarModule, material_1.MatSortModule, material_1.MatStepperModule, material_1.MatTableModule, material_1.MatTabsModule, material_1.MatToolbarModule, material_1.MatTooltipModule, material_1.NativeDateModule],
             exports: [
                 // export the component(s) that you want others to be able to use
                 appsapp_input_1.AppsappInputComponent,
-                appsapp_navigation_1.AppsappNavigationComponent
+                appsapp_navigation_1.AppsappNavigationComponent,
+                material_1.MatButtonModule, material_1.MatCheckboxModule, material_1.MatDatepickerModule, material_1.MatCardModule, material_1.MatButtonToggleModule, material_1.MatAutocompleteModule, material_1.MatChipsModule, material_1.MatCommonModule, material_1.MatDialogModule, material_1.MatDividerModule, material_1.MatExpansionModule, material_1.MatFormFieldModule, material_1.MatGridListModule, material_1.MatIconModule, material_1.MatInputModule, material_1.MatLineModule, material_1.MatListModule, material_1.MatMenuModule, material_1.MatNativeDateModule,
+                material_1.MatOptionModule, material_1.MatPaginatorModule, material_1.MatProgressBarModule, material_1.MatProgressSpinnerModule, material_1.MatPseudoCheckboxModule, material_1.MatRadioModule, material_1.MatRippleModule, material_1.MatSelectModule, material_1.MatSidenavModule, material_1.MatSliderModule, material_1.MatSlideToggleModule, material_1.MatSnackBarModule, material_1.MatSortModule, material_1.MatStepperModule, material_1.MatTableModule, material_1.MatTabsModule, material_1.MatToolbarModule, material_1.MatTooltipModule, material_1.NativeDateModule
             ],
             entryComponents: []
         })

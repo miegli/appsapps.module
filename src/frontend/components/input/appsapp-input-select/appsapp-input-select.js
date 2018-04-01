@@ -38,30 +38,6 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
      * @param values
      */
     AppsappInputSelectComponent.prototype.setOptions = function (values) {
-        var self = this;
-        var selectoptionsPreProcessed = [];
-        var currentSelectedselectoptions = {};
-        var value = values === undefined ? this.model.getParent().getPropertyValue(this.parentProperty) : values;
-        if (value && value.length) {
-            value.forEach(function () {
-                value.forEach(function (option) {
-                    if (option.__isPersistableModel && option.getUuid() !== self.model.getUuid()) {
-                        option.getPropertyValue(self.property).forEach(function (option) {
-                            currentSelectedselectoptions[option] = true;
-                        });
-                    }
-                });
-            });
-        }
-        var clonedselectoptions = JSON.parse(JSON.stringify(self.selectoptions));
-        clonedselectoptions.forEach(function (option) {
-            if (currentSelectedselectoptions[option.value] !== undefined) {
-                option.disabled = true;
-            }
-            selectoptionsPreProcessed.push(option);
-        });
-        self.mbsc.instance.refresh(selectoptionsPreProcessed);
-        self.mbsc.instance.setVal(values, true, false);
     };
     AppsappInputSelectComponent.prototype.applyselectoptionsPostprocess = function () {
         var self = this;
@@ -100,7 +76,7 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
                             self.setOptions();
                         }
                         else {
-                            self.mbsc.instance.refresh(selectoptions);
+                            //self.mbsc.instance.refresh(selectoptions);
                         }
                         self.select.getHashedValues().forEach(function (v) {
                             self.model.addHashedValue(v.value, v.hash);
@@ -112,7 +88,7 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
                             });
                         }
                         //self.update(hashedValues);
-                        self.mbsc.instance.setVal(hashedValues, true, false);
+                        // self.mbsc.instance.setVal(hashedValues, true, false);
                     });
                 });
             }
@@ -157,7 +133,7 @@ var AppsappInputSelectComponent = /** @class */ (function (_super) {
     AppsappInputSelectComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-select',
-            template: "\n        <mbsc-input [hidden]=\"selectoptions.length == 0\" mbsc-select [error]=\"validator | async\"\n                    #mbscInstance=\"mobiscroll\"\n                    [ngModel]=\"_ngModelGettter \" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n        </mbsc-input>\n\n    "
+            template: "\n       \n\n    "
         })
     ], AppsappInputSelectComponent);
     return AppsappInputSelectComponent;

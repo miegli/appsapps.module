@@ -65,7 +65,7 @@ var AppsappInputIntegerComponent = /** @class */ (function (_super) {
     AppsappInputIntegerComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-integer',
-            template: "\n        \n            <ng-container [ngSwitch]=\"__type\">\n                <mbsc-input [error]=\"validator | async\"  *ngSwitchCase=\"'default'\" #mbscInstance=\"mobiscroll\" mbsc-numpad-decimal [ngModel]=\"_ngModelGettter \" (ngModelChange)=\"modelChanges($event)\">{{_label}}</mbsc-input>\n                <mbsc-stepper *ngSwitchCase=\"'stepper'\" #mbscInstance=\"mobiscroll\" [min]=\"__min\" [max]=\"__max\" [ngModel]=\"_ngModelGettter \" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n                    <span class=\"mbsc-desc\">{{_description}}</span>\n                </mbsc-stepper>\n            </ng-container>\n   \n\n    "
+            template: "\n        \n           \n   \n\n    "
         })
     ], AppsappInputIntegerComponent);
     return AppsappInputIntegerComponent;

@@ -95,7 +95,7 @@ var AppsappInputDatesComponent = /** @class */ (function (_super) {
     AppsappInputDatesComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-dates',
-            template: "\n       \n            <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\"  #mbscInstance=\"mobiscroll\" mbsc-range [ngModel]=\"range\"\n                        (ngModelChange)=\"modelChanges($event)\">{{_label}}\n            </mbsc-input>\n     \n\n    "
+            template: "\n      \n     \n\n    "
         })
     ], AppsappInputDatesComponent);
     return AppsappInputDatesComponent;

@@ -77,7 +77,7 @@ var AppsappInputTimeComponent = /** @class */ (function (_super) {
     AppsappInputTimeComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-time',
-            template: "\n\n        <mbsc-input [ngClass]=\"{isInline: isInline}\" [error]=\"validator | async\" #mbscInstance=\"mobiscroll\" mbsc-time\n                    [ngModel]=\"_ngModelGettter \"\n                    (ngModelChange)=\"modelChanges($event)\">{{_label}}\n        </mbsc-input>\n\n\n    "
+            template: "\n\n       \n\n\n    "
         })
     ], AppsappInputTimeComponent);
     return AppsappInputTimeComponent;

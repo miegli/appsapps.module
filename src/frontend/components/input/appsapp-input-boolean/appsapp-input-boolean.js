@@ -29,10 +29,34 @@ var AppsappInputBooleanComponent = /** @class */ (function (_super) {
     function AppsappInputBooleanComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    __decorate([
+        core_1.Input('aria-label')
+    ], AppsappInputBooleanComponent.prototype, "ariaLabel");
+    __decorate([
+        core_1.Input('aria-labelledby')
+    ], AppsappInputBooleanComponent.prototype, "ariaLabelledby");
+    __decorate([
+        core_1.Input()
+    ], AppsappInputBooleanComponent.prototype, "color");
+    __decorate([
+        core_1.Input()
+    ], AppsappInputBooleanComponent.prototype, "disableRipple");
+    __decorate([
+        core_1.Input()
+    ], AppsappInputBooleanComponent.prototype, "disabled");
+    __decorate([
+        core_1.Input()
+    ], AppsappInputBooleanComponent.prototype, "labelPosition");
+    __decorate([
+        core_1.Input()
+    ], AppsappInputBooleanComponent.prototype, "name");
+    __decorate([
+        core_1.Input()
+    ], AppsappInputBooleanComponent.prototype, "required");
     AppsappInputBooleanComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-boolean',
-            template: "\n       \n            <mbsc-switch [ngModel]=\"_ngModelGettter \" (ngModelChange)=\"modelChanges($event)\">{{_label}}\n                <span class=\"mbsc-desc\">{{_description}}</span>\n            </mbsc-switch>\n      \n\n            "
+            template: "\n        <div class=\"mat-form-field-wrapper\" style=\"width:100%\">\n            <mat-slide-toggle style=\"width:100%\" [ngModel]=\"_ngModelGettter | async\"\n                              (ngModelChange)=\"modelChanges($event)\" [checked]=\"_ngModelGettter | async\"\n                              [color]=\"_color\" [labelPosition]=\"_labelPosition\">{{_label}}\n            </mat-slide-toggle>\n        </div>\n    "
         })
     ], AppsappInputBooleanComponent);
     return AppsappInputBooleanComponent;

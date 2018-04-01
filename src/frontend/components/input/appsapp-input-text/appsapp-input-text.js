@@ -28,8 +28,7 @@ var AppsappInputTextComponent = /** @class */ (function (_super) {
     __extends(AppsappInputTextComponent, _super);
     function AppsappInputTextComponent() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.max = null;
-        _this.lastvalue = null;
+        _this.max = 0;
         return _this;
     }
     /**
@@ -44,31 +43,13 @@ var AppsappInputTextComponent = /** @class */ (function (_super) {
             this.max = this.model.getMetadataValue(this.property, 'length')[1];
         }
     };
-    /**
-     *
-     * @param model
-     * @param property
-     * @param value
-     */
-    AppsappInputTextComponent.prototype.beforeModelChanges = function (model, property, value) {
-        var changed = false;
-        if (this.max !== null && value.length > this.max) {
-            value = this.lastvalue;
-            changed = true;
-        }
-        this.lastvalue = value;
-        if (changed) {
-            this.update(value);
-            return false;
-        }
-        else {
-            return true;
-        }
-    };
+    __decorate([
+        core_1.Output()
+    ], AppsappInputTextComponent.prototype, "max");
     AppsappInputTextComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-text',
-            template: "\n    \n      <mbsc-input [error]=\"validator | async\" [placeholder]=\"placeholder\" [ngModel]=\"_ngModelGettter \"\n                  (ngModelChange)=\"modelChanges($event)\">{{_label}}\n      </mbsc-input>\n  \n\n  "
+            template: "\n\n      <mat-form-field style=\"width:100%\">\n          <input (ngModelChange)=\"modelChanges($event)\" [errorStateMatcher]=\"errorStateMatcher\" [maxlength]=\"max\" [ngModel]=\"_ngModelGettter | async\" matInput [placeholder]=\"placeholder\">\n          <mat-label>{{_label}}</mat-label>\n          <mat-hint align=\"start\" *ngIf=\"description.length\">{{description}}</mat-hint>\n          <mat-hint align=\"end\" *ngIf=\"max && model[property]\">{{model[property].length}} / {{max}}</mat-hint>\n          <button mat-button *ngIf=\"clearable &&  model[property] &&  model[property].length\" matSuffix mat-icon-button aria-label=\"Clear\" (click)=\"clear()\">\n              <mat-icon>close</mat-icon>\n          </button>\n      </mat-form-field>\n\n  "
         })
     ], AppsappInputTextComponent);
     return AppsappInputTextComponent;

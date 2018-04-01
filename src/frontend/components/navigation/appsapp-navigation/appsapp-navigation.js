@@ -106,7 +106,7 @@ var AppsappNavigationComponent = /** @class */ (function (_super) {
     AppsappNavigationComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-navigation',
-            template: "\n\n        <mbsc-hamburger-nav [options]=\"options\" *ngIf=\"options.type == 'hamburger'\">\n            <mbsc-nav-item *ngFor=\"let item of children\" [icon]=\"item.icon\" [badge]=\"item.badge\">{{item.name}}\n            </mbsc-nav-item>\n        </mbsc-hamburger-nav>\n\n        <mbsc-tab-nav [options]=\"options\" *ngIf=\"options.type == 'tab'\">\n            <mbsc-nav-item *ngFor=\"let item of children\" [icon]=\"item.icon\" [badge]=\"item.badge\">{{item.name}}\n            </mbsc-nav-item>\n        </mbsc-tab-nav>\n\n        <mbsc-bottom-nav [options]=\"options\" *ngIf=\"options.type == 'bottom'\">\n            <mbsc-nav-item *ngFor=\"let item of children\" [icon]=\"item.icon\" [badge]=\"item.badge\">{{item.name}}\n            </mbsc-nav-item>\n        </mbsc-bottom-nav>\n    "
+            template: "\n .\n    "
         })
     ], AppsappNavigationComponent);
     return AppsappNavigationComponent;
