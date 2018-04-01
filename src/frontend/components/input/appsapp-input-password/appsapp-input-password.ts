@@ -18,6 +18,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
             <mat-hint align="start" *ngIf="description.length">{{description}}</mat-hint>
             <mat-hint align="end" *ngIf="max && model[property]">{{model[property].length}} / {{max}}</mat-hint>
             <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+            <mat-error *ngIf="_hasErrorsText.length">{{_hasErrorsText}}</mat-error>
         </mat-form-field>  
      
 

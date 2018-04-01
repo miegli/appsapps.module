@@ -15,6 +15,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
             <input (ngModelChange)="modelChanges($event)" type="email" [errorStateMatcher]="errorStateMatcher" [ngModel]="_ngModelGettter | async" matInput [placeholder]="placeholder">
             <mat-label>{{_label}}</mat-label>
             <mat-hint align="start" *ngIf="description.length">{{description}}</mat-hint>
+            <mat-error *ngIf="_hasErrorsText.length">{{_hasErrorsText}}</mat-error>
             <button mat-button *ngIf="clearable &&  model[property] &&  model[property].length" matSuffix mat-icon-button aria-label="Clear" (click)="clear()">
                 <mat-icon>close</mat-icon>
             </button>

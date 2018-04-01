@@ -3,6 +3,8 @@ import {AbstractComponent} from "../../abstractComponent";
 import {AppsappModuleProvider} from "../../../providers/appsapp-module-provider";
 import {Output} from "@angular/core";
 import {Observable} from "rxjs/Observable";
+import {FormBuilder, FormGroup} from '@angular/forms';
+
 
 /**
  * Generate d class for the AppsappInputComponent component.
@@ -13,7 +15,7 @@ import {Observable} from "rxjs/Observable";
 @Component({
     selector: 'appsapp-input',
     template: `
-        
+        <form [formGroup]="formGroupOptions">
             <ng-container [ngSwitch]="input.type" *ngFor="let input of _inputs">
                 <ng-container *ngSwitchCase="'text'">
                     <appsapp-input-text [model]="model" [property]="input.property" [label]="input.label"
@@ -115,7 +117,7 @@ import {Observable} from "rxjs/Observable";
                     <appsapp-input [model]="input.model"></appsapp-input>
                 </ng-container>
             </ng-container>
-       
+        </form>
 
     `
 })
@@ -132,58 +134,61 @@ export class AppsappInputComponent extends AbstractComponent {
     @Output() _inputs: any = [];
     _inputsRegistered: any = {};
     @Output() hidden: boolean = false;
+    formGroupOptions: FormGroup;
+
     private _model: Observable<any>;
 
-    constructor(public appsappModuleProvider: AppsappModuleProvider) {
+    constructor(public appsappModuleProvider: AppsappModuleProvider, fb: FormBuilder) {
         super(appsappModuleProvider);
 
-    }
+        this.formGroupOptions = fb.group({
+            hideRequired: false,
+            floatLabel: 'auto',
+        });
 
+    }
 
 
     registerConditions(property, model) {
         let self = this;
 
 
-            this._inputs.push({
-                type: model.getType(property),
-                property: property,
-                parentPropertyMetadata: this.parentPropertyMetadata,
-                parentProperty: this.parentProperty,
-                hidden: new Observable((observer) => {
+        this._inputs.push({
+            type: model.getType(property),
+            property: property,
+            parentPropertyMetadata: this.parentPropertyMetadata,
+            parentProperty: this.parentProperty,
+            hidden: new Observable((observer) => {
 
-                    var isConditionValue = false;
+                var isConditionValue = false;
 
 
-                    if (model.getMetadataValue(property, 'isHidden') === true) {
-                        observer.next(true);
-                    } else {
+                if (model.getMetadataValue(property, 'isHidden') === true) {
+                    observer.next(true);
+                } else {
 
-                        if (typeof model.getMetadataValue(property, 'isHidden') == 'object') {
+                    if (typeof model.getMetadataValue(property, 'isHidden') == 'object') {
 
-                            model.getCondition('__isHidden__' + property).subscribe((c) => {
+                        model.getCondition('__isHidden__' + property).subscribe((c) => {
 
-                                if (isConditionValue && !c.state) {
-                                    observer.next(isConditionValue);
-                                } else {
-                                    observer.next(!c.state);
-                                }
+                            if (isConditionValue && !c.state) {
+                                observer.next(isConditionValue);
+                            } else {
+                                observer.next(!c.state);
+                            }
 
-                            });
-                        }
-
-                        model.getCondition(property).subscribe((c) => {
-                            observer.next(self.isHidden(c));
-                            isConditionValue = self.isHidden(c);
                         });
                     }
 
+                    model.getCondition(property).subscribe((c) => {
+                        observer.next(self.isHidden(c));
+                        isConditionValue = self.isHidden(c);
+                    });
+                }
 
-                })
-            });
 
-
-
+            })
+        });
 
 
     }

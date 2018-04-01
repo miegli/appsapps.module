@@ -20,6 +20,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
             <mat-datepicker #picker></mat-datepicker>
 
             <mat-label>{{_label}}</mat-label>
+            <mat-error *ngIf="_hasErrorsText.length">{{_hasErrorsText}}</mat-error>
             <mat-hint align="start" *ngIf="description.length">{{description}}</mat-hint>
             <mat-hint align="end" *ngIf="max && model[property]">{{model[property].length}} / {{max}}</mat-hint>
             <button mat-button *ngIf="clearable &&  model[property] &&  model[property].length" matSuffix

@@ -17,6 +17,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
           <mat-label>{{_label}}</mat-label>
           <mat-hint align="start" *ngIf="description.length">{{description}}</mat-hint>
           <mat-hint align="end" *ngIf="max && model[property]">{{model[property].length}} / {{max}}</mat-hint>
+          <mat-error *ngIf="_hasErrorsText.length">{{_hasErrorsText}}</mat-error>
           <button mat-button *ngIf="clearable &&  model[property] &&  model[property].length" matSuffix mat-icon-button aria-label="Clear" (click)="clear()">
               <mat-icon>close</mat-icon>
           </button>

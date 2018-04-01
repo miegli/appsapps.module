@@ -3,6 +3,9 @@ import {AppsappInputComponent} from "./appsapp-input/appsapp-input";
 import {ConfigModel} from "../../models/config";
 import {AppsappModuleProvider} from "../../providers/appsapp-module-provider";
 import {Observable} from "rxjs/Observable";
+import {ValidationError} from "class-validator";
+import {FormBuilder} from "@angular/forms";
+
 
 /**
  * Generated class for the AppsappInputAbstractComponent component.
@@ -25,6 +28,7 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
     _validationMetadata: any = {};
     _options: any = {};
     _hasErrors: boolean = false;
+    @Output() _hasErrorsText: string = '';
     @Output() validator: Observable<any>;
     @Output() errorStateMatcher = {
         isErrorState: () => {
@@ -38,9 +42,9 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
     @Output() description: string = '';
 
 
-    constructor(public appsappModuleProvider: AppsappModuleProvider) {
+    constructor(public appsappModuleProvider: AppsappModuleProvider,fb: FormBuilder) {
 
-        super(appsappModuleProvider);
+        super(appsappModuleProvider, fb);
 
 
     }
@@ -70,6 +74,25 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
                 this.validator = this.model.getValidation(this.property);
                 this.validator.subscribe((next) => {
                     this._hasErrors = next ? true : false;
+                    if (!this._hasErrors) {
+                        this._hasErrorsText = '';
+                    } else {
+                        var m = '';
+                        var validationError: ValidationError = next;
+
+                        if (validationError.property == this.property) {
+
+                            Object.keys(validationError.constraints).forEach((constraint: string) => {
+                                if (m.length) {
+                                    m += ', ';
+                                }
+                                m += validationError.constraints[constraint];
+                            });
+                        }
+                        console.log(m);
+
+                        this._hasErrorsText = m;
+                    }
                 })
 
             }
