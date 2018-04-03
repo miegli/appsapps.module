@@ -58,7 +58,8 @@ export class AppsappModuleProvider {
         });
 
 
-
+        // init persistenceManager
+        self.persistenceManager = new PersistenceManager();
 
 
         // init notification provider
@@ -127,19 +128,23 @@ export class AppsappModuleProvider {
 
                     if (state && !state.isAnonymous) {
                         self._isAuthenticatedObserver.next(true);
-                    } else {
+                    }
 
-                        // try to authenticate with Firebase Anonymously
-                        self._isAuthenticatedObserver.next(false);
+                    if (state === null && this.authenticated === undefined) {
+                        //try to authenticate with Firebase Anonymously
                         self.anonymousSignIn().then((user) => {
-                            //
+                            self._isAuthenticatedObserver.next(false);
                         }).catch((error) => {
+                            self._isAuthenticatedObserver.next(false);
                             console.log(error);
                         });
                     }
 
 
                 })
+
+
+
 
             });
 
@@ -436,7 +441,12 @@ export class AppsappModuleProvider {
 
             self.firebaseProject.getAuth().then((auth: AngularFireAuth) => {
                 auth.auth.signOut().then((next) => {
-                    resolve(next);
+                    self.getPersistenceManager().clearStorage().then(() => {
+                        resolve(next);
+                    }).catch((e) => {
+                        reject(e);
+                    });
+
                 }, (error) => {
                     resolve(error);
                 });

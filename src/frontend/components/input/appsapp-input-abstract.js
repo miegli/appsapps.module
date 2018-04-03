@@ -48,6 +48,7 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
         _this.errormsg = '';
         _this.placeholder = '';
         _this.description = '';
+        _this.required = false;
         return _this;
     }
     /**.
@@ -83,7 +84,6 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
                                 m += validationError.constraints[constraint];
                             });
                         }
-                        console.log(m);
                         _this._hasErrorsText = m;
                     }
                 });
@@ -94,6 +94,17 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
             this.description = d ? d : '';
             if (self.model.getMetadataValue(self.property, 'hasClearable')) {
                 this.clearable = true;
+            }
+            if (self.model.getMetadata(self.property).length) {
+                if (self.model[self.property] === undefined || self.model[self.property] === null) {
+                    self.model[self.property] = self.model.transformTypeFromMetadata[self.property];
+                }
+                if (self.model[self.property] === undefined) {
+                    self.model[self.property] = '';
+                }
+                if (self.model.hasMetadata('isRequired')) {
+                    this.required = true;
+                }
             }
             this._ngModelGettter = self.model.getProperty(self.property);
         }
@@ -199,6 +210,9 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
     __decorate([
         core_1.Output()
     ], AppsappInputAbstractComponent.prototype, "description");
+    __decorate([
+        core_1.Output()
+    ], AppsappInputAbstractComponent.prototype, "required");
     AppsappInputAbstractComponent = __decorate([
         core_1.Component({
             template: ''

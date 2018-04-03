@@ -14,9 +14,11 @@ require("rxjs/add/operator/map");
 var config_1 = require("../models/config");
 var firebase_1 = require("../models/firebase");
 var persistenceManager_1 = require("../manager/persistenceManager");
+var Observable_1 = require("rxjs/Observable");
 ;
 var AppsappModuleProvider = /** @class */ (function () {
     function AppsappModuleProvider(providerConfig, providerMessages, http) {
+        var _this = this;
         this.providerConfig = providerConfig;
         this.providerMessages = providerMessages;
         this.http = http;
@@ -66,21 +68,58 @@ var AppsappModuleProvider = /** @class */ (function () {
             // try to auto-login
             if (config && config.getFirebaseUserPassword() && self.config.getFirebaseUserName()) {
                 self.userSignIn(config.getFirebaseUserName(), config.getFirebaseUserPassword()).then(function (user) {
-                    //
+                    self._isAuthenticatedObserver.next(true);
                 })["catch"](function (error) {
-                    console.log(error);
-                });
-            }
-            else {
-                // try to authenticate with Firebase Anonymously
-                self.anonymousSignIn().then(function (user) {
-                    //
-                })["catch"](function (error) {
+                    self._isAuthenticatedObserver.next(false);
                     console.log(error);
                 });
             }
         });
+        // init authentcation observer
+        this._isAuthenticated = new Observable_1.Observable(function (observer) {
+            _this._isAuthenticatedObserver = observer;
+            _this.firebaseProject.getAuth().then(function (auth) {
+                auth.authState.subscribe(function (state) {
+                    if (state && !state.isAnonymous) {
+                        self._isAuthenticatedObserver.next(true);
+                    }
+                    else {
+                        // try to authenticate with Firebase Anonymously
+                        self._isAuthenticatedObserver.next(false);
+                        self.anonymousSignIn().then(function (user) {
+                            //
+                        })["catch"](function (error) {
+                            console.log(error);
+                        });
+                    }
+                });
+            });
+        });
+        window.setTimeout(function () {
+            _this._isAuthenticated.subscribe(function (state) {
+                _this.authenticated = state;
+            });
+        });
     }
+    /**
+     * is user authenticated observable
+     * @returns {Observable<boolean>}
+     */
+    AppsappModuleProvider.prototype.isAuthenticated = function () {
+        var _this = this;
+        return new Observable_1.Observable(function (observer) {
+            _this.firebaseProject.getAuth().then(function (auth) {
+                auth.authState.subscribe(function (state) {
+                    if (state && !state.isAnonymous) {
+                        observer.next(true);
+                    }
+                    else {
+                        observer.next(false);
+                    }
+                });
+            });
+        });
+    };
     /**
      * get http client
      * @returns HttpClient
@@ -204,6 +243,31 @@ var AppsappModuleProvider = /** @class */ (function () {
             if (self.config.getAuthenticationMethod() == 'mail') {
                 self.firebaseProject.getAuth().then(function (auth) {
                     auth.auth.signInWithEmailAndPassword(username, password).then(function (user) {
+                        self._isAuthenticatedObserver.next(true);
+                        resolve(user);
+                    })["catch"](function (error) {
+                        reject(error);
+                    });
+                });
+            }
+        });
+    };
+    /**
+     * Register a new user by given email and password
+     * @param {string} email
+     * @param {string} password
+     * @returns {Promise<any>}
+     */
+    AppsappModuleProvider.prototype.userRegister = function (email, password) {
+        var self = this;
+        var t = {};
+        return new Promise(function (resolve, reject) {
+            t.resolve = resolve;
+            t.reject = reject;
+            if (self.config.getAuthenticationMethod() == 'mail') {
+                self.firebaseProject.getAuth().then(function (auth) {
+                    auth.auth.createUserWithEmailAndPassword(email, password).then(function (user) {
+                        self._isAuthenticatedObserver.next(true);
                         resolve(user);
                     })["catch"](function (error) {
                         reject(error);
@@ -239,6 +303,7 @@ var AppsappModuleProvider = /** @class */ (function () {
         var self = this;
         return new Promise(function (resolve, reject) {
             self.config.setFirebaseUserPassword('').emit();
+            self._isAuthenticatedObserver.next(false);
             self.firebaseProject.getAuth().then(function (auth) {
                 auth.auth.signOut().then(function (next) {
                     resolve(next);

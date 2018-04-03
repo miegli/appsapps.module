@@ -8,7 +8,7 @@ import {FirebaseModel} from "../models/firebase";
 import {AngularFireAuth} from "angularfire2/auth";
 import * as objectHash from 'object-hash';
 import {UUID} from "angular2-uuid";
-import {PersistableModel} from 'appsapp-cli';
+
 
 @Injectable()
 
@@ -30,7 +30,7 @@ export class PersistenceManager {
 
         let self = this;
 
-        let storage = new LocalStorageService({storageType: 'localStorage', prefix: 'appsapps-'});
+        let storage = new LocalStorageService({storageType: 'localStorage', prefix: 'appsapps'});
 
 
         this.storageWrapper = {
@@ -46,7 +46,7 @@ export class PersistenceManager {
             },
             clear: function () {
                 return new Promise(function (resolve, reject) {
-                    resolve(storage.remove());
+                    resolve(storage.clearAll());
                 });
             },
             remove: function (key) {
@@ -233,11 +233,11 @@ export class PersistenceManager {
                         if (model.hasPendingChanges()) {
 
 
-                                self.workOnPendingChanges(model).then(() => {
-                                    model.setHasPendingChanges(false).emit();
+                            self.workOnPendingChanges(model).then(() => {
+                                model.setHasPendingChanges(false).emit();
                             }).catch((e) => {
                                 console.log(e);
-                                });
+                            });
 
 
                         } else {
@@ -246,8 +246,6 @@ export class PersistenceManager {
                                 model.loadJson(action.payload.val());
                             }
                         }
-
-
 
 
                     }, (error) => {
@@ -839,6 +837,30 @@ export class PersistenceManager {
             }).catch((error) => {
                 reject(error);
             });
+
+        });
+
+
+    }
+
+    /**
+     * clear local storage
+     * @returns {Promise<any>}
+     */
+    public clearStorage() {
+
+        let self = this;
+
+        return new Promise(function (resolve, reject) {
+console.log(2);
+            self.storageWrapper.clear().then(() => {
+                console.log('cleared');
+                location.reload();
+                resolve();
+            }).catch((e) => {
+                console.log(e);
+                reject(e);
+            })
 
         });
 
