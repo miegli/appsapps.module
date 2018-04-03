@@ -21,7 +21,7 @@ import {AppsappInputSelectComponent} from "./components/input/appsapp-input-sele
 import {AppsappInputListComponent} from "./components/input/appsapp-input-list/appsapp-input-list";
 import {AppsappInputTimeComponent} from "./components/input/appsapp-input-time/appsapp-input-time";
 import {AppsappInputAbstractComponent} from "./components/input/appsapp-input-abstract";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AppsappModuleProvider} from "./providers/appsapp-module-provider";
 import {AppsappModuleProviderConfig} from "./providers/appsapp-module-provider";
 import {AppsappModuleProviderMessages} from "appsapp-cli";
@@ -66,7 +66,7 @@ import './polyfills';
         // here, due to limitations of our example generation script.
         {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
         {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},],
-    imports: [BrowserModule,
+    imports: [BrowserModule,ReactiveFormsModule,
         BrowserAnimationsModule,CommonModule, NoopAnimationsModule, FormsModule, HttpClientModule, MatButtonModule, MatCheckboxModule,MatDatepickerModule, MatCardModule, MatButtonToggleModule, MatAutocompleteModule, MatChipsModule, MatCommonModule, MatDialogModule, MatDividerModule, MatExpansionModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatInputModule, MatLineModule, MatListModule, MatMenuModule, MatNativeDateModule,
         MatOptionModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatPseudoCheckboxModule, MatRadioModule, MatRippleModule, MatSelectModule, MatSidenavModule, MatSliderModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatStepperModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule, NativeDateModule],
     exports: [

@@ -12,10 +12,12 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
     selector: 'appsapp-input-date',
     template: `
 
-        <mat-form-field style="width:100%">
+        <mat-form-field style="width:100%"
+                        [hideRequiredMarker]="formGroupOptions.value.hideRequired"
+                        [floatLabel]="formGroupOptions.value.floatLabel">
 
             <input (ngModelChange)="modelChanges($event)" [ngModel]="_ngModelGettter | async" matInput [min]="minDate"
-                   [max]="maxDate" [matDatepicker]="picker" [placeholder]="placeholder">
+                   [max]="maxDate" [matDatepicker]="picker" [placeholder]="placeholder" [required]="required">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
 

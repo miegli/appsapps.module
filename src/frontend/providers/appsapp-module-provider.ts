@@ -6,6 +6,8 @@ import {AngularFireAuth} from "angularfire2/auth";
 import {PersistenceManager} from "../manager/persistenceManager";
 import {AppsappModuleProviderMessages} from "appsapp-cli";
 import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs/Observable";
+import {Observer} from "rxjs/Observer";
 
 
 /*
@@ -28,10 +30,14 @@ declare var require: any;
 export class AppsappModuleProvider {
 
     public config: ConfigModel;
+    public redirectUrl: string;
     public platform: any = null;
     private firebaseProject: FirebaseModel;
     private persistenceManager: any;
     private notificationProvider: object;
+    public authenticated: boolean;
+    private _isAuthenticated: Observable<boolean>;
+    private _isAuthenticatedObserver: Observer<any>;
 
 
     constructor(@Inject('config') private providerConfig: AppsappModuleProviderConfig, @Inject('messages') private providerMessages: AppsappModuleProviderMessages, private http: HttpClient) {
@@ -50,6 +56,9 @@ export class AppsappModuleProvider {
             firebaseDatabaseURL: 'https://' + providerConfig.projectId + '.firebaseio.com/',
             firebaseAuthDomain: 'https://' + providerConfig.projectId + '.firebaseio.com/'
         });
+
+
+
 
 
         // init notification provider
@@ -99,16 +108,9 @@ export class AppsappModuleProvider {
             // try to auto-login
             if (config && config.getFirebaseUserPassword() && self.config.getFirebaseUserName()) {
                 self.userSignIn(config.getFirebaseUserName(), config.getFirebaseUserPassword()).then((user) => {
-                    //
+                    self._isAuthenticatedObserver.next(true);
                 }).catch((error) => {
-                    console.log(error);
-                });
-            } else {
-
-                // try to authenticate with Firebase Anonymously
-                self.anonymousSignIn().then((user) => {
-                    //
-                }).catch((error) => {
+                    self._isAuthenticatedObserver.next(false);
                     console.log(error);
                 });
             }
@@ -116,10 +118,67 @@ export class AppsappModuleProvider {
         });
 
 
+        // init authentcation observer
+        this._isAuthenticated = new Observable<boolean>((observer: Observer<any>) => {
+            this._isAuthenticatedObserver = observer;
+            this.firebaseProject.getAuth().then((auth: AngularFireAuth) => {
+
+                auth.authState.subscribe((state) => {
+
+                    if (state && !state.isAnonymous) {
+                        self._isAuthenticatedObserver.next(true);
+                    } else {
+
+                        // try to authenticate with Firebase Anonymously
+                        self._isAuthenticatedObserver.next(false);
+                        self.anonymousSignIn().then((user) => {
+                            //
+                        }).catch((error) => {
+                            console.log(error);
+                        });
+                    }
+
+
+                })
+
+            });
+
+        });
+        window.setTimeout(()=> {
+            this._isAuthenticated.subscribe((state) => {
+                this.authenticated = state;
+            });
+        });
+
 
 
     }
 
+
+    /**
+     * is user authenticated observable
+     * @returns {Observable<boolean>}
+     */
+    public isAuthenticated() {
+
+
+        return new Observable<boolean>((observer: Observer<any>) => {
+
+            this.firebaseProject.getAuth().then((auth: AngularFireAuth) => {
+                auth.authState.subscribe((state) => {
+                    if (state && !state.isAnonymous) {
+                        observer.next(true);
+                    } else {
+                        observer.next(false);
+                    }
+                })
+
+            });
+
+        });
+
+
+    }
 
     /**
      * get http client
@@ -156,7 +215,7 @@ export class AppsappModuleProvider {
         }
 
 
-       this.lazyLoad(model, initialdata);
+        this.lazyLoad(model, initialdata);
 
 
         return model;
@@ -265,7 +324,7 @@ export class AppsappModuleProvider {
      * @param {string} password
      * @returns {Promise<any>}
      */
-    private userSignIn(username: string, password: string) {
+    public userSignIn(username: string, password: string) {
 
 
         let self = this;
@@ -282,6 +341,43 @@ export class AppsappModuleProvider {
 
                 self.firebaseProject.getAuth().then((auth: AngularFireAuth) => {
                     auth.auth.signInWithEmailAndPassword(username, password).then((user) => {
+                        self._isAuthenticatedObserver.next(true);
+                        resolve(user);
+                    }).catch((error) => {
+                        reject(error);
+                    });
+
+                });
+            }
+
+
+        });
+    }
+
+    /**
+     * Register a new user by given email and password
+     * @param {string} email
+     * @param {string} password
+     * @returns {Promise<any>}
+     */
+    public userRegister(email: string, password: string) {
+
+
+        let self = this;
+        let t = <any>{};
+
+        return new Promise(function (resolve, reject) {
+
+
+            t.resolve = resolve;
+            t.reject = reject;
+
+
+            if (self.config.getAuthenticationMethod() == 'mail') {
+
+                self.firebaseProject.getAuth().then((auth: AngularFireAuth) => {
+                    auth.auth.createUserWithEmailAndPassword(email, password).then((user) => {
+                        self._isAuthenticatedObserver.next(true);
                         resolve(user);
                     }).catch((error) => {
                         reject(error);
@@ -329,13 +425,14 @@ export class AppsappModuleProvider {
      * Logout user
      * @returns {Promise<any>}
      */
-    private userSignOut() {
+    public userSignOut() {
 
         let self = this;
 
         return new Promise(function (resolve, reject) {
 
             self.config.setFirebaseUserPassword('').emit();
+            self._isAuthenticatedObserver.next(false);
 
             self.firebaseProject.getAuth().then((auth: AngularFireAuth) => {
                 auth.auth.signOut().then((next) => {

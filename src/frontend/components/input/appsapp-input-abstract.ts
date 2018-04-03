@@ -40,6 +40,7 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
     @Output() errormsg: string = '';
     @Output() placeholder: string = '';
     @Output() description: string = '';
+    @Output() required: boolean = false;
 
 
     constructor(public appsappModuleProvider: AppsappModuleProvider,fb: FormBuilder) {
@@ -89,7 +90,7 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
                                 m += validationError.constraints[constraint];
                             });
                         }
-                        console.log(m);
+
 
                         this._hasErrorsText = m;
                     }
@@ -105,6 +106,19 @@ export class AppsappInputAbstractComponent extends AppsappInputComponent {
 
             if (self.model.getMetadataValue(self.property, 'hasClearable')) {
                 this.clearable = true;
+            }
+
+            if (self.model.getMetadata(self.property).length)
+            {
+                if (self.model[self.property] === undefined || self.model[self.property] === null) {
+                    self.model[self.property] = self.model.transformTypeFromMetadata[self.property]
+                }
+                if (self.model[self.property] === undefined) {
+                    self.model[self.property] = '';
+                }
+                if (self.model.hasMetadata('isRequired')) {
+                    this.required = true;
+                }
             }
 
             this._ngModelGettter = self.model.getProperty(self.property);

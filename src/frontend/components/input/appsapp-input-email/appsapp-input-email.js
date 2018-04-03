@@ -32,7 +32,7 @@ var AppsappInputEmailComponent = /** @class */ (function (_super) {
     AppsappInputEmailComponent = __decorate([
         core_1.Component({
             selector: 'appsapp-input-email',
-            template: "\n\n        <mat-form-field style=\"width:100%\">\n            <input (ngModelChange)=\"modelChanges($event)\" type=\"email\" [errorStateMatcher]=\"errorStateMatcher\" [ngModel]=\"_ngModelGettter | async\" matInput [placeholder]=\"placeholder\">\n            <mat-label>{{_label}}</mat-label>\n            <mat-hint align=\"start\" *ngIf=\"description.length\">{{description}}</mat-hint>\n            <button mat-button *ngIf=\"clearable &&  model[property] &&  model[property].length\" matSuffix mat-icon-button aria-label=\"Clear\" (click)=\"clear()\">\n                <mat-icon>close</mat-icon>\n            </button>\n        </mat-form-field>\n\n    "
+            template: "\n\n        <mat-form-field style=\"width:100%\">\n            <input (ngModelChange)=\"modelChanges($event)\" type=\"email\" [errorStateMatcher]=\"errorStateMatcher\" [ngModel]=\"_ngModelGettter | async\" matInput [placeholder]=\"placeholder\">\n            <mat-label>{{_label}}</mat-label>\n            <mat-hint align=\"start\" *ngIf=\"description.length\">{{description}}</mat-hint>\n            <mat-error *ngIf=\"_hasErrorsText.length\">{{_hasErrorsText}}</mat-error>\n            <button mat-button *ngIf=\"clearable &&  model[property] &&  model[property].length\" matSuffix mat-icon-button aria-label=\"Clear\" (click)=\"clear()\">\n                <mat-icon>close</mat-icon>\n            </button>\n        </mat-form-field>\n\n    "
         })
     ], AppsappInputEmailComponent);
     return AppsappInputEmailComponent;

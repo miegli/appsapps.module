@@ -26,8 +26,8 @@ var appsapp_input_1 = require("./appsapp-input/appsapp-input");
  */
 var AppsappInputAbstractComponent = /** @class */ (function (_super) {
     __extends(AppsappInputAbstractComponent, _super);
-    function AppsappInputAbstractComponent(appsappModuleProvider) {
-        var _this = _super.call(this, appsappModuleProvider) || this;
+    function AppsappInputAbstractComponent(appsappModuleProvider, fb) {
+        var _this = _super.call(this, appsappModuleProvider, fb) || this;
         _this.appsappModuleProvider = appsappModuleProvider;
         _this._name = '';
         _this._label = '';
@@ -37,6 +37,7 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
         _this._validationMetadata = {};
         _this._options = {};
         _this._hasErrors = false;
+        _this._hasErrorsText = '';
         _this.errorStateMatcher = {
             isErrorState: function () {
                 return _this._hasErrors;
@@ -68,6 +69,23 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
                 this.validator = this.model.getValidation(this.property);
                 this.validator.subscribe(function (next) {
                     _this._hasErrors = next ? true : false;
+                    if (!_this._hasErrors) {
+                        _this._hasErrorsText = '';
+                    }
+                    else {
+                        var m = '';
+                        var validationError = next;
+                        if (validationError.property == _this.property) {
+                            Object.keys(validationError.constraints).forEach(function (constraint) {
+                                if (m.length) {
+                                    m += ', ';
+                                }
+                                m += validationError.constraints[constraint];
+                            });
+                        }
+                        console.log(m);
+                        _this._hasErrorsText = m;
+                    }
                 });
             }
             var p = self.model.getMetadataValue(self.property, 'hasPlaceholder');
@@ -157,6 +175,9 @@ var AppsappInputAbstractComponent = /** @class */ (function (_super) {
             return null;
         }
     };
+    __decorate([
+        core_1.Output()
+    ], AppsappInputAbstractComponent.prototype, "_hasErrorsText");
     __decorate([
         core_1.Output()
     ], AppsappInputAbstractComponent.prototype, "validator");
