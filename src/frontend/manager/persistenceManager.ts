@@ -852,10 +852,8 @@ export class PersistenceManager {
         let self = this;
 
         return new Promise(function (resolve, reject) {
-console.log(2);
+
             self.storageWrapper.clear().then(() => {
-                console.log('cleared');
-                location.reload();
                 resolve();
             }).catch((e) => {
                 console.log(e);

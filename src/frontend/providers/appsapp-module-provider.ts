@@ -144,17 +144,14 @@ export class AppsappModuleProvider {
                 })
 
 
-
-
             });
 
         });
-        window.setTimeout(()=> {
+        window.setTimeout(() => {
             this._isAuthenticated.subscribe((state) => {
                 this.authenticated = state;
             });
         });
-
 
 
     }
@@ -248,6 +245,12 @@ export class AppsappModuleProvider {
                     self.persistenceManager = persistenceManager;
                     model.setHttpClient(self.http).setNotificationProvider(self.notificationProvider).setMessages(self.providerMessages);
                     persistenceManager.initAndload(model, modeldata).then((model: any) => {
+                        if (model.getParent() && model.getParent().__isAutosave) {
+                            model.autosave();
+                            model.getChangesWithCallback(() => {
+                                model.getParent().save().subscribe();
+                            });
+                        }
                         persistenceManager.setFirebase(self.firebaseProject);
                         model.setPersistenceManager(persistenceManager);
                         persistenceManager._loadedResolver = resolve;

@@ -34,6 +34,8 @@ var AppsappModuleProvider = /** @class */ (function () {
             firebaseDatabaseURL: 'https://' + providerConfig.projectId + '.firebaseio.com/',
             firebaseAuthDomain: 'https://' + providerConfig.projectId + '.firebaseio.com/'
         });
+        // init persistenceManager
+        self.persistenceManager = new persistenceManager_1.PersistenceManager();
         // init notification provider
         var timeout = null;
         this.notificationProvider = function (message, error) {
@@ -83,12 +85,12 @@ var AppsappModuleProvider = /** @class */ (function () {
                     if (state && !state.isAnonymous) {
                         self._isAuthenticatedObserver.next(true);
                     }
-                    else {
-                        // try to authenticate with Firebase Anonymously
-                        self._isAuthenticatedObserver.next(false);
+                    if (state === null && _this.authenticated === undefined) {
+                        //try to authenticate with Firebase Anonymously
                         self.anonymousSignIn().then(function (user) {
-                            //
+                            self._isAuthenticatedObserver.next(false);
                         })["catch"](function (error) {
+                            self._isAuthenticatedObserver.next(false);
                             console.log(error);
                         });
                     }
@@ -306,7 +308,11 @@ var AppsappModuleProvider = /** @class */ (function () {
             self._isAuthenticatedObserver.next(false);
             self.firebaseProject.getAuth().then(function (auth) {
                 auth.auth.signOut().then(function (next) {
-                    resolve(next);
+                    self.getPersistenceManager().clearStorage().then(function () {
+                        resolve(next);
+                    })["catch"](function (e) {
+                        reject(e);
+                    });
                 }, function (error) {
                     resolve(error);
                 });

@@ -19,7 +19,7 @@ var PersistenceManager = /** @class */ (function () {
         this._pendingChangesModels = {};
         this._isConnected = false;
         var self = this;
-        var storage = new angular_2_local_storage_1.LocalStorageService({ storageType: 'localStorage', prefix: 'appsapps-' });
+        var storage = new angular_2_local_storage_1.LocalStorageService({ storageType: 'localStorage', prefix: 'appsapps' });
         this.storageWrapper = {
             set: function (key, set) {
                 return new Promise(function (resolve, reject) {
@@ -33,7 +33,7 @@ var PersistenceManager = /** @class */ (function () {
             },
             clear: function () {
                 return new Promise(function (resolve, reject) {
-                    resolve(storage.remove());
+                    resolve(storage.clearAll());
                 });
             },
             remove: function (key) {
@@ -602,6 +602,24 @@ var PersistenceManager = /** @class */ (function () {
                 }
             })["catch"](function (error) {
                 reject(error);
+            });
+        });
+    };
+    /**
+     * clear local storage
+     * @returns {Promise<any>}
+     */
+    PersistenceManager.prototype.clearStorage = function () {
+        var self = this;
+        return new Promise(function (resolve, reject) {
+            console.log(2);
+            self.storageWrapper.clear().then(function () {
+                console.log('cleared');
+                location.reload();
+                resolve();
+            })["catch"](function (e) {
+                console.log(e);
+                reject(e);
             });
         });
     };
