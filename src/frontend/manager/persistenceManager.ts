@@ -232,7 +232,6 @@ export class PersistenceManager {
 
                         if (model.hasPendingChanges()) {
 
-
                             self.workOnPendingChanges(model).then(() => {
                                 model.setHasPendingChanges(false).emit();
                             }).catch((e) => {
@@ -579,9 +578,7 @@ export class PersistenceManager {
                     reject(e);
                 });
             } else {
-
                 resolve(model.loadJson(json));
-
             }
 
         });
@@ -627,6 +624,7 @@ export class PersistenceManager {
         return new Promise(function (resolve, reject) {
 
             let m = new model.constructor();
+            console.log('clone', model);
             resolve(m.loadJson(model.serialize(true, true), true));
 
 

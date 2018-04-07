@@ -261,11 +261,23 @@ export class AppsappInputComponent extends AbstractComponent {
                     self.ngOnInitExecute(model);
                 })
             } else {
+
+
+
                 if (this.model.__isPersistableModel) {
+
                     if (this.model.getAppsAppModuleProvider() !== undefined) {
                         this.model.getAppsAppModuleProvider().lazyLoad(this.model);
                     }
-                    self.ngOnInitExecute(this.model);
+
+                    this.model.loaded().then((model) => {
+
+                        self.ngOnInitExecute(this.model);
+
+                    })
+
+
+
                 } else {
 
                     if (typeof this.model.forEach == 'function') {
@@ -277,6 +289,8 @@ export class AppsappInputComponent extends AbstractComponent {
                         });
                     }
                 }
+
+
             }
         }
     }

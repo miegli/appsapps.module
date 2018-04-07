@@ -31,6 +31,7 @@ export class AppsappModuleProvider {
 
     public config: ConfigModel;
     public redirectUrl: string;
+    public loading: boolean = false;
     public platform: any = null;
     private firebaseProject: FirebaseModel;
     private persistenceManager: any;
@@ -241,19 +242,27 @@ export class AppsappModuleProvider {
 
             let p = new Promise(function (resolve, reject) {
 
+
                 pm.init().then((persistenceManager: PersistenceManager) => {
                     self.persistenceManager = persistenceManager;
                     model.setHttpClient(self.http).setNotificationProvider(self.notificationProvider).setMessages(self.providerMessages);
                     persistenceManager.initAndload(model, modeldata).then((model: any) => {
-                        if (model.getParent() && model.getParent().__isAutosave) {
-                            model.autosave();
-                            model.getChangesWithCallback(() => {
-                                model.getParent().save().subscribe();
-                            });
-                        }
                         persistenceManager.setFirebase(self.firebaseProject);
                         model.setPersistenceManager(persistenceManager);
                         persistenceManager._loadedResolver = resolve;
+
+                        if (model.getParent()) {
+                           model.getParent().save().subscribe();
+                        }
+
+                        if (model.getParent() && model.getParent().__isAutosave) {
+                            model.autosave();
+                            model.getChangesWithCallback(() => {
+                                console.log('autosave 1', model.hasChanges(), model);
+                                model.getParent().save().subscribe();
+                            });
+                        }
+
                     }).catch((e) => {
                         console.log(e);
                         resolve(model);
