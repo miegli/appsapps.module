@@ -258,7 +258,6 @@ export class AppsappModuleProvider {
                         if (model.getParent() && model.getParent().__isAutosave) {
                             model.autosave();
                             model.getChangesWithCallback(() => {
-                                console.log('autosave 1', model.hasChanges(), model);
                                 model.getParent().save().subscribe();
                             });
                         }

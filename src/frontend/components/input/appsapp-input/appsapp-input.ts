@@ -271,12 +271,8 @@ export class AppsappInputComponent extends AbstractComponent {
                     }
 
                     this.model.loaded().then((model) => {
-
                         self.ngOnInitExecute(this.model);
-
                     })
-
-
 
                 } else {
 

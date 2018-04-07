@@ -14,7 +14,7 @@ import {AppsappInputAbstractComponent} from "../appsapp-input-abstract";
         <mat-form-field style="width:100%"
                         [hideRequiredMarker]="formGroupOptions.value.hideRequired"
                         [floatLabel]="formGroupOptions.value.floatLabel">
-            <input (ngModelChange)="modelChanges($event)" type="url" [errorStateMatcher]="errorStateMatcher" [ngModel]="_ngModelGettter | async" matInput [placeholder]="placeholder"  [required]="required">
+            <input autocomplete="off" (ngModelChange)="modelChanges($event)" type="url" [errorStateMatcher]="errorStateMatcher" [ngModel]="_ngModelGettter | async" matInput [placeholder]="placeholder"  [required]="required">
             <mat-label>{{_label}}</mat-label>
             <mat-hint align="start" *ngIf="description.length">{{description}}</mat-hint>
             <mat-error *ngIf="_hasErrorsText.length">{{_hasErrorsText}}</mat-error>
